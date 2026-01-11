@@ -1,6 +1,7 @@
 // Variables globales
 let productosExistentes = [];
 let supermercadosExistentes = [];
+let historialCompras = []; // Nuevo: para autocompletado inteligente
 let contadorProductos = 1;
 
 // Cargar datos existentes al iniciar
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     configurarFecha();
     configurarEventos();
     cargarSupermercados();
+    cargarHistorialCompras(); // Nuevo: cargar historial para autocompletado
 });
 
 // Cargar productos y supermercados del JSON
@@ -24,6 +26,17 @@ async function cargarDatosExistentes() {
     } catch (error) {
         console.error('Error cargando datos:', error);
         mostrarMensaje('Error cargando datos existentes', 'error');
+    }
+}
+
+// NUEVO: Cargar historial completo para autocompletado
+async function cargarHistorialCompras() {
+    try {
+        const response = await fetch('datos_super.json');
+        historialCompras = await response.json();
+        console.log(`📊 ${historialCompras.length} registros históricos cargados para autocompletado`);
+    } catch (error) {
+        console.error('Error cargando historial:', error);
     }
 }
 
@@ -88,6 +101,13 @@ function configurarEventos() {
         }
     });
     
+    // NUEVO: Cuando cambia el supermercado, actualizar sugerencias de productos
+    selectSuper.addEventListener('change', function() {
+        if (this.value !== 'otro') {
+            actualizarProductosPorSupermercado(this.value);
+        }
+    });
+    
     // Sugerencias de productos
     document.addEventListener('input', function(e) {
         if (e.target.classList.contains('producto-input')) {
@@ -101,6 +121,25 @@ function configurarEventos() {
         }
     });
     
+    // NUEVO: Autocompletar cuando se selecciona un producto
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('sugerencia-item')) {
+            const productoSeleccionado = e.target.textContent;
+            const inputProducto = e.target.parentElement.previousElementSibling;
+            const idNum = inputProducto.id.split('-')[1];
+            
+            // Autocompletar con el último registro de ese producto
+            autocompletarDesdeHistorial(idNum, productoSeleccionado);
+        }
+    });
+    
+    // NUEVO: Sugerencias de marcas cuando se empieza a escribir
+    document.addEventListener('input', function(e) {
+        if (e.target.id && e.target.id.startsWith('marca-')) {
+            mostrarSugerenciasMarcas(e.target);
+        }
+    });
+    
     // Enviar formulario
     document.getElementById('compra-form').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -108,7 +147,73 @@ function configurarEventos() {
     });
 }
 
-// Mostrar sugerencias de productos
+// NUEVO: Actualizar lista de productos según supermercado seleccionado
+function actualizarProductosPorSupermercado(supermercado) {
+    if (!supermercado || supermercado === 'otro') return;
+    
+    // Filtrar productos comprados en este supermercado
+    const productosEnSuper = [...new Set(
+        historialCompras
+            .filter(item => item.super === supermercado)
+            .map(item => item.producto)
+    )].sort();
+    
+    // Actualizar la lista global de sugerencias
+    productosExistentes = productosEnSuper;
+    
+    console.log(`🏪 ${productosEnSuper.length} productos disponibles en ${supermercado}`);
+}
+
+// NUEVO: Autocompletar campos basado en historial
+function autocompletarDesdeHistorial(idNum, productoNombre) {
+    const supermercadoSelect = document.getElementById('supermercado');
+    const supermercado = supermercadoSelect.value === 'otro' 
+        ? document.getElementById('nuevo-super').value.trim()
+        : supermercadoSelect.value;
+    
+    if (!supermercado || supermercado === 'otro') {
+        console.log('⚠️  Selecciona un supermercado primero');
+        return;
+    }
+    
+    // Buscar el último registro para este producto en este supermercado
+    const registrosProducto = historialCompras
+        .filter(item => 
+            item.super === supermercado && 
+            item.producto === productoNombre
+        )
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); // Más reciente primero
+    
+    if (registrosProducto.length > 0) {
+        const ultimoRegistro = registrosProducto[0];
+        
+        // Autocompletar campos
+        document.getElementById(`marca-${idNum}`).value = ultimoRegistro.marca || 'no aplica';
+        document.getElementById(`unidad-${idNum}`).value = ultimoRegistro.unidad || 'g';
+        
+        // Sugerir cantidad (mantener la que ya tenía el usuario)
+        const cantidadInput = document.getElementById(`cantidad-${idNum}`);
+        if (!cantidadInput.value) {
+            cantidadInput.value = ultimoRegistro.cantidad || '';
+        }
+        
+        // Sugerir precio (mantener el que ya tenía el usuario)
+        const precioInput = document.getElementById(`precio-${idNum}`);
+        if (!precioInput.value) {
+            precioInput.value = ultimoRegistro.precio || '';
+        }
+        
+        console.log(`✅ Autocompletado: ${productoNombre} en ${supermercado} - Marca: ${ultimoRegistro.marca}`);
+        
+        // Calcular precio unitario
+        calcularPrecioUnitario(document.getElementById(`cantidad-${idNum}`));
+        
+    } else {
+        console.log(`ℹ️  No hay historial para ${productoNombre} en ${supermercado}`);
+    }
+}
+
+// Mostrar sugerencias de productos (MODIFICADA para incluir autocompletado)
 function mostrarSugerencias(input) {
     const valor = input.value.toLowerCase().trim();
     const sugerenciasId = `sugerencias-${input.id.split('-')[1]}`;
@@ -123,9 +228,10 @@ function mostrarSugerencias(input) {
         return;
     }
     
+    // Filtrar productos que coincidan
     const matches = productosExistentes
         .filter(producto => producto.toLowerCase().includes(valor))
-        .slice(0, 5);
+        .slice(0, 8); // Mostrar más sugerencias
     
     if (matches.length === 0) {
         sugerenciasDiv.style.display = 'none';
@@ -140,11 +246,121 @@ function mostrarSugerencias(input) {
             input.value = producto;
             sugerenciasDiv.innerHTML = '';
             sugerenciasDiv.style.display = 'none';
+            
+            // NUEVO: Autocompletar otros campos
+            autocompletarDesdeHistorial(input.id.split('-')[1], producto);
         });
         sugerenciasDiv.appendChild(div);
     });
     
     sugerenciasDiv.style.display = 'block';
+}
+
+// NUEVO: Mostrar sugerencias de marcas para un producto específico
+function mostrarSugerenciasMarcas(input) {
+    const idNum = input.id.split('-')[1];
+    const productoInput = document.getElementById(`producto-${idNum}`);
+    const productoNombre = productoInput.value.trim();
+    const supermercadoSelect = document.getElementById('supermercado');
+    const supermercado = supermercadoSelect.value === 'otro' 
+        ? document.getElementById('nuevo-super').value.trim()
+        : supermercadoSelect.value;
+    
+    if (!productoNombre || productoNombre.length < 2 || !supermercado || supermercado === 'otro') {
+        return;
+    }
+    
+    const valorMarca = input.value.toLowerCase().trim();
+    
+    // Crear contenedor de sugerencias de marcas si no existe
+    let sugerenciasDiv = document.getElementById(`sugerencias-marca-${idNum}`);
+    if (!sugerenciasDiv) {
+        sugerenciasDiv = document.createElement('div');
+        sugerenciasDiv.id = `sugerencias-marca-${idNum}`;
+        sugerenciasDiv.className = 'sugerencias-marca';
+        input.parentNode.appendChild(sugerenciasDiv);
+    }
+    
+    sugerenciasDiv.innerHTML = '';
+    
+    if (valorMarca.length < 1) {
+        sugerenciasDiv.style.display = 'none';
+        return;
+    }
+    
+    // Buscar marcas usadas para este producto en este supermercado
+    const marcasUsadas = [...new Set(
+        historialCompras
+            .filter(item => 
+                item.super === supermercado && 
+                item.producto === productoNombre
+            )
+            .map(item => item.marca)
+            .filter(marca => marca && marca !== 'no aplica')
+    )].sort();
+    
+    // Filtrar marcas que coincidan con lo que el usuario está escribiendo
+    const matches = marcasUsadas
+        .filter(marca => marca.toLowerCase().includes(valorMarca))
+        .slice(0, 5);
+    
+    if (matches.length === 0) {
+        sugerenciasDiv.style.display = 'none';
+        return;
+    }
+    
+    matches.forEach(marca => {
+        const div = document.createElement('div');
+        div.className = 'sugerencia-item-marca';
+        div.textContent = marca;
+        div.addEventListener('click', function() {
+            input.value = marca;
+            sugerenciasDiv.innerHTML = '';
+            sugerenciasDiv.style.display = 'none';
+            
+            // NUEVO: Autocompletar con datos de esa marca específica
+            autocompletarConMarcaEspecifica(idNum, productoNombre, supermercado, marca);
+        });
+        sugerenciasDiv.appendChild(div);
+    });
+    
+    sugerenciasDiv.style.display = 'block';
+}
+
+// NUEVO: Autocompletar con datos de una marca específica
+function autocompletarConMarcaEspecifica(idNum, productoNombre, supermercado, marcaEspecifica) {
+    // Buscar el último registro para esta combinación exacta
+    const registros = historialCompras
+        .filter(item => 
+            item.super === supermercado && 
+            item.producto === productoNombre &&
+            item.marca === marcaEspecifica
+        )
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    
+    if (registros.length > 0) {
+        const ultimoRegistro = registros[0];
+        
+        // Autocompletar cantidad si está vacío
+        const cantidadInput = document.getElementById(`cantidad-${idNum}`);
+        if (!cantidadInput.value) {
+            cantidadInput.value = ultimoRegistro.cantidad || '';
+        }
+        
+        // Autocompletar unidad
+        document.getElementById(`unidad-${idNum}`).value = ultimoRegistro.unidad || 'g';
+        
+        // Autocompletar precio si está vacío
+        const precioInput = document.getElementById(`precio-${idNum}`);
+        if (!precioInput.value) {
+            precioInput.value = ultimoRegistro.precio || '';
+        }
+        
+        console.log(`✅ Autocompletado con marca específica: ${marcaEspecifica}`);
+        
+        // Calcular precio unitario
+        calcularPrecioUnitario(cantidadInput);
+    }
 }
 
 // Calcular precio por kg o unidad
@@ -176,7 +392,7 @@ function calcularPrecioUnitario(elemento) {
     precioCalcDiv.querySelector('span').textContent = texto;
 }
 
-// Agregar nuevo campo de producto
+// Agregar nuevo campo de producto (MODIFICADA para incluir eventos de autocompletado)
 function agregarProducto() {
     contadorProductos++;
     const container = document.getElementById('productos-container');
@@ -211,6 +427,7 @@ function agregarProducto() {
             <div class="form-group">
                 <label for="marca-${contadorProductos}">Marca:</label>
                 <input type="text" id="marca-${contadorProductos}" placeholder="Ej: no aplica">
+                <!-- Las sugerencias de marca se crean dinámicamente -->
             </div>
             <div class="form-group">
                 <label for="precio-${contadorProductos}">Precio (€):</label>
@@ -228,6 +445,21 @@ function agregarProducto() {
     `;
     
     container.appendChild(nuevoProducto);
+    
+    // NUEVO: Añadir evento para autocompletar cuando se selecciona producto
+    const inputProducto = document.getElementById(`producto-${contadorProductos}`);
+    inputProducto.addEventListener('blur', function() {
+        if (this.value.trim()) {
+            const idNum = this.id.split('-')[1];
+            autocompletarDesdeHistorial(idNum, this.value.trim());
+        }
+    });
+    
+    // NUEVO: Añadir evento para sugerencias de marca
+    const inputMarca = document.getElementById(`marca-${contadorProductos}`);
+    inputMarca.addEventListener('focus', function() {
+        mostrarSugerenciasMarcas(this);
+    });
 }
 
 // Eliminar producto
@@ -238,18 +470,48 @@ function eliminarProducto(boton) {
     }
     
     const productoItem = boton.closest('.producto-item');
+    
+    // Eliminar también las sugerencias de marca asociadas
+    const idNum = boton.closest('.producto-item').querySelector('[id^="marca-"]').id.split('-')[1];
+    const sugerenciasMarca = document.getElementById(`sugerencias-marca-${idNum}`);
+    if (sugerenciasMarca) {
+        sugerenciasMarca.remove();
+    }
+    
     productoItem.remove();
     contadorProductos--;
     
     // Renumerar productos
     const productos = document.querySelectorAll('.producto-item');
     productos.forEach((item, index) => {
-        item.querySelector('h3').textContent = `Producto ${index + 1}`;
+        const newNum = index + 1;
+        item.querySelector('h3').textContent = `Producto ${newNum}`;
+        
+        // Renumerar todos los IDs
+        const inputs = item.querySelectorAll('[id]');
+        inputs.forEach(input => {
+            const oldId = input.id;
+            const parts = oldId.split('-');
+            if (parts.length > 1) {
+                input.id = `${parts[0]}-${newNum}`;
+            }
+        });
+        
+        // Renumerar sugerencias
+        const sugerencias = item.querySelector('.sugerencias');
+        if (sugerencias) {
+            sugerencias.id = `sugerencias-${newNum}`;
+        }
+        
+        // Renumerar precio calculado
+        const precioCalc = item.querySelector('.precio-calculado');
+        if (precioCalc) {
+            precioCalc.id = `precio-calc-${newNum}`;
+        }
     });
 }
 
 // Validar datos
-// Modifica la función validarDatos para usar el formato correcto:
 function validarDatos() {
     const fecha = document.getElementById('fecha').value;
     const supermercadoSelect = document.getElementById('supermercado');
@@ -283,7 +545,7 @@ function validarDatos() {
         }
         
         productosValidos.push({
-            fecha: formatearFechaParaJSON(fecha), // Usar formato correcto
+            fecha: formatearFechaParaJSON(fecha),
             super: supermercado.toLowerCase(),
             producto: producto.toLowerCase(),
             cantidad: cantidad,
@@ -335,7 +597,14 @@ async function enviarCompra() {
             // Mantener solo un producto
             const productosContainer = document.getElementById('productos-container');
             while (productosContainer.children.length > 1) {
-                productosContainer.lastChild.remove();
+                // Eliminar sugerencias de marca de los productos que se eliminan
+                const productoItem = productosContainer.lastChild;
+                const idNum = productoItem.querySelector('[id^="marca-"]').id.split('-')[1];
+                const sugerenciasMarca = document.getElementById(`sugerencias-marca-${idNum}`);
+                if (sugerenciasMarca) {
+                    sugerenciasMarca.remove();
+                }
+                productoItem.remove();
             }
             contadorProductos = 1;
         }, 3000);
