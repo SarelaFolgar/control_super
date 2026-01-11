@@ -220,11 +220,27 @@ function updateStats() {
 
 // Configurar navegación
 function setupNavigation() {
-    // Navegación lateral - SOLO para enlaces internos
-    document.querySelectorAll('.nav-link:not([href])').forEach(link => {
+    // Navegación lateral - PARA TODOS LOS ENLACES .nav-link
+    document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
+            // Si tiene href y es un enlace real (no #), dejar que navegue normalmente
+            const href = this.getAttribute('href');
+            if (href && href !== '#' && href !== '') {
+                // Solo cerrar menú en móvil
+                if (window.innerWidth <= 992) {
+                    const sidebar = document.getElementById('sidebar');
+                    if (sidebar) sidebar.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+                console.log('Navegando a:', href);
+                return; // Permitir navegación normal
+            }
+            
+            // Para enlaces internos (sin href o href="#")
             e.preventDefault();
             const action = this.dataset.action;
+            
+            if (!action) return;
             
             // Cerrar menú en móvil
             if (window.innerWidth <= 992) {
@@ -234,28 +250,21 @@ function setupNavigation() {
             }
             
             // Actualizar estado activo (solo enlaces internos)
-            document.querySelectorAll('.nav-link:not([href])').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => {
+                // Solo quitar active de enlaces internos
+                const lHref = l.getAttribute('href');
+                if (!lHref || lHref === '#' || lHref === '') {
+                    l.classList.remove('active');
+                }
+            });
             this.classList.add('active');
             
             handleNavigationAction(action);
         });
     });
     
-    // Navegación lateral - PARA ENLACES EXTERNOS (como agregar.html)
-    document.querySelectorAll('.nav-link-externo').forEach(link => {
-        link.addEventListener('click', function(e) {
-            // Cerrar menú en móvil
-            if (window.innerWidth <= 992) {
-                const sidebar = document.getElementById('sidebar');
-                if (sidebar) sidebar.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            
-            // Permitir que el navegador siga el enlace normalmente
-            // No hacer preventDefault() ni cambiar clases
-            console.log('Navegando a:', this.href);
-        });
-    });
+    // ELIMINA ESTE BLOQUE COMPLETO (ya no es necesario):
+    // document.querySelectorAll('.nav-link-externo').forEach(link => { ... });
     
     // Botones de estadísticas
     document.querySelectorAll('.stat-btn').forEach(btn => {
@@ -1952,3 +1961,4 @@ window.debugProduct = function(productName) {
     return exactMatches;
 
 };
+
