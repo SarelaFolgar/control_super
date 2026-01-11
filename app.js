@@ -1777,6 +1777,76 @@ function showFilterResults(filterType, value) {
     `;
 }
 
+// Crear gráfico de años
+function createYearChart(years) {
+    const canvas = document.getElementById('records-chart');
+    if (!canvas) {
+        console.error('❌ Canvas #records-chart no encontrado');
+        return;
+    }
+    
+    // Destruir gráfico anterior si existe
+    const existingChart = Chart.getChart(canvas);
+    if (existingChart) {
+        existingChart.destroy();
+    }
+    
+    const sortedYears = Object.keys(years).sort();
+    const counts = sortedYears.map(year => years[year].count);
+    
+    if (sortedYears.length === 0 || counts.length === 0) {
+        console.warn('No hay datos para el gráfico');
+        return;
+    }
+    
+    console.log('📊 Datos para gráfico:', sortedYears, counts);
+    
+    const ctx = canvas.getContext('2d');
+    try {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: sortedYears,
+                datasets: [{
+                    label: 'Registros',
+                    data: counts,
+                    backgroundColor: 'rgba(74, 111, 165, 0.7)',
+                    borderColor: 'rgba(74, 111, 165, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Número de registros'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Año'
+                        }
+                    }
+                }
+            }
+        });
+        console.log('✅ Gráfico creado exitosamente');
+    } catch (error) {
+        console.error('❌ Error creando gráfico:', error);
+    }
+}
+
+
 // Event Listeners adicionales
 function initEventListeners() {
     // Botones de volver
@@ -1906,6 +1976,7 @@ window.debugProduct = function(productName) {
     return exactMatches;
 
 };
+
 
 
 
