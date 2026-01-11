@@ -1,10 +1,5 @@
 import pandas as pd
-from datetime import datetime
-import re
-import os
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 def transformacion(df, dic_ciudad_super, dic_categoria_producto):
     print("=" * 80)
