@@ -145,6 +145,45 @@ function configurarEventos() {
         e.preventDefault();
         enviarCompra();
     });
+    
+    // NUEVO: Limpiar campos cuando se escribe una marca nueva (no en sugerencias)
+    document.addEventListener('change', function(e) {
+        if (e.target.id && e.target.id.startsWith('marca-')) {
+            const idNum = e.target.id.split('-')[1];
+            const productoInput = document.getElementById(`producto-${idNum}`);
+            const supermercadoSelect = document.getElementById('supermercado');
+            const supermercado = supermercadoSelect.value === 'otro' 
+                ? document.getElementById('nuevo-super').value.trim()
+                : supermercadoSelect.value;
+            
+            const productoNombre = productoInput.value.trim();
+            const marcaSeleccionada = e.target.value.trim();
+            
+            if (productoNombre && supermercado && supermercado !== 'otro' && marcaSeleccionada) {
+                verificarYAutocompletarMarca(idNum, productoNombre, supermercado, marcaSeleccionada);
+            }
+        }
+    });
+}
+
+// NUEVO: Verificar si la marca escrita existe y autocompletar
+function verificarYAutocompletarMarca(idNum, productoNombre, supermercado, marcaSeleccionada) {
+    // Buscar si esta marca existe para este producto y supermercado
+    const registros = historialCompras
+        .filter(item => 
+            item.super === supermercado && 
+            item.producto === productoNombre &&
+            item.marca === marcaSeleccionada
+        )
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    
+    if (registros.length > 0) {
+        // La marca existe, autocompletar
+        autocompletarConMarcaEspecifica(idNum, productoNombre, supermercado, marcaSeleccionada);
+    } else {
+        // Es una marca nueva, mantener los campos como están
+        console.log(`🆕 Marca nueva: ${marcaSeleccionada} para ${productoNombre} en ${supermercado}`);
+    }
 }
 
 // NUEVO: Actualizar lista de productos según supermercado seleccionado
@@ -318,7 +357,6 @@ function mostrarSugerenciasMarcas(input) {
             sugerenciasDiv.innerHTML = '';
             sugerenciasDiv.style.display = 'none';
             
-            // NUEVO: Autocompletar con datos de esa marca específica
             autocompletarConMarcaEspecifica(idNum, productoNombre, supermercado, marca);
         });
         sugerenciasDiv.appendChild(div);
@@ -341,25 +379,24 @@ function autocompletarConMarcaEspecifica(idNum, productoNombre, supermercado, ma
     if (registros.length > 0) {
         const ultimoRegistro = registros[0];
         
-        // Autocompletar cantidad si está vacío
-        const cantidadInput = document.getElementById(`cantidad-${idNum}`);
-        if (!cantidadInput.value) {
-            cantidadInput.value = ultimoRegistro.cantidad || '';
-        }
+        // Actualizar cantidad
+        document.getElementById(`cantidad-${idNum}`).value = ultimoRegistro.cantidad || '';
         
-        // Autocompletar unidad
+        // Actualizar unidad
         document.getElementById(`unidad-${idNum}`).value = ultimoRegistro.unidad || 'g';
         
-        // Autocompletar precio si está vacío
-        const precioInput = document.getElementById(`precio-${idNum}`);
-        if (!precioInput.value) {
-            precioInput.value = ultimoRegistro.precio || '';
-        }
+        // Actualizar precio
+        document.getElementById(`precio-${idNum}`).value = ultimoRegistro.precio || '';
         
-        console.log(`✅ Autocompletado con marca específica: ${marcaEspecifica}`);
+        console.log(`✅ Autocompletado con marca específica: ${marcaEspecifica} - Cantidad: ${ultimoRegistro.cantidad}, Precio: ${ultimoRegistro.precio}`);
         
         // Calcular precio unitario
-        calcularPrecioUnitario(cantidadInput);
+        calcularPrecioUnitario(document.getElementById(`cantidad-${idNum}`));
+        
+    } else {
+        // Marca no encontrada - es una marca nueva
+        console.log(`🆕 Marca nueva detectada: ${marcaEspecifica} para ${productoNombre}`);
+        // No hacer nada, dejar que el usuario introduzca los datos manualmente
     }
 }
 
@@ -459,6 +496,23 @@ function agregarProducto() {
     const inputMarca = document.getElementById(`marca-${contadorProductos}`);
     inputMarca.addEventListener('focus', function() {
         mostrarSugerenciasMarcas(this);
+    });
+    
+    // NUEVO: Añadir evento para detectar cuando el usuario termina de escribir una marca
+    inputMarca.addEventListener('blur', function() {
+        const idNum = this.id.split('-')[1];
+        const productoInput = document.getElementById(`producto-${idNum}`);
+        const supermercadoSelect = document.getElementById('supermercado');
+        const supermercado = supermercadoSelect.value === 'otro' 
+            ? document.getElementById('nuevo-super').value.trim()
+            : supermercadoSelect.value;
+        
+        const productoNombre = productoInput.value.trim();
+        const marcaSeleccionada = this.value.trim();
+        
+        if (productoNombre && supermercado && supermercado !== 'otro' && marcaSeleccionada) {
+            verificarYAutocompletarMarca(idNum, productoNombre, supermercado, marcaSeleccionada);
+        }
     });
 }
 
