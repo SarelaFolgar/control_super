@@ -609,15 +609,24 @@ function showDateSummary() {
         }
     }
     
-    // Crear gráfico de barras
-    createYearChart(years);
+    // Crear gráfico de barras - AÑADE ESTO:
+    console.log('📊 Preparando datos para gráfico...');
+    console.log('Años encontrados:', Object.keys(years));
+    
+    // Crear objeto simple para el gráfico
+    const chartData = {};
+    Object.keys(years).forEach(year => {
+        chartData[year] = years[year].count;
+    });
+    
+    console.log('Datos para gráfico:', chartData);
+    createYearChart(chartData);
     
     // Actualizar navegación
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     const dateNavLink = document.querySelector('[data-action="by-date"]');
     if (dateNavLink) dateNavLink.classList.add('active');
 }
-
 // Función para mostrar resumen de producto
 function updateProductSummary(productData, filters = { city: 'global', supermarket: 'global', brand: 'global' }) {
     if (!productData || productData.length === 0) {
@@ -1976,6 +1985,7 @@ window.debugProduct = function(productName) {
     return exactMatches;
 
 };
+
 
 
 
