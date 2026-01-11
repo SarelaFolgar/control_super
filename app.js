@@ -538,7 +538,6 @@ function updateAllProductsList() {
 }
 
 // Mostrar resumen por fecha
-// Mostrar resumen por fecha
 function showDateSummary() {
     showScreen('date');
     
@@ -548,32 +547,37 @@ function showDateSummary() {
         if (!item.fecha) return;
         
         try {
-            // Intentar diferentes formatos de fecha
             let year;
             
-            // Formato 1: "YYYY-MM-DD"
+            // Formato 1: "DD-MM-YYYY" (tu nuevo formato)
             if (item.fecha.includes('-')) {
                 const parts = item.fecha.split('-');
-                year = parts[0];
-            }
-            // Formato 2: "DD/MM/YYYY"
-            else if (item.fecha.includes('/')) {
-                const parts = item.fecha.split('/');
                 if (parts.length === 3) {
-                    year = parts[2]; // Última parte es el año en DD/MM/YYYY
+                    // Para DD-MM-YYYY, el año está en la tercera posición
+                    year = parts[2];
                 }
             }
+            // Formato 2: "YYYY-MM-DD" (formato anterior)
+            else if (item.fecha.includes('-') && item.fecha.split('-')[0].length === 4) {
+                const parts = item.fecha.split('-');
+                year = parts[0]; // YYYY está primero
+            }
             
+            // Si no se pudo obtener el año de la cadena, intentar Date.parse
             if (!year) {
-                // Intentar parsear como objeto Date directamente
+                // Intentar parsear directamente
                 const dateObj = new Date(item.fecha);
                 if (!isNaN(dateObj.getTime())) {
                     year = dateObj.getFullYear().toString();
                 }
             }
             
-            if (!year) return; // Si no se pudo obtener el año, saltar
+            if (!year) {
+                console.warn('No se pudo obtener año de fecha:', item.fecha);
+                return;
+            }
             
+            // Inicializar estructura para este año si no existe
             if (!years[year]) {
                 years[year] = {
                     count: 0,
@@ -582,8 +586,10 @@ function showDateSummary() {
                     cities: new Set()
                 };
             }
+            
+            // Agregar datos
             years[year].count++;
-            years[year].products.add(item.producto);
+            years[producto].products.add(item.producto);
             if (item.super) years[year].supermarkets.add(item.super);
             if (item.ciudad) years[year].cities.add(item.ciudad);
         } catch (error) {
@@ -631,7 +637,7 @@ function showDateSummary() {
         }
     }
     
-    // Crear gráfico de barras - MANTÉN ESTO:
+    // Crear gráfico de barras
     console.log('📊 Preparando datos para gráfico...');
     console.log('Años encontrados:', Object.keys(years));
     
@@ -642,6 +648,8 @@ function showDateSummary() {
     });
     
     console.log('Datos para gráfico:', chartData);
+    
+    // LLAMAR A LA FUNCIÓN PARA CREAR EL GRÁFICO
     createYearChart(chartData);
     
     // Actualizar navegación
@@ -2007,6 +2015,7 @@ window.debugProduct = function(productName) {
     return exactMatches;
 
 };
+
 
 
 
