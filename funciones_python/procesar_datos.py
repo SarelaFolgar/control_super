@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime
 
 def transformacion(df, dic_ciudad_super, dic_categoria_producto):
     print("=" * 80)
@@ -21,20 +22,14 @@ def transformacion(df, dic_ciudad_super, dic_categoria_producto):
     print("CALCULAR NUEVA COLUMNA")
     print("-"*60)
     df= columna_por_diccionario(df, "producto", "categoria", dic_categoria_producto)
-    #df = agregar_ultimo_precio_neto(df)
     print()
     print("CALCULAR ULTIMOS Y PRIMEROS PRECIOS NETOS")
     print("-"*60)
     df = calcular_ultimos_primeros_precios_netos(df)
-    #df = calcular_variacion_precio(df)
     print()
     print("CALCULAR VARIACIONES DE PRECIO")
     print("-"*60)
     df = calcular_variaciones(df)
-    #print()
-    #print("ELIMINAR NULOS")
-    #print("-"*60)
-    #df = limpiar_nulos_para_json(df)
     print()
     print("=" * 80)
     print("FIN TRANSFORMACION")
@@ -108,7 +103,7 @@ def calcular_precio_neto(df):
 def calcular_mes_ano(df):
     """
     Calcula el año y mes en español a partir de la fecha.
-    Ahora convierte fechas a formato DD-MM-YYYY.
+    Mantiene fecha como datetime para cálculos posteriores.
     """    
     # Diccionario de meses en español
     meses_espanol = {
@@ -117,9 +112,10 @@ def calcular_mes_ano(df):
         9: 'septiembre', 10: 'octubre', 11: 'noviembre', 12: 'diciembre'
     }
     
-    print("🔄 Procesando fechas para DD-MM-YYYY...")
+    print("🔄 Procesando fechas...")
     
     # 1. Convertir a datetime (aceptar DD/MM/YYYY o YYYY-MM-DD)
+    # Mantener la columna original 'fecha_str' para referencia
     df['fecha_dt'] = pd.to_datetime(df['fecha'], dayfirst=True, errors='coerce')
     
     # 2. Extraer año y mes
@@ -127,19 +123,16 @@ def calcular_mes_ano(df):
     df['mes_num'] = df['fecha_dt'].dt.month
     df['mes'] = df['mes_num'].map(meses_espanol)
     
-    # 3. ✅ IMPORTANTE: Convertir fecha a formato DD-MM-YYYY (con guiones)
-    df['fecha'] = df['fecha_dt'].dt.strftime('%d-%m-%Y')
-    
-    # 4. Eliminar columnas temporales
-    df = df.drop(['fecha_dt', 'mes_num'], axis=1)
+    # 3. Eliminar columnas temporales (pero mantener fecha_dt para cálculos)
+    df = df.drop(['mes_num'], axis=1)
     
     # Estadísticas
-    fechas_validas = df['fecha'].notna().sum()
+    fechas_validas = df['fecha_dt'].notna().sum()
     print(f"✅ Fechas procesadas: {fechas_validas}/{len(df)}")
-    print(f"   Formato final: DD-MM-YYYY")
     print(f"   Años únicos: {sorted(df['ano'].dropna().unique())}")
     
     return df
+
 def columna_por_diccionario(df, col_original, col_nueva, diccionario):
     """
     Crea una nueva columna mapeando valores de una columna existente usando un diccionario.
@@ -189,31 +182,30 @@ def calcular_ultimos_primeros_precios_netos(df):
     4. primer_precio_neto_YYYY: Primer precio por año para cada producto/marca/super
     
     Args:
-        df: DataFrame con columnas 'fecha', 'producto', 'marca', 'super', 'precio_neto'
+        df: DataFrame con columnas 'fecha_dt', 'producto', 'marca', 'super', 'precio_neto'
     
     Returns:
         DataFrame con nuevas columnas de precios
     """    
     print("📊 Calculando precios netos históricos...")
     
-    # Verificar columnas necesarias
-    columnas_necesarias = ['fecha', 'producto', 'marca', 'super', 'precio_neto']
+    # Verificar columnas necesarias - usar 'fecha_dt' en lugar de 'fecha'
+    columnas_necesarias = ['fecha_dt', 'producto', 'marca', 'super', 'precio_neto']
     for col in columnas_necesarias:
         if col not in df.columns:
             print(f"❌ Error: Falta columna '{col}'")
             return df
     
-    # Convertir fecha y extraer año
-    df = df.copy()
-    if not pd.api.types.is_datetime64_any_dtype(df['fecha']):
-        df['fecha'] = pd.to_datetime(df['fecha'], dayfirst=True, errors='coerce')
+    # Crear copia para no modificar el original
+    df_calc = df.copy()
     
-    if 'ano' not in df.columns:
-        df['ano'] = df['fecha'].dt.year
+    # Asegurarnos de que tenemos la columna 'ano'
+    if 'ano' not in df_calc.columns:
+        df_calc['ano'] = df_calc['fecha_dt'].dt.year
     
     # 1. ÚLTIMO PRECIO GENERAL (todos los años)
     print("1. Último precio general (todos los años)...")
-    df_sorted_desc = df.sort_values('fecha', ascending=False)
+    df_sorted_desc = df_calc.sort_values('fecha_dt', ascending=False)
     ultimos_generales = df_sorted_desc.drop_duplicates(
         subset=['producto', 'marca', 'super']
     )[['producto', 'marca', 'super', 'precio_neto']]
@@ -223,7 +215,7 @@ def calcular_ultimos_primeros_precios_netos(df):
     
     # 2. PRIMER PRECIO GENERAL
     print("2. Primer precio general (todos los años)...")
-    df_sorted_asc = df.sort_values('fecha', ascending=True)
+    df_sorted_asc = df_calc.sort_values('fecha_dt', ascending=True)
     primeros_generales = df_sorted_asc.drop_duplicates(
         subset=['producto', 'marca', 'super']
     )[['producto', 'marca', 'super', 'precio_neto']]
@@ -232,22 +224,22 @@ def calcular_ultimos_primeros_precios_netos(df):
     )
     
     # Combinar precios generales
-    df = df.merge(ultimos_generales, on=['producto', 'marca', 'super'], how='left')
-    df = df.merge(primeros_generales, on=['producto', 'marca', 'super'], how='left')
+    df_calc = df_calc.merge(ultimos_generales, on=['producto', 'marca', 'super'], how='left')
+    df_calc = df_calc.merge(primeros_generales, on=['producto', 'marca', 'super'], how='left')
     
     # 3. PRECIOS POR AÑO (por producto/marca/super dentro de cada año)
-    años_unicos = sorted(df['ano'].dropna().unique())
+    años_unicos = sorted(df_calc['ano'].dropna().unique())
     print(f"3. Procesando precios por año ({len(años_unicos)} años encontrados)...")
     
     for año in años_unicos:
         print(f"   Año {año}...")
-        df_año = df[df['ano'] == año].copy()
+        df_año = df_calc[df_calc['ano'] == año].copy()
         
         if len(df_año) == 0:
             continue
         
         # Último precio del año (por producto/marca/super)
-        df_año_desc = df_año.sort_values('fecha', ascending=False)
+        df_año_desc = df_año.sort_values('fecha_dt', ascending=False)
         ultimos_año = df_año_desc.drop_duplicates(
             subset=['producto', 'marca', 'super']
         )[['producto', 'marca', 'super', 'precio_neto']]
@@ -256,7 +248,7 @@ def calcular_ultimos_primeros_precios_netos(df):
         )
         
         # Primer precio del año (por producto/marca/super)
-        df_año_asc = df_año.sort_values('fecha', ascending=True)
+        df_año_asc = df_año.sort_values('fecha_dt', ascending=True)
         primeros_año = df_año_asc.drop_duplicates(
             subset=['producto', 'marca', 'super']
         )[['producto', 'marca', 'super', 'precio_neto']]
@@ -265,8 +257,8 @@ def calcular_ultimos_primeros_precios_netos(df):
         )
         
         # Combinar
-        df = df.merge(ultimos_año, on=['producto', 'marca', 'super'], how='left')
-        df = df.merge(primeros_año, on=['producto', 'marca', 'super'], how='left')
+        df_calc = df_calc.merge(ultimos_año, on=['producto', 'marca', 'super'], how='left')
+        df_calc = df_calc.merge(primeros_año, on=['producto', 'marca', 'super'], how='left')
     
     print("\n✅ Precios calculados:")
     print(f"   - Último precio general: para {len(ultimos_generales)} combinaciones producto/marca/super")
@@ -274,10 +266,10 @@ def calcular_ultimos_primeros_precios_netos(df):
     print(f"   - Precios por año: para {len(años_unicos)} años diferentes")
     
     # Mostrar columnas añadidas
-    nuevas_columnas = [col for col in df.columns if 'precio_neto_' in col or col in ['ultimo_precio_neto', 'primer_precio_neto']]
+    nuevas_columnas = [col for col in df_calc.columns if 'precio_neto_' in col or col in ['ultimo_precio_neto', 'primer_precio_neto']]
     print(f"   - Columnas añadidas: {len(nuevas_columnas)}")
     
-    return df
+    return df_calc
 
 def calcular_variaciones(df):
     """
@@ -293,27 +285,30 @@ def calcular_variaciones(df):
         print("❌ Error: Falta columna 'precio_neto'")
         return df
     
+    # Crear copia
+    df_calc = df.copy()
+    
     # 1. VARIACIÓN ACTUAL (precio actual vs último precio)
-    if 'ultimo_precio_neto' in df.columns:
+    if 'ultimo_precio_neto' in df_calc.columns:
         print("1. Calculando variación actual...")
         # Calcular variación porcentual: ((último - actual) / actual) * 100
-        df['variacion_actual'] = ((df['ultimo_precio_neto'] - df['precio_neto']) / df['precio_neto']) * 100
-        df['variacion_actual'] = df['variacion_actual'].round(2)
+        df_calc['variacion_actual'] = ((df_calc['ultimo_precio_neto'] - df_calc['precio_neto']) / df_calc['precio_neto']) * 100
+        df_calc['variacion_actual'] = df_calc['variacion_actual'].round(2)
         
-        variaciones_actuales = df['variacion_actual'].notna().sum()
-        print(f"   ✅ Calculada para {variaciones_actuales}/{len(df)} registros")
+        variaciones_actuales = df_calc['variacion_actual'].notna().sum()
+        print(f"   ✅ Calculada para {variaciones_actuales}/{len(df_calc)} registros")
     else:
         print("⚠️  Advertencia: No se calculó variación actual (falta 'ultimo_precio_neto')")
     
     # 2. VARIACIÓN TOTAL (primero vs último)
-    if 'primer_precio_neto' in df.columns and 'ultimo_precio_neto' in df.columns:
+    if 'primer_precio_neto' in df_calc.columns and 'ultimo_precio_neto' in df_calc.columns:
         print("2. Calculando variación total...")
         # Calcular variación porcentual: ((último - primero) / primero) * 100
-        df['variacion_total'] = ((df['ultimo_precio_neto'] - df['primer_precio_neto']) / df['primer_precio_neto']) * 100
-        df['variacion_total'] = df['variacion_total'].round(2)
+        df_calc['variacion_total'] = ((df_calc['ultimo_precio_neto'] - df_calc['primer_precio_neto']) / df_calc['primer_precio_neto']) * 100
+        df_calc['variacion_total'] = df_calc['variacion_total'].round(2)
         
-        variaciones_totales = df['variacion_total'].notna().sum()
-        print(f"   ✅ Calculada para {variaciones_totales}/{len(df)} registros")
+        variaciones_totales = df_calc['variacion_total'].notna().sum()
+        print(f"   ✅ Calculada para {variaciones_totales}/{len(df_calc)} registros")
     else:
         print("⚠️  Advertencia: No se calculó variación total (faltan columnas)")
     
@@ -321,8 +316,8 @@ def calcular_variaciones(df):
     print("3. Calculando variaciones por año...")
     
     # Buscar todas las columnas de primer y último precio por año
-    columnas_primer = [col for col in df.columns if col.startswith('primer_precio_neto_')]
-    columnas_ultimo = [col for col in df.columns if col.startswith('ultimo_precio_neto_')]
+    columnas_primer = [col for col in df_calc.columns if col.startswith('primer_precio_neto_')]
+    columnas_ultimo = [col for col in df_calc.columns if col.startswith('ultimo_precio_neto_')]
     
     # Extraer años de las columnas
     años_primer = [col.replace('primer_precio_neto_', '') for col in columnas_primer]
@@ -338,21 +333,21 @@ def calcular_variaciones(df):
         col_ultimo = f'ultimo_precio_neto_{año}'
         
         # Calcular variación para este año
-        df[f'variacion_{año}'] = ((df[col_ultimo] - df[col_primer]) / df[col_primer]) * 100
-        df[f'variacion_{año}'] = df[f'variacion_{año}'].round(2)
+        df_calc[f'variacion_{año}'] = ((df_calc[col_ultimo] - df_calc[col_primer]) / df_calc[col_primer]) * 100
+        df_calc[f'variacion_{año}'] = df_calc[f'variacion_{año}'].round(2)
         
         # Contar cuántos registros tienen esta variación calculada
-        variaciones_año = df[f'variacion_{año}'].notna().sum()
+        variaciones_año = df_calc[f'variacion_{año}'].notna().sum()
         print(f"   Año {año}: {variaciones_año} registros")
     
     # Estadísticas finales
     print(f"\n✅ Todas las variaciones calculadas")
     
     # Contar columnas de variación añadidas
-    columnas_variacion = [col for col in df.columns if col.startswith('variacion')]
+    columnas_variacion = [col for col in df_calc.columns if col.startswith('variacion')]
     print(f"📊 Columnas de variación añadidas: {len(columnas_variacion)}")
     
-    return df
+    return df_calc
 
 def main():
     """Función principal que ejecuta todo el proceso"""    
@@ -552,16 +547,27 @@ def main():
     # 3. EJECUTAR TRANSFORMACIÓN
     df_transformado = transformacion(df, dic_ciudad_super, dic_categoria_producto)
     
-    # 4. GUARDAR COMO JSON
-    print("\n💾 Guardando como datos_super.json...")
+    # 4. CONVERTIR FECHA A STRING CON FORMATO DD-MM-YYYY PARA EL JSON
+    print("\n💾 Preparando para guardar JSON...")
     
-    # ✅ NO CONVERTIR FECHAS AQUÍ - YA SE HIZO EN calcular_mes_ano()
-    # Las fechas ya están en formato DD-MM-YYYY gracias a calcular_mes_ano
+    if 'fecha_dt' in df_transformado.columns:
+        # Convertir fecha datetime a string con formato DD-MM-YYYY
+        df_transformado['fecha'] = df_transformado['fecha_dt'].dt.strftime('%d-%m-%Y')
+        
+        # Eliminar la columna datetime (opcional, pero mantiene el JSON limpio)
+        df_transformado = df_transformado.drop('fecha_dt', axis=1)
+        print("✅ Fechas convertidas a formato DD-MM-YYYY")
     
-    # Guardar JSON con ensure_ascii=False para mantener caracteres especiales
-    df_transformado.to_json("../datos_super.json", orient="records", indent=2, force_ascii=False)
+    # 5. GUARDAR COMO JSON
+    print("💾 Guardando como datos_super.json...")
+    
+    # Guardar JSON con date_format='iso' para asegurar formato correcto
+    df_transformado.to_json("../datos_super.json", orient="records", indent=2, 
+                           force_ascii=False, date_format='iso')
+    
     print(f"✅ JSON guardado: {len(df_transformado)} registros")
-    print(f"📅 Formato de fechas: DD-MM-YYYY (ejemplo: 09-01-2026)")
+    print(f"📅 Formato de fechas en JSON: 'DD-MM-YYYY' (ejemplo: '09-01-2026')")
+
 # 5. EJECUTAR AUTOMÁTICAMENTE SI SE LLAMA DIRECTAMENTE
 if __name__ == "__main__":
     main()
