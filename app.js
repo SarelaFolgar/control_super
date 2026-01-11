@@ -537,7 +537,7 @@ function updateAllProductsList() {
     }
 }
 
-// Mostrar resumen por fecha - VERSIÓN CORREGIDA
+// Mostrar resumen por fecha - VERSIÓN CORREGIDA DEFINITIVAMENTE
 function showDateSummary() {
     showScreen('date');
     
@@ -546,11 +546,13 @@ function showDateSummary() {
     
     // DEBUG: Mostrar primeros registros
     console.log('=== DEBUG showDateSummary ===');
-    console.log('Primeros 5 registros:');
-    productosData.slice(0, 5).forEach((item, i) => {
-        console.log(`  ${i}: fecha=${item.fecha}, producto=${item.producto}`);
+    console.log('Total registros:', productosData.length);
+    console.log('Primeros 3 registros:');
+    productosData.slice(0, 3).forEach((item, i) => {
+        console.log(`  ${i}: fecha="${item.fecha}", producto="${item.producto}", super="${item.super}", ciudad="${item.ciudad}"`);
     });
     
+    // Procesar cada registro
     productosData.forEach(item => {
         if (!item.fecha) {
             console.warn('Registro sin fecha:', item);
@@ -560,40 +562,42 @@ function showDateSummary() {
         try {
             let year = null;
             
-            // DEBUG: Ver qué formato tiene la fecha
-            console.log(`Procesando fecha: "${item.fecha}"`);
-            
-            // Formato 1: "DD-MM-YYYY" (tu nuevo formato)
+            // Formato DD-MM-YYYY (tu formato)
             if (item.fecha.includes('-')) {
                 const parts = item.fecha.split('-');
                 if (parts.length === 3) {
-                    // Para DD-MM-YYYY, el año está en la tercera posición
+                    // Verificar qué formato es
+                    // Si la tercera parte tiene 4 dígitos, es DD-MM-YYYY
                     if (parts[2].length === 4) {
-                        year = parts[2]; // Año en formato YYYY
-                        console.log(`  -> Formato DD-MM-YYYY detectado, año: ${year}`);
+                        year = parts[2]; // DD-MM-YYYY
+                        console.log(`  Fecha "${item.fecha}" -> formato DD-MM-YYYY, año: ${year}`);
                     }
-                    // Para YYYY-MM-DD, el año está en la primera posición
+                    // Si la primera parte tiene 4 dígitos, es YYYY-MM-DD
                     else if (parts[0].length === 4) {
-                        year = parts[0];
-                        console.log(`  -> Formato YYYY-MM-DD detectado, año: ${year}`);
+                        year = parts[0]; // YYYY-MM-DD
+                        console.log(`  Fecha "${item.fecha}" -> formato YYYY-MM-DD, año: ${year}`);
                     }
                 }
             }
             
-            // Si no se pudo obtener el año, intentar Date.parse
+            // Si no se pudo obtener con split, intentar con Date
             if (!year) {
-                console.log(`  -> Intentando parsear como Date: "${item.fecha}"`);
+                console.log(`  Intentando parsear "${item.fecha}" como Date...`);
                 const dateObj = new Date(item.fecha);
                 if (!isNaN(dateObj.getTime())) {
                     year = dateObj.getFullYear().toString();
-                    console.log(`  -> Parseado exitoso, año: ${year}`);
-                } else {
-                    console.log(`  -> No se pudo parsear fecha`);
+                    console.log(`  Parseado exitoso, año: ${year}`);
                 }
             }
             
+            // Si aún no hay año, usar el campo "ano" si existe
+            if (!year && item.ano) {
+                year = item.ano.toString();
+                console.log(`  Usando campo "ano": ${year}`);
+            }
+            
             if (!year) {
-                console.warn('No se pudo obtener año de fecha:', item.fecha);
+                console.warn(`No se pudo obtener año de: ${item.fecha}`);
                 return;
             }
             
@@ -607,15 +611,34 @@ function showDateSummary() {
                 };
             }
             
-            // Agregar datos - ¡CORREGIDO! Usar years[year] no years[producto]
+            // Agregar datos - ¡ESTO ES LO IMPORTANTE!
             years[year].count++;
-            years[year].products.add(item.producto);
-            if (item.super) years[year].supermarkets.add(item.super);
-            if (item.ciudad) years[year].cities.add(item.ciudad);
+            
+            // Asegurarse de que el producto no sea null/undefined
+            if (item.producto && item.producto.trim() !== '') {
+                years[year].products.add(item.producto.trim());
+            }
+            
+            // Asegurarse de que el supermercado no sea null/undefined
+            if (item.super && item.super.trim() !== '') {
+                years[year].supermarkets.add(item.super.trim());
+            }
+            
+            // Asegurarse de que la ciudad no sea null/undefined
+            if (item.ciudad && item.ciudad.trim() !== '') {
+                years[year].cities.add(item.ciudad.trim());
+            }
             
         } catch (error) {
-            console.warn('Error procesando fecha:', item.fecha, error);
+            console.warn('Error procesando registro:', item, error);
         }
+    });
+    
+    // DEBUG: Mostrar resumen por año
+    console.log('=== RESUMEN POR AÑO ===');
+    Object.keys(years).sort().forEach(year => {
+        const data = years[year];
+        console.log(`Año ${year}: ${data.count} registros, ${data.products.size} productos, ${data.supermarkets.size} supermercados, ${data.cities.size} ciudades`);
     });
     
     // Mostrar tarjetas de año
@@ -623,10 +646,9 @@ function showDateSummary() {
     if (yearCards) {
         yearCards.innerHTML = '';
         
-        const sortedYears = Object.keys(years).sort().reverse();
+        const sortedYears = Object.keys(years).sort((a, b) => b - a); // Más reciente primero
         
-        console.log(`Años encontrados: ${sortedYears.join(', ')}`);
-        console.log('Datos por año:', years);
+        console.log(`Años encontrados (ordenados): ${sortedYears.join(', ')}`);
         
         if (sortedYears.length === 0) {
             yearCards.innerHTML = '<p class="no-data">No hay datos por año disponibles</p>';
@@ -664,7 +686,6 @@ function showDateSummary() {
     
     // Crear gráfico de barras
     console.log('📊 Preparando datos para gráfico...');
-    console.log('Años encontrados:', Object.keys(years));
     
     // Crear objeto simple para el gráfico
     const chartData = {};
@@ -2084,6 +2105,7 @@ window.debugProduct = function(productName) {
     return exactMatches;
 
 };
+
 
 
 
