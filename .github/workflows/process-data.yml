@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
           
       - name: 🐍 Configurar Python
         uses: actions/setup-python@v4
@@ -36,5 +37,5 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
           git add datos_super.json
-          git commit -m "🔄 Actualizar JSON automáticamente" || echo "No hay cambios"
-          git push
+          git commit -m "🔄 Actualizar JSON automáticamente [skip ci]" || echo "No hay cambios"
+          git push origin HEAD:main
