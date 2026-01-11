@@ -116,12 +116,16 @@ async def agregar_compra(compra: Compra):
             csv_content = repo.get_contents("datos_super.csv")
             # Decodificar contenido base64
             contenido_decodificado = base64.b64decode(csv_content.content).decode('utf-8')
-            df_actual = pd.read_csv(pd.compat.StringIO(contenido_decodificado))
+            
+            # CORRECCIÓN: Usar StringIO de io en lugar de pandas.compat
+            from io import StringIO
+            df_actual = pd.read_csv(StringIO(contenido_decodificado), sep='\t')  # ¡AÑADIR sep='\t'!
+            
             sha_actual = csv_content.sha
             print(f"📂 CSV actual cargado: {len(df_actual)} registros existentes")
         except Exception as e:
             print(f"⚠️  No se pudo cargar CSV existente, creando nuevo: {str(e)}")
-            df_actual = pd.DataFrame()  # DataFrame vacío si no existe
+            df_actual = pd.DataFrame(columns=['fecha', 'super', 'producto', 'cantidad', 'unidad', 'marca', 'precio'])
             sha_actual = None
         
         # 5. COMBINAR DATOS
@@ -129,7 +133,7 @@ async def agregar_compra(compra: Compra):
         print(f"📊 Datos combinados: {len(df_combinado)} registros totales")
         
         # 6. GUARDAR NUEVO CSV
-        new_csv_content = df_combinado.to_csv(index=False)
+        new_csv_content = df_combinado.to_csv(index=False, sep='\t')
         
         if sha_actual:
             # Actualizar archivo existente
