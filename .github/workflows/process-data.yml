@@ -1,0 +1,44 @@
+name: Process New Data
+
+on:
+  workflow_dispatch:  # Permite ejecución manual
+  push:
+    paths:
+      - 'datos_super.csv'  # Se activa cuando cambia el CSV
+
+jobs:
+  process-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 🐍 Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: 📦 Instalar dependencias
+        run: |
+          pip install pandas numpy
+          
+      - name: 🏃‍♂️ Ejecutar procesamiento
+        run: |
+          cd funciones_python
+          python procesar_datos.py
+          
+      - name: 📊 Mostrar resultados
+        run: |
+          echo "Procesamiento completado"
+          ls -la ../*.json
+          
+      - name: 💾 Commit y push cambios
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add ../datos_super.json
+          git commit -m "🔄 Actualizar JSON automáticamente" || echo "No hay cambios"
+          git push
