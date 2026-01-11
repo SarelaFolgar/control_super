@@ -323,6 +323,8 @@ async function enviarCompra() {
         }
         
         const data = await response.json();
+
+        alert('✅ Producto enviado. Revisa GitHub en 2 minutos.');
         
         mostrarMensaje(`✅ ${data.message}`, 'success');
         
@@ -340,6 +342,7 @@ async function enviarCompra() {
         
     } catch (error) {
         console.error('Error enviando compra:', error);
+        alert('❌ Error al enviar: ' + error.message);
         mostrarMensaje('Error al enviar la compra: ' + error.message, 'error');
     }
 }
