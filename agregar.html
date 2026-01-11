@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Compra - Análisis de Precios</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-cart-plus"></i> Agregar Nueva Compra</h1>
+        
+        <form id="compra-form">
+            <!-- Fecha -->
+            <div class="form-group">
+                <label for="fecha"><i class="fas fa-calendar"></i> Fecha:</label>
+                <input type="date" id="fecha" required>
+            </div>
+            
+            <!-- Supermercado -->
+            <div class="form-group">
+                <label for="supermercado"><i class="fas fa-store"></i> Supermercado:</label>
+                <select id="supermercado" required>
+                    <option value="">Seleccionar...</option>
+                </select>
+                <input type="text" id="nuevo-super" placeholder="Otro supermercado..." style="display: none;">
+            </div>
+            
+            <!-- Productos dinámicos -->
+            <div id="productos-container">
+                <div class="producto-item">
+                    <h3>Producto 1</h3>
+                    
+                    <!-- Nombre del producto -->
+                    <div class="form-group">
+                        <label for="producto-1">Producto:</label>
+                        <input type="text" id="producto-1" class="producto-input" 
+                               placeholder="Ej: lomo adobado, pan, arroz...">
+                        <div class="sugerencias" id="sugerencias-1"></div>
+                    </div>
+                    
+                    <!-- Cantidad y unidad -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cantidad-1">Cantidad:</label>
+                            <input type="number" id="cantidad-1" step="0.01" placeholder="Ej: 1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="unidad-1">Unidad:</label>
+                            <select id="unidad-1">
+                                <option value="g">g (gramos)</option>
+                                <option value="ud">ud (unidades)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Marca y precio -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marca-1">Marca:</label>
+                            <input type="text" id="marca-1" placeholder="Ej: no aplica">
+                        </div>
+                        <div class="form-group">
+                            <label for="precio-1">Precio (€):</label>
+                            <input type="number" id="precio-1" step="0.01" placeholder="Ej: 2.81">
+                        </div>
+                    </div>
+                    
+                    <!-- Precio calculado -->
+                    <div class="precio-calculado" id="precio-calc-1">
+                        <small>Precio por 1kg/unidad: <span>-</span></small>
+                    </div>
+                    
+                    <button type="button" class="btn-eliminar" onclick="eliminarProducto(this)">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Botones -->
+            <div class="form-buttons">
+                <button type="button" class="btn-secondary" onclick="agregarProducto()">
+                    <i class="fas fa-plus"></i> Agregar otro producto
+                </button>
+                
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-paper-plane"></i> Enviar compra
+                </button>
+                
+                <button type="button" class="btn-cancel" onclick="window.location.href='index.html'">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+            
+            <!-- Mensajes -->
+            <div id="mensaje" class="mensaje"></div>
+        </form>
+    </div>
+    
+    <script src="agregar.js"></script>
+</body>
+</html>
