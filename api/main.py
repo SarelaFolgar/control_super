@@ -41,7 +41,7 @@ def trigger_github_workflow():
         print("⚠️  GITHUB_TOKEN no configurado - no se puede disparar workflow")
         return False
     
-    repo_owner = "targaryen666"  # Cambia si es diferente
+    repo_owner = "SarelaFolgar"  # Cambia si es diferente
     repo_name = "control_super"
     
     url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/dispatches"
@@ -109,7 +109,7 @@ async def agregar_compra(compra: Compra):
         
         # 3. CONECTAR CON GITHUB
         g = Github(github_token)
-        repo = g.get_repo("targaryen666/control_super")  # Cambia si es diferente
+        repo = g.get_repo("SarelaFolgar/control_super")  # Cambia si es diferente
         
         # 4. LEER CSV ACTUAL
         try:
