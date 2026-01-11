@@ -1,0 +1,611 @@
+fecha,super,producto,cantidad,unidad,marca,precio
+17/06/2025,spar borbalan,lomo adobado,1000.0,g,no aplica,10.99
+17/06/2025,spar borbalan,croquetas,1000.0,g,no aplica,9.95
+17/06/2025,spar borbalan,pollo adobado,1000.0,g,no aplica,10.69
+17/06/2025,spar borbalan,bistec de res,1000.0,g,no aplica,14.09
+17/06/2025,spar borbalan,patatas,1000.0,g,no aplica,1.95
+07/07/2025,spar borbalan,patatillas,140.0,g,lays mediterraneas,2.28
+07/07/2025,spar borbalan,patatillas,165.0,g,pringles,2.17
+07/07/2025,spar borbalan,crema solar,200.0,g,nivea,15.29
+19/05/2025,hiperdino,estropajos,10.0,ud,no aplica,1.69
+19/05/2025,hiperdino,pasta de dientes,150.0,g,colgate,2.82
+18/05/2025,olivier,patatillas,125.0,g,lays,1.5
+18/05/2025,olivier,patatillas,125.0,g,lays,1.5
+18/05/2025,olivier,huevos,6.0,ud,el taro,1.8
+18/05/2025,olivier,pan,125.0,g,no aplica,0.65
+13/05/2025,spar borbalan,pan,125.0,g,no aplica,0.59
+13/05/2025,spar borbalan,pimiento rojo,1000.0,g,no aplica,2.89
+13/05/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.5
+13/05/2025,spar borbalan,pimiento verde,1000.0,g,no aplica,3.24
+13/05/2025,spar borbalan,cebolla,1000.0,g,no aplica,2.5
+12/05/2025,spar borbalan,pan,125.0,g,no aplica,0.59
+12/05/2025,spar borbalan,fuet,170.0,g,el pozo,4.95
+12/05/2025,spar borbalan,chocolate,210.0,g,kinder maxi,3.98
+12/05/2025,spar borbalan,leche sin lactosa,1000.0,g,asturiana,1.45
+26/04/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
+26/04/2025,spar borbalan,chorizo,80.0,g,revilla,1.0
+26/04/2025,spar borbalan,detergente lavadora,1550.0,g,ariel basico,5.95
+26/04/2025,spar borbalan,carne picada de anojo,1000.0,g,no aplica,12.29
+25/04/2025,spar borbalan,patatillas,130.0,g,cumba,1.79
+25/04/2025,spar borbalan,munchitos,160.0,g,matutano,2.55
+25/04/2025,spar borbalan,pan,70.0,g,no aplica,0.57
+25/04/2025,spar borbalan,fuet,170.0,g,el pozo,4.95
+26/04/2025,hiperdino,condones,12.0,ud,durex,6.89
+26/04/2025,hiperdino,papel higienico,12.0,ud,hiperdino,2.35
+26/04/2025,hiperdino,aceite de oliva virgen extra,1000.0,g,ybarra,6.99
+26/04/2025,hiperdino,detergente lavadora,3375.0,g,ariel basico,13.67
+26/04/2025,hiperdino,chorizo,80.0,g,revilla,1.0
+26/04/2025,spar borbalan,yogur fresa,480.0,g,danone,1.79
+26/04/2025,hiperdino,yogur fresa,480.0,g,danone,1.7
+26/04/2025,hiperdino,desodorante,75.0,g,hiperdino,1.26
+25/04/2025,spar borbalan,potitos,400.0,g,spar,2.39
+25/04/2025,spar borbalan,natillas vainilla,500.0,g,spar,1.73
+25/04/2025,spar borbalan,chocolate,125.0,g,nestle,1.96
+25/04/2025,spar borbalan,pollo mechado,300.0,g,buga buga,3.95
+25/04/2025,spar borbalan,pimiento rojo,1000.0,g,no aplica,3.95
+25/04/2025,spar borbalan,pimiento verde,1000.0,g,no aplica,3.5
+25/04/2025,spar borbalan,platanos,1000.0,g,canarias,2.19
+25/04/2025,spar borbalan,huevos,10.0,ud,el taro,3.49
+18/04/2025,spar borbalan,aceitunas,180.0,g,escamilla,0.69
+18/04/2025,spar borbalan,pimiento verde,1000.0,g,no aplica,3.5
+18/04/2025,spar borbalan,pimiento rojo,1000.0,g,no aplica,3.69
+18/04/2025,spar borbalan,patatillas,130.0,g,cumba,1.79
+18/04/2025,spar borbalan,huevos,10.0,ud,el taro,3.49
+18/04/2025,spar borbalan,patatillas,150.0,g,spar,1.29
+16/04/2025,spar borbalan,chorizo,80.0,g,revilla,1.0
+16/04/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.5
+16/04/2025,spar borbalan,carne picada de anojo,1000.0,g,no aplica,13.3
+16/04/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
+16/04/2025,spar borbalan,platanos,1000.0,g,canarias,2.19
+15/03/2025,spar borbalan,pan,260.0,g,no aplica,1.25
+15/03/2025,spar borbalan,natillas vainilla,500.0,g,spar,1.73
+15/03/2025,spar borbalan,ajo-perejil,55.0,g,carmencita,2.09
+15/03/2025,spar borbalan,bistec de res,1000.0,g,no aplica,14.09
+15/03/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
+15/03/2025,spar borbalan,ajos,1000.0,g,no aplica,6.95
+17/04/2025,spar borbalan,chocolate,125.0,g,nestle,1.96
+17/04/2025,spar borbalan,galletas,760.0,g,cuetara,4.2
+05/04/2025,hiperdino,zanahorias,1000.0,g,bouquet,1.24
+05/04/2025,hiperdino,maiz palomitas,250.0,g,hiperdino,0.62
+05/04/2025,hiperdino,cebolla,1000.0,g,no aplica,1.57
+05/04/2025,hiperdino,lechuga,1.0,ud,batavia,1.38
+05/04/2025,hiperdino,ketchup,545.0,g,libby's,2.52
+05/04/2025,hiperdino,leche,1000.0,g,asturiana,1.32
+12/03/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
+12/03/2025,fruteria,aguacates,1000.0,g,no aplica,7.4
+12/03/2025,fruteria,queso fresco,1000.0,g,no aplica,16.85
+10/03/2025,spar borbalan,tomate natural,400.0,g,spar,0.79
+08/03/2025,spar borbalan,papel de horno,1.0,ud,spar,1.0
+08/03/2025,spar borbalan,leche sin lactosa,1000.0,g,kaiku,1.45
+08/03/2025,spar borbalan,potitos,400.0,g,spar,2.39
+08/03/2025,spar borbalan,pan,260.0,g,no aplica,1.25
+08/03/2025,spar borbalan,cereales,375.0,g,chocapic,3.16
+08/03/2025,spar borbalan,atun,6.0,ud,eureka,6.36
+08/03/2025,spar borbalan,huevos,10.0,ud,el taro,3.49
+08/03/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
+08/03/2025,spar borbalan,patatillas,150.0,g,spar,1.29
+08/03/2025,spar borbalan,chorizo,80.0,g,revilla,1.0
+08/03/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.5
+08/03/2025,spar borbalan,estropajos,3.0,ud,am,0.53
+08/03/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
+08/03/2025,spar borbalan,lechuga,1.0,ud,cogollos,2.09
+08/03/2025,spar borbalan,carne picada de anojo,1000.0,g,no aplica,13.3
+08/03/2025,spar borbalan,leche,2.0,ud,asturiana,2.5
+04/03/2025,spar borbalan,mermelada de fresa,330.0,g,ligeresa,2.39
+04/03/2025,spar borbalan,pan,125.0,g,no aplica,0.59
+04/03/2025,olivier,patatillas,125.0,g,lays,1.5
+03/03/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
+03/03/2025,spar borbalan,fuet,340.0,g,el pozo,4.95
+03/03/2025,spar borbalan,aceitunas,180.0,g,jolca,0.89
+03/03/2025,spar borbalan,pan,550.0,g,no aplica,0.85
+26/02/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
+26/02/2025,fruteria,aguacates,1000.0,g,no aplica,7.4
+22/02/2025,hiperdino,queso semicurado,1000.0,g,lomo gallego,10.29
+22/02/2025,hiperdino,queso fresco,1000.0,g,la vaca afortunada,8.39
+22/02/2025,hiperdino,chocolate,150.0,g,hiperdino,1.19
+22/02/2025,hiperdino,leche condensada sin lactosa,450.0,g,la lechera,3.49
+22/02/2025,hiperdino,tampones,44.0,ud,tampax compak,4.86
+22/02/2025,hiperdino,tampones,16.0,ud,tampax compak pearl,4.59
+22/02/2025,hiperdino,maiz,420.0,g,hiperdino,2.69
+22/02/2025,spar borbalan,papel de horno,1.0,ud,spar,1.0
+22/02/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
+22/02/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.5
+22/02/2025,hiperdino,tomate natural,450.0,g,hiperdino,0.54
+22/02/2025,hiperdino,cereales,500.0,g,hiperdino,2.14
+21/02/2025,hiperdino,chocolate,100.0,g,nestle dolca,1.23
+22/02/2025,hiperdino,insecticida,750.0,g,ifa,2.55
+22/02/2025,hiperdino,bayetas,3.0,ud,hiperdino,1.68
+22/02/2025,hiperdino,platanos,1000.0,g,canarias,1.45
+21/02/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
+21/02/2025,fruteria,queso fresco,1000.0,g,quesos flor valsequillo,16.85
+21/02/2025,fruteria,lechuga,1.0,ud,batavia,1.59
+20/02/2025,spar borbalan,pimientos,1000.0,g,no aplica,3.6
+20/02/2025,hiperdino,bicarbonato de sodio,200.0,g,carmencita,1.47
+20/02/2025,hiperdino,papel de horno,1.0,ud,hiperdino,1.03
+20/02/2025,hiperdino,pimientos,1000.0,g,no aplica,3.58
+17/02/2025,spar borbalan,munchitos,160.0,g,matutano,2.55
+17/02/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
+17/02/2025,spar borbalan,pan,125.0,g,no aplica,0.59
+17/02/2025,spar borbalan,aceitunas,180.0,g,jolca,0.89
+17/02/2025,spar borbalan,fresas,1000.0,g,no aplica,9.25
+17/02/2025,spar borbalan,potitos,400.0,g,spar,2.39
+17/02/2025,spar borbalan,manzanas,1000.0,g,royal,2.25
+17/02/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.25
+17/02/2025,spar borbalan,tomate natural,390.0,g,diamante,1.36
+17/02/2025,fruteria,cebolla,1000.0,g,no aplica,1.8
+17/02/2025,fruteria,platanos,1000.0,g,canarias,1.89
+15/02/2025,olivier,agua,8000.0,g,vitalia,1.8
+13/02/2025,spar borbalan,chorizo,80.0,g,revilla,1.0
+13/02/2025,spar borbalan,tomate natural,400.0,g,spar,0.79
+11/02/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
+11/02/2025,heladeria,aguacates,1000.0,g,no aplica,4.5
+09/02/2025,olivier,pan de molde sin gluten,300.0,g,bimbo,3.95
+09/02/2025,olivier,tarro atun,220.0,g,pescamar,2.85
+07/02/2025,spar borbalan,patatillas,150.0,g,lays mediterraneas,2.85
+07/02/2025,olivier,patatas congeladas,1000.0,g,eurofrits,2.95
+05/02/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
+05/02/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.25
+05/02/2025,spar playa,fresas,1000.0,g,no aplica,9.25
+03/02/2025,hiperdino,aceite de oliva virgen extra,1000.0,g,ybarra,9.95
+03/02/2025,hiperdino,papel de cocina,4.0,ud,suavecel,1.99
+03/02/2025,hiperdino,leche condensada sin lactosa,450.0,g,la lechera,3.62
+03/02/2025,hiperdino,arroz,1000.0,g,brillante,1.88
+03/02/2025,hiperdino,bolsas zip,20.0,ud,ifa,0.89
+03/02/2025,hiperdino,crema de cacahuete,500.0,g,just loading,2.82
+03/02/2025,hiperdino,galletas flor sin gluten,400.0,g,gullon,3.24
+03/02/2025,hiperdino,galletas maria sin gluten,200.0,g,schar,2.08
+03/02/2025,hiperdino,garbanzos,580.0,g,hiperdino,0.74
+03/02/2025,hiperdino,harina,1000.0,g,pan,2.36
+03/02/2025,hiperdino,leche sin lactosa,1000.0,g,hiperdino,0.85
+03/02/2025,hiperdino,lechuga,1.0,ud,batavia,1.67
+03/02/2025,hiperdino,mayonesa,450.0,g,ybarra,1.55
+03/02/2025,hiperdino,miel,500.0,g,hiperdino,2.62
+03/02/2025,hiperdino,nata,500.0,g,asturiana,2.61
+03/02/2025,hiperdino,natillas chocolate,500.0,g,ifa,1.04
+03/02/2025,hiperdino,natillas vainilla,500.0,g,ifa,1.04
+03/02/2025,hiperdino,pan de molde sin gluten,350.0,g,sinblat,3.15
+03/02/2025,hiperdino,pasta sin gluten,450.0,g,la islena,2.27
+03/02/2025,hiperdino,pizza sin gluten,420.0,g,casa tarradellas,3.49
+03/02/2025,hiperdino,queso fresco,1000.0,g,quesos flor valsequillo,8.9
+03/02/2025,hiperdino,tomate cherry,250.0,g,pera,1.29
+03/02/2025,hiperdino,tortitas de arroz,100.0,g,ecocesta,1.25
+03/02/2025,hiperdino,yogur griego,1000.0,g,ifa,2.39
+03/02/2025,hiperdino,chocolate,100.0,g,nestle dolca,0.93
+03/02/2025,hiperdino,lavavajillas,1000.0,g,hiperdino,1.42
+03/02/2025,hiperdino,papel higienico,12.0,ud,hiperdino,2.3801
+03/02/2025,hiperdino,huevos,12.0,ud,rujamar,2.48
+02/02/2025,spar borbalan,mayonesa,750.0,g,ybarra,3.95
+02/02/2025,spar borbalan,lavavajillas,935.0,g,disiclin,1.79
+02/02/2025,spar borbalan,pan,260.0,g,no aplica,1.25
+02/02/2025,spar borbalan,chorizo perro,3.0,ud,el palmero,2.07
+01/02/2025,lupe,aceitunas,180.0,g,jolca,0.95
+01/02/2025,lupe,anacardos,1000.0,g,casa ricardo,22.75
+01/02/2025,spar borbalan,pizza sin gluten,345.0,g,ristorante,6.2
+31/01/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
+31/01/2025,spar borbalan,pan,550.0,g,no aplica,0.85
+31/01/2025,spar borbalan,natillas vainilla,500.0,g,spar,1.73
+31/01/2025,spar borbalan,lechuga,1.0,ud,batavia,2.25
+31/01/2025,spar borbalan,chorizo perro,2.0,ud,el palmero,1.38
+31/01/2025,spar borbalan,leche,6.0,ud,asturiana,7.5
+30/01/2025,spar playa,patatas,1000.0,g,no aplica,1.85
+30/01/2025,spar playa,espinacas congeladas,400.0,g,spar,1.43
+30/01/2025,spar playa,harina,1000.0,g,pan,2.52
+30/01/2025,spar playa,yogur proteinas,400.0,g,asturiana,3.19
+30/01/2025,spar playa,pan,550.0,g,no aplica,0.85
+28/01/2025,spar borbalan,atun,6.0,ud,eureka,6.36
+28/01/2025,spar borbalan,limpiador multiusos,750.0,g,sanytol,2.78
+28/01/2025,spar borbalan,garbanzos,540.0,g,spar,1.14
+28/01/2025,spar borbalan,quitagrasa,780.0,g,kh-7,4.79
+28/01/2025,spar borbalan,tomate natural,660.0,g,spar1,2.46
+28/01/2025,spar borbalan,bolsas basura,20.0,ud,spar,1.79
+28/01/2025,spar borbalan,tampones,16.0,ud,tampax compak pearl,3.98
+28/01/2025,spar borbalan,potitos,400.0,g,spar,2.39
+28/01/2025,spar borbalan,tortitas de arroz,130.0,g,comeztier,1.59
+28/01/2025,spar borbalan,carne picada de anojo,1000.0,g,no aplica,13.3
+28/01/2025,spar borbalan,flan,400.0,g,spar,1.22
+28/01/2025,spar borbalan,chorizo,80.0,g,revilla,1.0
+28/01/2025,spar borbalan,compresas,16.0,ud,evax,2.96
+28/01/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
+28/01/2025,spar borbalan,bistec de res,1000.0,g,no aplica,14.09
+28/01/2025,spar borbalan,huevos,10.0,ud,el taro,3.49
+28/01/2025,spar borbalan,manzanas,1000.0,g,royal,2.25
+28/01/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.25
+28/01/2025,spar borbalan,pimiento verde,1000.0,g,no aplica,2.7
+28/01/2025,spar borbalan,pimiento amarillo,1000.0,g,no aplica,3.85
+28/01/2025,spar borbalan,cebolla,1000.0,g,no aplica,2.19
+28/01/2025,spar borbalan,pimiento rojo,1000.0,g,no aplica,2.84
+28/01/2025,spar borbalan,chorizo perro,2.0,ud,el palmero,1.38
+28/01/2025,spar borbalan,tomate cherry,250.0,g,normal,2.16
+28/01/2025,spar borbalan,queso fresco,1000.0,g,quesos flor valsequillo,11.95
+20/01/2025,spar borbalan,potitos,400.0,g,spar,2.39
+20/01/2025,spar borbalan,lechuga,1.0,ud,batavia,2.25
+20/01/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
+20/01/2025,spar borbalan,fuet,250.0,g,el pozo imperial,3.45
+18/01/2025,spar borbalan,huevos,10.0,ud,el taro,3.49
+18/01/2025,spar borbalan,vino blanco,1000.0,g,spar,1.46
+18/01/2025,spar borbalan,cebolla,1000.0,g,no aplica,2.19
+18/01/2025,spar borbalan,chorizo,80.0,g,revilla,1.0
+17/01/2025,spar borbalan,tomate natural,660.0,g,spar1,2.46
+17/01/2025,spar borbalan,pan,260.0,g,no aplica,1.25
+17/01/2025,spar borbalan,fuet,250.0,g,el pozo imperial,3.45
+16/01/2025,spar borbalan,pan de molde,430.0,g,bimbo,1.59
+16/01/2025,spar borbalan,carne picada de res,1000.0,g,no aplica,12.09
+16/01/2025,spar borbalan,nata,500.0,g,asturiana,2.79
+16/01/2025,spar borbalan,bacon,200.0,g,el pozo,2.59
+16/01/2025,spar borbalan,atun,6.0,ud,eureka,6.36
+16/01/2025,spar borbalan,maiz,420.0,g,spar,3.95
+16/01/2025,spar borbalan,bolsas zip,15.0,ud,spar,1.29
+16/01/2025,spar borbalan,aceitunas,540.0,g,jolca,2.67
+16/01/2025,spar borbalan,pimiento amarillo,1000.0,g,no aplica,3.6
+16/01/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.19
+16/01/2025,spar borbalan,kiwi,1000.0,g,no aplica,3.64
+16/01/2025,spar borbalan,gel de ducha,750.0,g,sensations,1.82
+16/01/2025,spar borbalan,natillas vainilla,500.0,g,spar,1.73
+16/01/2025,spar borbalan,pimiento verde,1000.0,g,no aplica,2.7
+16/01/2025,spar borbalan,manzanas,1000.0,g,royal,1.96
+14/01/2025,spar playa,queso fresco,1000.0,g,quesos flor valsequillo,16.25
+14/01/2025,spar playa,patatillas paja,500.0,g,palichips,4.99
+14/01/2025,spar playa,galletas maria sin gluten,200.0,g,schar,2.58
+14/01/2025,spar playa,mermelada de arandanos,410.0,g,spar,3.49
+14/01/2025,olivier,agua,8000.0,g,vitalia,1.7
+14/01/2025,olivier,mayonesa,450.0,g,ybarra,2.35
+13/01/2025,spar borbalan,avena,500.0,g,ecocesta,2.89
+13/01/2025,spar borbalan,corn flakes sin gluten,375.0,g,nestle,3.59
+13/01/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
+13/01/2025,spar borbalan,garbanzos,570.0,g,penelas,1.09
+13/01/2025,spar borbalan,tortitas de arroz,138.0,g,ecocesta,1.69
+13/01/2025,spar borbalan,gofio,1000.0,g,molino de gofio imendi,3.06
+13/01/2025,spar borbalan,manzanas,1000.0,g,royal,1.96
+13/01/2025,spar borbalan,pollo mechado,300.0,g,buga buga,3.95
+13/01/2025,spar borbalan,arroz,1000.0,g,la cigala,1.99
+13/01/2025,spar borbalan,crema de cacahuete,500.0,g,spar,3.69
+13/01/2025,spar borbalan,potitos,800.0,g,spar,4.78
+13/01/2025,spar borbalan,harina,1000.0,g,pan,2.52
+13/01/2025,spar borbalan,tomate cherry,250.0,g,pera,2.65
+13/01/2025,spar borbalan,ajos,1000.0,g,no aplica,6.62
+13/01/2025,spar borbalan,miel,500.0,g,spar,3.69
+13/01/2025,spar borbalan,cebolla,1000.0,g,no aplica,2.19
+13/01/2025,spar borbalan,lechuga,1.0,ud,batavia,1.68
+13/01/2025,olivier,papel de cocina,1.0,ud,colhogar,5.5
+08/01/2025,spar borbalan,fuetec,250.0,g,el pozo imperial,2.95
+08/01/2025,spar borbalan,potitos,400.0,g,spar,2.39
+08/01/2025,spar borbalan,ajo en polvo,60.0,g,carmencita,2.87
+08/01/2025,spar borbalan,natillas vainilla,1000.0,g,spar,3.46
+08/01/2025,spar borbalan,bistec de res,1000.0,g,no aplica,12.69
+08/01/2025,spar borbalan,bacon,200.0,g,el pozo,2.59
+08/01/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.19
+08/01/2025,spar borbalan,chocolate,100.0,g,nestle dolca,1.25
+08/01/2025,spar borbalan,espaguetti,260.0,g,pontutoke,3.79
+08/01/2025,spar borbalan,pan,125.0,g,no aplica,0.59
+08/01/2025,spar borbalan,huevos,10.0,ud,el taro,3.49
+08/01/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
+08/01/2025,spar borbalan,patatillas,265.0,g,ruffles,2.29
+08/01/2025,charco,pasta sin gluten,500.0,g,d'oro pipette,2.85
+04/01/2025,spar borbalan,patatas congeladas,2500.0,g,farm frites,6.85
+04/01/2025,spar borbalan,mantequilla,250.0,g,asturiana,3.79
+04/01/2025,spar borbalan,pan,260.0,g,no aplica,1.25
+04/01/2025,spar borbalan,palomitas gusanito,90.0,g,risi,1.45
+04/01/2025,spar borbalan,fuet,150.0,g,navidul,3.05
+04/01/2025,olivier,perejil,100.0,g,no aplica,0.8
+04/01/2025,olivier,pan de molde,430.0,g,bimbo,1.65
+04/01/2025,olivier,pimienta negra,50.0,g,carmencita,0.95
+04/01/2025,olivier,comino,45.0,g,carmencita,0.95
+02/01/2025,spar borbalan,bistec de res,1000.0,g,no aplica,12.69
+02/01/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.19
+02/01/2025,spar borbalan,hamburguesa de res,1000.0,g,no aplica,12.09
+02/01/2025,spar borbalan,chocolate,210.0,g,kinder maxi,3.98
+02/01/2025,spar borbalan,bacon,200.0,g,el pozo,2.59
+02/01/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
+02/01/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
+02/01/2025,spar borbalan,leche,6.0,ud,asturiana,7.2
+26/12/2024,spar playa,tortitas de arroz con chocolate,120.0,g,noglut,2.75
+26/12/2024,spar playa,galletas maria sin gluten,200.0,g,schar,2.58
+26/12/2024,spar playa,pan de cadiz,250.0,g,pico,4.19
+26/12/2024,spar borbalan,papel higienico,8.0,ud,disiclin,3.23
+23/12/2024,charco,maiz palomitas,250.0,g,casa ricardo,0.95
+23/12/2024,charco,mermelada de platano,250.0,g,luma,3.55
+21/12/2024,spar borbalan,huevos,10.0,ud,el taro,3.49
+21/12/2024,spar borbalan,pan de molde sin gluten,300.0,g,bimbo,3.65
+21/12/2024,spar borbalan,pan de cadiz,250.0,g,pico,4.19
+21/12/2024,spar borbalan,bacon,200.0,g,el pozo,2.59
+21/12/2024,spar borbalan,natillas chocolate,500.0,g,spar,1.73
+21/12/2024,spar borbalan,natillas vainilla,500.0,g,spar,1.73
+21/12/2024,spar borbalan,patatas congeladas,1000.0,g,fripozo,2.55
+21/12/2024,flor del valle,tierra,10000.0,g,infertosa,3.35
+21/12/2024,flor del valle,planta,1.0,ud,no aplica,3.0
+20/12/2024,lupe,anacardos,1000.0,g,casa ricardo,22.75
+19/12/2024,lupe,maiz palomitas,259.0,g,casa ricardo,0.95
+17/12/2024,spar borbalan,pan de molde,700.0,g,bimbo,2.59
+17/12/2024,spar borbalan,huevos,10.0,ud,el taro,3.49
+17/12/2024,spar borbalan,patatas congeladas,1000.0,g,fripozo,2.55
+17/12/2024,spar borbalan,bacon,200.0,g,el pozo,2.59
+17/12/2024,spar borbalan,salchichitas,125.0,g,tulip,1.55
+17/12/2024,spar borbalan,natillas vainilla,500.0,g,spar,1.73
+17/12/2024,spar borbalan,mayonesa,750.0,g,ybarra,3.95
+17/12/2024,spar borbalan,tomate frito,630.0,g,spar,1.59
+16/12/2024,spar borbalan,palomitas gusanito,90.0,g,risi,1.45
+16/12/2024,spar borbalan,fuetec,200.0,g,el pozo,2.5
+16/12/2024,spar borbalan,potitos,400.0,g,spar,2.39
+16/12/2024,spar borbalan,pan de molde sin gluten,300.0,g,bimbo,3.65
+16/12/2024,spar borbalan,natillas vainilla,500.0,g,spar,1.73
+16/12/2024,spar borbalan,chocolate,100.0,g,nestle dolca,1.25
+16/12/2024,olivier,ketchup,545.0,g,libby's,2.8
+14/12/2024,olivier,tomate frito,210.0,g,udaco,0.6
+14/12/2024,olivier,patatas congeladas,1000.0,g,eurofrits,2.95
+13/12/2024,olivier,agua,8000.0,g,fonteide,2.0
+13/12/2024,olivier,natillas chocolate,250.0,g,kalise,1.6
+13/12/2024,olivier,salchichitas,125.0,g,tulip,1.4
+12/12/2024,olivier,maiz palomitas,250.0,g,casa ricardo,0.9
+12/12/2024,olivier,pan de molde,430.0,g,bimbo,1.6
+10/12/2024,spar borbalan,suavizante lavadora,4000.0,g,spar,2.95
+10/12/2024,spar borbalan,arroz,1000.0,g,brillante,2.35
+10/12/2024,spar borbalan,estropajos,10.0,ud,santex,2.46
+10/12/2024,spar borbalan,natillas chocolate,500.0,g,spar,1.73
+10/12/2024,spar borbalan,hamburguesa de res,1000.0,g,no aplica,12.14
+10/12/2024,spar borbalan,potitos,400.0,g,spar,2.39
+10/12/2024,spar borbalan,bolsas basura,20.0,ud,spar,1.79
+10/12/2024,spar borbalan,pan de molde sin gluten,300.0,g,bimbo,3.65
+10/12/2024,spar borbalan,huevos,10.0,ud,el taro,3.49
+10/12/2024,spar borbalan,leche sin lactosa,1000.0,g,asturiana,1.45
+10/12/2024,spar borbalan,mermelada de platano,250.0,g,frutaguay,3.75
+10/12/2024,spar borbalan,estropajo nanas,1.0,ud,nanas,1.79
+10/12/2024,spar borbalan,galletas maria sin gluten,200.0,g,schar,2.58
+10/12/2024,spar borbalan,yogur frutos del bosque,500.0,g,kalise,1.49
+10/12/2024,spar borbalan,yogur fresa asqueroso,500.0,g,kalise,1.49
+10/12/2024,charco,pasta sin gluten,500.0,g,d'oro pipette,2.85
+10/12/2024,charco,munchitos,65.0,g,matutano,1.65
+10/12/2024,charco,detergente lavadora,1440.0,g,ariel basico,8.35
+17/12/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
+17/12/2025,spar borbalan,platanos,1000.0,g,canarias,1.69
+17/12/2025,spar borbalan,tomate cherry,250.0,g,pera,1.33
+17/12/2025,spar borbalan,queso fresco,1000.0,g,flor valsequillo,12.59
+23/12/2025,spar borbalan,lomo adobado,1000.0,g,no aplica,11.11
+23/12/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,11.19
+23/12/2025,spar borbalan,chocogalletas,150.0,g,schar,3.98
+23/12/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
+23/12/2025,spar borbalan,carne picada de anojo,1000.0,g,no aplica,13.59
+23/12/2025,spar borbalan,huevos,10.0,ud,el taro,3.98
+23/12/2025,spar borbalan,patatillas,140.0,g,lays mediterraneas,2.28
+23/12/2025,spar borbalan,pajitas,100.0,g,risi,1.45
+26/12/2025,spar borbalan,mermelada de platano,250.0,g,frutaguay,3.79
+26/12/2025,spar borbalan,compresas,28.0,ud,secretisima,2.38
+26/12/2025,spar borbalan,lechuga,1.0,ud,batavia,1.45
+26/12/2025,spar borbalan,platanos,1000.0,g,canarias,1.69
+26/12/2025,spar borbalan,queso gouda,1000.0,g,bonissimo,8.33
+26/12/2025,spar borbalan,queso fresco,1000.0,g,quesos flor valsequillo,12.59
+26/12/2025,spar borbalan,jamon serrano,100.0,g,el pozo,1.96
+26/12/2025,spar borbalan,chocolate,125.0,g,kinder chocobons,3.39
+26/12/2025,spar borbalan,yogur fresa,480.0,g,danone,1.79
+26/12/2025,spar borbalan,tomate cherry,250.0,g,pera,1.25
+01/09/2025,spar borbalan,jamon serrano,220.0,g,navidul,4.81
+01/09/2025,spar borbalan,leche,1000.0,g,asturiana,1.26
+15/12/2025,spar borbalan,muesli chocolate,500.0,g,spar,2.79
+15/12/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
+15/12/2025,spar borbalan,cebolla,1000.0,g,no aplica,2.29
+15/12/2025,spar borbalan,pimiento amarillo,1000.0,g,no aplica,4.55
+15/12/2025,spar borbalan,pimiento verde,1000.0,g,no aplica,3.04
+15/12/2025,spar borbalan,pimiento rojo,1000.0,g,no aplica,4.05
+15/12/2025,spar borbalan,pan de molde,700.0,g,bimbo,1.99
+13/12/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
+13/12/2025,spar borbalan,platanos,1000.0,g,canarias,1.69
+13/12/2025,spar borbalan,munchitos,160.0,g,matutano,2.55
+13/12/2025,spar borbalan,tomate cherry,250.0,g,pera,1.33
+13/12/2025,spar borbalan,pajitas,100.0,g,risi,1.45
+13/12/2025,spar borbalan,lechuga,1.0,ud,batavia,1.45
+13/12/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,11.19
+13/12/2025,spar borbalan,carne picada de anojo,1000.0,g,no aplica,13.59
+13/12/2025,spar borbalan,queso gouda,1000.0,g,bonissimo,8.33
+04/02/2025,alcampo,huevos,12.0,ud,alcampo,2.26
+04/02/2025,alcampo,yogur griego,1000.0,g,alcampo,2.69
+04/02/2025,alcampo,tortitas de arroz,115.0,g,ecocesta,1.25
+04/02/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.79
+04/02/2025,alcampo,leche condensada sin lactosa,450.0,g,la lechera,3.12
+04/02/2025,alcampo,chocolate,100.0,g,nestle dolca,0.83
+04/02/2025,alcampo,champu,300.0,g,garnier,3.56
+04/02/2025,alcampo,harina,1000.0,g,pan,2.02
+04/02/2025,alcampo,atun,6.0,ud,alcampo,4.19
+04/02/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+04/02/2025,alcampo,crema de cacahuete,500.0,g,alcampo,2.78
+04/02/2025,alcampo,papel higienico,12.0,ud,alcampo,2.38
+04/02/2025,alcampo,lavavajillas,4000.0,g,alcampo,2.85
+04/02/2025,alcampo,platanos,1000.0,g,canarias,1.0
+04/02/2025,alcampo,papel de cocina,4.0,ud,renova,1.45
+04/02/2025,alcampo,champu,1250.0,g,sadermo,1.55
+04/02/2025,alcampo,pasta sin gluten,500.0,g,pasta d'oro,2.08
+04/02/2025,alcampo,corn flakes sin gluten,250.0,g,schar,2.05
+04/02/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.55
+06/04/2025,alcampo,cereales rellenos de leche,650.0,g,alcampo,2.99
+06/04/2025,alcampo,huevos,12.0,ud,alcampo,2.89
+06/04/2025,alcampo,natillas vainilla,500.0,g,alcampo,1.25
+06/04/2025,alcampo,yogur griego,1000.0,g,alcampo,2.69
+06/04/2025,alcampo,anacardos,500.0,g,borges,4.77
+06/04/2025,alcampo,maiz palomitas,400.0,g,casa ricardo,1.04
+06/04/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.17
+06/04/2025,alcampo,leche,6000.0,g,asturiana,6.96
+06/04/2025,alcampo,cebolla,1000.0,g,no aplica,1.69
+06/04/2025,alcampo,garbanzos,400.0,g,el plato de oro,0.65
+06/04/2025,alcampo,gel de ducha,1250.0,g,instituto español,2.25
+06/04/2025,alcampo,leche sin lactosa,1000.0,g,lr,0.91
+06/04/2025,alcampo,lechuga,1.0,ud,batavia,1.59
+06/04/2025,alcampo,corn flakes sin gluten,375.0,g,nacional,1.99
+06/04/2025,alcampo,harina,1000.0,g,pan,2.02
+06/04/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
+06/04/2025,alcampo,pasta sin gluten,500.0,g,alcampo,1.9
+06/04/2025,alcampo,tomate natural,400.0,g,alcampo,0.51
+06/04/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.3
+06/04/2025,alcampo,ketchup,340.0,g,alcampo,0.85
+06/04/2025,alcampo,zanahorias,1000.0,g,no aplica,2.36
+26/04/2025,alcampo,natillas vainilla,500.0,g,alcampo,0.98
+26/04/2025,alcampo,yogur griego,1000.0,g,alcampo,2.69
+26/04/2025,alcampo,anacardos,500.0,g,borges,4.77
+26/04/2025,alcampo,arroz,1000.0,g,brillante,1.92
+26/04/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.01
+26/04/2025,alcampo,yogur fresa,480.0,g,danone,1.6
+26/04/2025,alcampo,condones,12.0,ud,durex,6.68
+26/04/2025,alcampo,tomate cherry,250.0,g,pera,1.0
+26/04/2025,alcampo,aceite de oliva virgen extra,1000.0,g,ybarra,6.46
+26/04/2025,alcampo,leche sin lactosa,1000.0,g,puleva,1.15
+26/04/2025,alcampo,desodorante,50.0,g,sanex,1.52
+26/04/2025,alcampo,maiz,210.0,g,bonduelle,1.74
+26/04/2025,alcampo,lechuga,1.0,ud,batavia,1.59
+26/04/2025,alcampo,leche,6000.0,g,pascual,6.42
+26/04/2025,alcampo,miel,500.0,g,alcampo,2.58
+26/04/2025,alcampo,tomate natural,800.0,g,alcampo,0.87
+20/05/2025,alcampo,cereales rellenos de leche,650.0,g,alcampo,2.99
+20/05/2025,alcampo,natillas vainilla,500.0,g,alcampo,1.49
+20/05/2025,alcampo,yogur griego,1000.0,g,alcampo,2.25
+20/05/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.01
+20/05/2025,alcampo,leche sin lactosa,1000.0,g,asturiana,1.25
+20/05/2025,alcampo,pasta de dientes,75.0,g,colgate,1.97
+20/05/2025,alcampo,galletas,760.0,g,cuetara,3.71
+20/05/2025,alcampo,yogur fresa,480.0,g,danone,1.6
+20/05/2025,alcampo,fuet,300.0,g,el pozo,3.77
+20/05/2025,alcampo,maiz palomitas,250.0,g,emicela,0.71
+20/05/2025,alcampo,corn flakes sin gluten,375.0,g,nacional,1.99
+20/05/2025,alcampo,harina,1000.0,g,pan,2.0
+20/05/2025,alcampo,bicarbonato de sodio,200.0,g,alcampo,0.71
+20/05/2025,alcampo,bolsas basura,40.0,ud,alcampo,1.64
+20/05/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
+20/05/2025,alcampo,pasta sin gluten,500.0,g,alcampo,1.9
+20/05/2025,alcampo,anacardos,200.0,g,casa ricardo,3.75
+20/05/2025,alcampo,estropajos,10.0,ud,rozenbal,1.61
+20/05/2025,alcampo,tomate natural,800.0,g,alcampo,0.87
+20/05/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.18
+23/07/2025,alcampo,bayetas,5.0,ud,alcampo,2.19
+23/07/2025,alcampo,natillas vainilla,500.0,g,alcampo,1.49
+23/07/2025,alcampo,yogur griego,1000.0,g,alcampo,2.69
+23/07/2025,alcampo,maiz,210.0,g,bonduelle,1.72
+23/07/2025,alcampo,anacardos,500.0,g,borges,4.77
+23/07/2025,alcampo,arroz,1000.0,g,brillante,1.92
+23/07/2025,alcampo,maiz palomitas,400.0,g,casa ricardo,1.2
+23/07/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,2.97
+23/07/2025,alcampo,leche,6000.0,g,asturiana,7.14
+23/07/2025,alcampo,leche sin lactosa,1000.0,g,asturiana,1.4
+23/07/2025,alcampo,cebolla,1000.0,g,no aplica,3.36
+23/07/2025,alcampo,yogur fresa,480.0,g,danone,1.59
+23/07/2025,alcampo,papadelta,73.0,g,grefusa,1.61
+23/07/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.5
+23/07/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+23/07/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
+23/07/2025,alcampo,tomate natural,800.0,g,alcampo,0.86
+23/07/2025,alcampo,pimientos,500.0,g,no aplica,2.49
+23/07/2025,alcampo,pasta sin gluten,500.0,g,pasta d'oro,1.89
+23/07/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.17
+23/07/2025,alcampo,aceite de oliva virgen extra,1000.0,g,ybarra,7.93
+19/08/2025,alcampo,natillas vainilla,500.0,g,alcampo,1.49
+19/08/2025,alcampo,yogur griego,1000.0,g,alcampo,2.69
+19/08/2025,alcampo,maiz,210.0,g,bonduelle,1.71
+19/08/2025,alcampo,anacardos,500.0,g,borges,5.9
+19/08/2025,alcampo,arroz,1000.0,g,brillante,1.92
+19/08/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,2.96
+19/08/2025,alcampo,leche sin lactosa,1000.0,g,asturiana,1.26
+19/08/2025,alcampo,yogur fresa,480.0,g,danone,1.59
+19/08/2025,alcampo,papadelta,73.0,g,grefusa,1.61
+19/08/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.49
+19/08/2025,alcampo,mantequilla,250.0,g,harmony,2.29
+19/08/2025,alcampo,gel de ducha,1250.0,g,instituto espanol,2.8
+19/08/2025,alcampo,cafe,500.0,g,lavazza,16.1
+19/08/2025,alcampo,harina,1000.0,g,pan,1.99
+19/08/2025,alcampo,atun,6.0,ud,alcampo,4.11
+19/08/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
+19/08/2025,alcampo,papel de cocina,4.0,ud,renova,1.78
+19/08/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.16
+19/08/2025,alcampo,acondicionador,685.0,g,tresemme,4.78
+02/09/2025,alcampo,natillas vainilla,500.0,g,alcampo,1.49
+02/09/2025,alcampo,yogur griego,1000.0,g,alcampo,2.69
+02/09/2025,alcampo,anacardos,500.0,g,borges,5.9
+02/09/2025,alcampo,maiz palomitas,400.0,g,casa ricardo,1.2
+02/09/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.39
+02/09/2025,alcampo,yogur fresa,480.0,g,danone,1.7
+02/09/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,3.19
+02/09/2025,alcampo,champu,350.0,g,herbal essences,3.85
+02/09/2025,alcampo,leche condensada sin lactosa,450.0,g,la lechera,3.14
+02/09/2025,alcampo,leche,6000.0,g,pascual,7.62
+02/09/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+02/09/2025,alcampo,tomate natural,800.0,g,alcampo,0.86
+02/09/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo,2.1
+02/09/2025,alcampo,corn flakes sin gluten,250.0,g,schar,1.74
+02/09/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.16
+02/09/2025,alcampo,tampones,16.0,ud,tampax,3.99
+09/11/2025,alcampo,natillas vainilla,500.0,g,alcampo,1.49
+09/11/2025,alcampo,anacardos,500.0,g,borges,5.49
+09/11/2025,alcampo,arroz,1000.0,g,brillante,1.92
+09/11/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.28
+09/11/2025,alcampo,papadelta,73.0,g,grefusa,1.61
+09/11/2025,alcampo,yogur griego,900.0,g,oikos,5.38
+09/11/2025,alcampo,harina,1000.0,g,pan,2.03
+09/11/2025,alcampo,leche,6000.0,g,pascual,7.26
+09/11/2025,alcampo,aceite de girasol,5000.0,g,alcampo,7.35
+09/11/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+09/11/2025,alcampo,miel,500.0,g,alcampo,2.58
+09/11/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
+09/11/2025,alcampo,pegamento,3.0,g,alcampo,1.75
+09/11/2025,alcampo,pasta sin gluten,500.0,g,pasta d'oro,1.89
+09/11/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.15
+09/11/2025,alcampo,mayonesa,750.0,g,ybarra,3.58
+02/12/2025,alcampo,yogur griego,1000.0,g,alcampo,2.99
+02/12/2025,alcampo,pan de molde,430.0,g,bimbo,1.46
+02/12/2025,alcampo,anacardos,500.0,g,borges,5.95
+02/12/2025,alcampo,arroz,1000.0,g,brillante,1.92
+02/12/2025,alcampo,ajo-perejil,35.0,g,carmencita,1.55
+02/12/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.28
+02/12/2025,alcampo,yogur proteinas,400.0,g,danone,1.88
+02/12/2025,alcampo,tortitas de arroz y quinoa,120.0,g,ecocesta,1.49
+02/12/2025,alcampo,maiz palomitas,250.0,g,emicela,0.74
+02/12/2025,alcampo,leche,6000.0,g,pascual,7.26
+02/12/2025,alcampo,potitos,400.0,g,alcampo,2.11
+02/12/2025,alcampo,cafe,500.0,g,alcampo,5.48
+02/12/2025,alcampo,tomate natural,400.0,g,alcampo,0.53
+02/12/2025,alcampo,estropajos,10.0,ud,rozenbal,0.95
+02/12/2025,alcampo,pasta sin gluten,500.0,g,pasta d'oro,1.89
+02/12/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.15
+02/12/2025,alcampo,pasta de dientes,150.0,g,vitis,7.75
+20/12/2025,spar borbalan,corn flakes sin gluten,375.0,g,nestle,3.59
+20/12/2025,spar borbalan,potitos,400.0,g,spar,2.39
+20/12/2025,spar borbalan,chocogalletas,150.0,g,schar,3.98
+20/12/2025,spar borbalan,pajitas,100.0,g,risi,1.45
+20/12/2025,spar borbalan,patatillas,140.0,g,lays mediterraneas,2.28
+20/12/2025,spar borbalan,chocolate,125.0,g,nestle,2.18
+20/12/2025,spar borbalan,muesli chocolate,500.0,g,spar,2.79
+20/12/2025,spar borbalan,chocolate negro,100.0,g,spar,2.18
+20/12/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
+20/12/2025,spar borbalan,aguacates,1000.0,g,no aplica,5.5
+20/12/2025,spar borbalan,platanos,1000.0,g,canarias,1.69
+28/12/2025,spar borbalan,palomitas gusanito,90.0,g,risi,1.45
+28/12/2025,spar borbalan,muesli chocolate,500.0,g,spar,2.79
+28/12/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
+28/12/2025,spar borbalan,pajitas,100.0,g,risi,1.45
+28/12/2025,spar borbalan,pan de molde,430.0,g,bimbo,1.4
+27/12/2025,alcampo,yogur griego,1000.0,g,alcampo,2.99
+27/12/2025,alcampo,pan de molde,430.0,g,bimbo,1.46
+27/12/2025,alcampo,maiz,210.0,g,bonduelle,1.7
+27/12/2025,alcampo,anacardos,500.0,g,borges,5.95
+27/12/2025,alcampo,arroz,1000.0,g,brillante,1.92
+27/12/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.22
+27/12/2025,alcampo,yogur fresa,480.0,g,danone,1.64
+27/12/2025,alcampo,maiz palomitas,250.0,g,emicela,0.74
+27/12/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.71
+27/12/2025,alcampo,corn flakes sin gluten,375.0,g,nestle,2.81
+27/12/2025,alcampo,harina,1000.0,g,pan,2.02
+27/12/2025,alcampo,leche,6000.0,g,pascual,7.26
+27/12/2025,alcampo,potitos,400.0,g,alcampo,2.11
+27/12/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+27/12/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
+27/12/2025,alcampo,tomate natural,400.0,g,alcampo,0.53
+27/12/2025,alcampo,pasta sin gluten,500.0,g,pasta d'oro,1.89
+27/12/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.15
+27/12/2025,alcampo,aceite de oliva virgen extra,1000.0,g,ybarra,5.62
+30/12/2025,spar borbalan,platanos,1000.0,g,canarias,1.69
+30/12/2025,spar borbalan,chocolate,210.0,g,kinder maxi,4.29
+02/01/2026,spar borbalan,aceitunas,180.0,g,jolca,0.89
+02/01/2026,spar borbalan,patatas,1000.0,g,no aplica,1.4
+04/01/2026,spar borbalan,chocolate,210.0,g,kinder maxi,4.29
+04/01/2026,spar borbalan,filipinos,128.0,g,artiach,1.55
+05/01/2026,spar borbalan,cafe,250.0,g,carioca,3.99
+05/01/2026,spar borbalan,queso gouda,1000.0,g,castillo,10.7
+05/01/2026,spar borbalan,queso fresco,1000.0,g,quesos flor valsequillo,12.59
+05/01/2026,spar borbalan,patatillas,140.0,g,lays mediterraneas,2.28
+05/01/2026,spar borbalan,patatillas,165.0,g,pringles,1.73
+05/01/2026,spar borbalan,jamon serrano,100.0,g,el pozo,19.98
+08/01/2026,spar borbalan,limpiador wc,750.0,g,cillit bang,3.89
+08/01/2026,spar borbalan,limpiasuciedad,750.0,g,cillit bang,5.45
