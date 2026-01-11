@@ -369,7 +369,7 @@ def main():
     """Función principal que ejecuta todo el proceso"""    
     # 1. CARGAR CSV
     print("📂 Cargando datos_super.csv...")
-    df = pd.read_csv("datos_super.csv")
+    df = pd.read_csv("../datos_super.csv")
     print(f"✅ CSV cargado: {len(df)} registros")
     
     # 2. TUS DICCIONARIOS (los que usas en Python)
@@ -565,7 +565,7 @@ def main():
     
     # 4. GUARDAR COMO JSON
     print("\n💾 Guardando como datos_super.json...")
-    df_transformado.to_json("datos_super.json", orient="records", indent=2, force_ascii=False)
+    df_transformado.to_json("../datos_super.json", orient="records", indent=2, force_ascii=False)
     print(f"✅ JSON guardado: {len(df_transformado)} registros")
 
 # 5. EJECUTAR AUTOMÁTICAMENTE SI SE LLAMA DIRECTAMENTE
