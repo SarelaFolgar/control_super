@@ -564,16 +564,16 @@ def main():
     df_transformado = transformacion(df, dic_ciudad_super, dic_categoria_producto)
     
     # 4. GUARDAR COMO JSON
-print("\n💾 Guardando como datos_super.json...")
-
-# Convertir fechas a string si son datetime
-if 'fecha' in df_transformado.columns and len(df_transformado) > 0:
-    try:
-        # Si la columna fecha es datetime, convertir a string
-        if pd.api.types.is_datetime64_any_dtype(df_transformado['fecha']):
-            df_transformado['fecha'] = df_transformado['fecha'].dt.strftime('%d/%m/%Y')
-    except:
-        pass  # Si falla, dejar como está
+    print("\n💾 Guardando como datos_super.json...")
+    
+    # Convertir fechas a string si son datetime
+    if 'fecha' in df_transformado.columns and len(df_transformado) > 0:
+        try:
+            # Si la columna fecha es datetime, convertir a string
+            if pd.api.types.is_datetime64_any_dtype(df_transformado['fecha']):
+                df_transformado['fecha'] = df_transformado['fecha'].dt.strftime('%d/%m/%Y')
+        except:
+            pass  # Si falla, dejar como está
 
 df_transformado.to_json("../datos_super.json", orient="records", indent=2, force_ascii=False)
 print(f"✅ JSON guardado: {len(df_transformado)} registros")
