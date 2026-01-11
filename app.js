@@ -537,38 +537,58 @@ function updateAllProductsList() {
     }
 }
 
-// Mostrar resumen por fecha
+// Mostrar resumen por fecha - VERSIÓN CORREGIDA
 function showDateSummary() {
     showScreen('date');
     
     // Agrupar por año
     const years = {};
+    
+    // DEBUG: Mostrar primeros registros
+    console.log('=== DEBUG showDateSummary ===');
+    console.log('Primeros 5 registros:');
+    productosData.slice(0, 5).forEach((item, i) => {
+        console.log(`  ${i}: fecha=${item.fecha}, producto=${item.producto}`);
+    });
+    
     productosData.forEach(item => {
-        if (!item.fecha) return;
+        if (!item.fecha) {
+            console.warn('Registro sin fecha:', item);
+            return;
+        }
         
         try {
-            let year;
+            let year = null;
+            
+            // DEBUG: Ver qué formato tiene la fecha
+            console.log(`Procesando fecha: "${item.fecha}"`);
             
             // Formato 1: "DD-MM-YYYY" (tu nuevo formato)
             if (item.fecha.includes('-')) {
                 const parts = item.fecha.split('-');
                 if (parts.length === 3) {
                     // Para DD-MM-YYYY, el año está en la tercera posición
-                    year = parts[2];
+                    if (parts[2].length === 4) {
+                        year = parts[2]; // Año en formato YYYY
+                        console.log(`  -> Formato DD-MM-YYYY detectado, año: ${year}`);
+                    }
+                    // Para YYYY-MM-DD, el año está en la primera posición
+                    else if (parts[0].length === 4) {
+                        year = parts[0];
+                        console.log(`  -> Formato YYYY-MM-DD detectado, año: ${year}`);
+                    }
                 }
             }
-            // Formato 2: "YYYY-MM-DD" (formato anterior)
-            else if (item.fecha.includes('-') && item.fecha.split('-')[0].length === 4) {
-                const parts = item.fecha.split('-');
-                year = parts[0]; // YYYY está primero
-            }
             
-            // Si no se pudo obtener el año de la cadena, intentar Date.parse
+            // Si no se pudo obtener el año, intentar Date.parse
             if (!year) {
-                // Intentar parsear directamente
+                console.log(`  -> Intentando parsear como Date: "${item.fecha}"`);
                 const dateObj = new Date(item.fecha);
                 if (!isNaN(dateObj.getTime())) {
                     year = dateObj.getFullYear().toString();
+                    console.log(`  -> Parseado exitoso, año: ${year}`);
+                } else {
+                    console.log(`  -> No se pudo parsear fecha`);
                 }
             }
             
@@ -587,11 +607,12 @@ function showDateSummary() {
                 };
             }
             
-            // Agregar datos
+            // Agregar datos - ¡CORREGIDO! Usar years[year] no years[producto]
             years[year].count++;
-            years[producto].products.add(item.producto);
+            years[year].products.add(item.producto);
             if (item.super) years[year].supermarkets.add(item.super);
             if (item.ciudad) years[year].cities.add(item.ciudad);
+            
         } catch (error) {
             console.warn('Error procesando fecha:', item.fecha, error);
         }
@@ -604,8 +625,12 @@ function showDateSummary() {
         
         const sortedYears = Object.keys(years).sort().reverse();
         
+        console.log(`Años encontrados: ${sortedYears.join(', ')}`);
+        console.log('Datos por año:', years);
+        
         if (sortedYears.length === 0) {
             yearCards.innerHTML = '<p class="no-data">No hay datos por año disponibles</p>';
+            console.log('No se encontraron años');
         } else {
             sortedYears.forEach(year => {
                 const data = years[year];
@@ -649,7 +674,14 @@ function showDateSummary() {
     
     console.log('Datos para gráfico:', chartData);
     
-    // LLAMAR A LA FUNCIÓN PARA CREAR EL GRÁFICO
+    // Asegurarse de que el canvas exista
+    const canvas = document.getElementById('records-chart');
+    if (!canvas) {
+        console.error('❌ Canvas #records-chart no encontrado en el DOM');
+        return;
+    }
+    
+    // Crear el gráfico inmediatamente
     createYearChart(chartData);
     
     // Actualizar navegación
@@ -1816,8 +1848,10 @@ function showFilterResults(filterType, value) {
     `;
 }
 
-// Crear gráfico de años
+// Crear gráfico de años - VERSIÓN MEJORADA
 function createYearChart(years) {
+    console.log('📊 Creando gráfico de años con datos:', years);
+    
     const canvas = document.getElementById('records-chart');
     if (!canvas) {
         console.error('❌ Canvas #records-chart no encontrado');
@@ -1827,21 +1861,33 @@ function createYearChart(years) {
     // Destruir gráfico anterior si existe
     const existingChart = Chart.getChart(canvas);
     if (existingChart) {
+        console.log('Destruyendo gráfico anterior');
         existingChart.destroy();
     }
     
     const sortedYears = Object.keys(years).sort();
-    const counts = sortedYears.map(year => years[year].count);
+    const counts = sortedYears.map(year => years[year]);
+    
+    console.log('Años ordenados:', sortedYears);
+    console.log('Conteos:', counts);
     
     if (sortedYears.length === 0 || counts.length === 0) {
         console.warn('No hay datos para el gráfico');
+        
+        // Mostrar mensaje en el canvas
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#666';
+        ctx.textAlign = 'center';
+        ctx.fillText('No hay datos disponibles', canvas.width / 2, canvas.height / 2);
         return;
     }
     
-    console.log('📊 Datos para gráfico:', sortedYears, counts);
-    
     const ctx = canvas.getContext('2d');
     try {
+        console.log('Intentando crear gráfico...');
+        
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -1860,6 +1906,13 @@ function createYearChart(years) {
                 plugins: {
                     legend: {
                         display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Registros: ${context.parsed.y}`;
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -1867,13 +1920,22 @@ function createYearChart(years) {
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Número de registros'
+                            text: 'Número de registros',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            precision: 0
                         }
                     },
                     x: {
                         title: {
                             display: true,
-                            text: 'Año'
+                            text: 'Año',
+                            font: {
+                                weight: 'bold'
+                            }
                         }
                     }
                 }
@@ -1882,6 +1944,13 @@ function createYearChart(years) {
         console.log('✅ Gráfico creado exitosamente');
     } catch (error) {
         console.error('❌ Error creando gráfico:', error);
+        
+        // Mostrar mensaje de error
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#d9534f';
+        ctx.textAlign = 'center';
+        ctx.fillText('Error al crear gráfico', canvas.width / 2, canvas.height / 2);
     }
 }
 
@@ -2015,6 +2084,7 @@ window.debugProduct = function(productName) {
     return exactMatches;
 
 };
+
 
 
 
