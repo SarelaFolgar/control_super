@@ -303,11 +303,45 @@ async function enviarCompra() {
     mostrarMensaje('Enviando datos...', 'info');
     
     try {
-        // Aquí más tarde conectaremos con la API
-        console.log('Productos a enviar:', productos);
+        // URL de tu API en Render
+        const API_URL = 'https://control-super-api.onrender.com/api/agregar-compra';
         
-        // Por ahora, simulamos éxito
-        mostrarMensaje('¡Compra enviada correctamente! Los datos se procesarán automáticamente.', 'success');
+        // Enviar datos a la API
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                productos: productos
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        mostrarMensaje(`✅ ${data.message}`, 'success');
+        
+        // Limpiar formulario después de 3 segundos
+        setTimeout(() => {
+            document.getElementById('compra-form').reset();
+            configurarFecha();
+            // Mantener solo un producto
+            const productosContainer = document.getElementById('productos-container');
+            while (productosContainer.children.length > 1) {
+                productosContainer.lastChild.remove();
+            }
+            contadorProductos = 1;
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error enviando compra:', error);
+        mostrarMensaje(`❌ Error al enviar: ${error.message}`, 'error');
+    }
+}
         
         // Limpiar formulario después de 3 segundos
         setTimeout(() => {
