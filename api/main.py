@@ -119,7 +119,7 @@ async def agregar_compra(compra: Compra):
             
             # CORRECCIÓN: Usar StringIO de io en lugar de pandas.compat
             from io import StringIO
-            df_actual = pd.read_csv(StringIO(contenido_decodificado), sep='\t')  # ¡AÑADIR sep='\t'!
+            df_actual = pd.read_csv(StringIO(contenido_decodificado))
             
             sha_actual = csv_content.sha
             print(f"📂 CSV actual cargado: {len(df_actual)} registros existentes")
@@ -133,7 +133,7 @@ async def agregar_compra(compra: Compra):
         print(f"📊 Datos combinados: {len(df_combinado)} registros totales")
         
         # 6. GUARDAR NUEVO CSV
-        new_csv_content = df_combinado.to_csv(index=False, sep='\t')
+        new_csv_content = df_combinado.to_csv(index=False)
         
         if sha_actual:
             # Actualizar archivo existente
