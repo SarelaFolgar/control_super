@@ -16630,5 +16630,32 @@
     "variacion_2024":null,
     "variacion_2025":null,
     "variacion_2026":0.0
+  },
+  {
+    "fecha":"11-01-2026",
+    "super":"spar borbalan",
+    "producto":"pajitas",
+    "cantidad":100.0,
+    "unidad":"g",
+    "marca":"risi",
+    "precio":1.45,
+    "precio_neto":14.5,
+    "ano":2026,
+    "mes":"enero",
+    "ciudad":"valle gran rey",
+    "categoria":"patatillas",
+    "ultimo_precio_neto":14.5,
+    "primer_precio_neto":14.5,
+    "ultimo_precio_neto_2024":null,
+    "primer_precio_neto_2024":null,
+    "ultimo_precio_neto_2025":14.5,
+    "primer_precio_neto_2025":14.5,
+    "ultimo_precio_neto_2026":14.5,
+    "primer_precio_neto_2026":14.5,
+    "variacion_actual":0.0,
+    "variacion_total":0.0,
+    "variacion_2024":null,
+    "variacion_2025":0.0,
+    "variacion_2026":0.0
   }
 ]
