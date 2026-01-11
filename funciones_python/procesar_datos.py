@@ -108,7 +108,7 @@ def calcular_precio_neto(df):
 def calcular_mes_ano(df):
     """
     Calcula el año y mes en español a partir de la fecha.
-    Ahora mantiene fechas en formato YYYY-MM-DD.
+    Ahora convierte fechas a formato DD-MM-YYYY.
     """    
     # Diccionario de meses en español
     meses_espanol = {
@@ -117,7 +117,7 @@ def calcular_mes_ano(df):
         9: 'septiembre', 10: 'octubre', 11: 'noviembre', 12: 'diciembre'
     }
     
-    print("🔄 Procesando fechas para YYYY-MM-DD...")
+    print("🔄 Procesando fechas para DD-MM-YYYY...")
     
     # 1. Convertir a datetime (aceptar DD/MM/YYYY o YYYY-MM-DD)
     df['fecha_dt'] = pd.to_datetime(df['fecha'], dayfirst=True, errors='coerce')
@@ -127,8 +127,8 @@ def calcular_mes_ano(df):
     df['mes_num'] = df['fecha_dt'].dt.month
     df['mes'] = df['mes_num'].map(meses_espanol)
     
-    # 3. ✅ IMPORTANTE: Convertir fecha a formato YYYY-MM-DD
-    df['fecha'] = df['fecha_dt'].dt.strftime('%Y-%m-%d')
+    # 3. ✅ IMPORTANTE: Convertir fecha a formato DD-MM-YYYY (con guiones)
+    df['fecha'] = df['fecha_dt'].dt.strftime('%d-%m-%Y')
     
     # 4. Eliminar columnas temporales
     df = df.drop(['fecha_dt', 'mes_num'], axis=1)
@@ -136,11 +136,10 @@ def calcular_mes_ano(df):
     # Estadísticas
     fechas_validas = df['fecha'].notna().sum()
     print(f"✅ Fechas procesadas: {fechas_validas}/{len(df)}")
-    print(f"   Formato final: YYYY-MM-DD")
+    print(f"   Formato final: DD-MM-YYYY")
     print(f"   Años únicos: {sorted(df['ano'].dropna().unique())}")
     
     return df
-
 def columna_por_diccionario(df, col_original, col_nueva, diccionario):
     """
     Crea una nueva columna mapeando valores de una columna existente usando un diccionario.
@@ -556,18 +555,13 @@ def main():
     # 4. GUARDAR COMO JSON
     print("\n💾 Guardando como datos_super.json...")
     
-    # Convertir fechas a string si son datetime
-    if 'fecha' in df_transformado.columns and len(df_transformado) > 0:
-        try:
-            # Si la columna fecha es datetime, convertir a string
-            if pd.api.types.is_datetime64_any_dtype(df_transformado['fecha']):
-                df_transformado['fecha'] = df_transformado['fecha'].dt.strftime('%d/%m/%Y')
-        except:
-            pass  # Si falla, dejar como está
-
+    # ✅ NO CONVERTIR FECHAS AQUÍ - YA SE HIZO EN calcular_mes_ano()
+    # Las fechas ya están en formato DD-MM-YYYY gracias a calcular_mes_ano
+    
+    # Guardar JSON con ensure_ascii=False para mantener caracteres especiales
     df_transformado.to_json("../datos_super.json", orient="records", indent=2, force_ascii=False)
     print(f"✅ JSON guardado: {len(df_transformado)} registros")
-
+    print(f"📅 Formato de fechas: DD-MM-YYYY (ejemplo: 09-01-2026)")
 # 5. EJECUTAR AUTOMÁTICAMENTE SI SE LLAMA DIRECTAMENTE
 if __name__ == "__main__":
     main()
