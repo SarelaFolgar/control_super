@@ -538,6 +538,7 @@ function updateAllProductsList() {
 }
 
 // Mostrar resumen por fecha
+// Mostrar resumen por fecha
 function showDateSummary() {
     showScreen('date');
     
@@ -546,27 +547,48 @@ function showDateSummary() {
     productosData.forEach(item => {
         if (!item.fecha) return;
         
-        // FORMATO: "17/06/2025" -> extraer año (última parte después del /)
-        const parts = item.fecha.split('/');
-        if (parts.length !== 3) {
-            console.warn('Formato de fecha inválido:', item.fecha);
-            return;
+        try {
+            // Intentar diferentes formatos de fecha
+            let year;
+            
+            // Formato 1: "YYYY-MM-DD"
+            if (item.fecha.includes('-')) {
+                const parts = item.fecha.split('-');
+                year = parts[0];
+            }
+            // Formato 2: "DD/MM/YYYY"
+            else if (item.fecha.includes('/')) {
+                const parts = item.fecha.split('/');
+                if (parts.length === 3) {
+                    year = parts[2]; // Última parte es el año en DD/MM/YYYY
+                }
+            }
+            
+            if (!year) {
+                // Intentar parsear como objeto Date directamente
+                const dateObj = new Date(item.fecha);
+                if (!isNaN(dateObj.getTime())) {
+                    year = dateObj.getFullYear().toString();
+                }
+            }
+            
+            if (!year) return; // Si no se pudo obtener el año, saltar
+            
+            if (!years[year]) {
+                years[year] = {
+                    count: 0,
+                    products: new Set(),
+                    supermarkets: new Set(),
+                    cities: new Set()
+                };
+            }
+            years[year].count++;
+            years[year].products.add(item.producto);
+            if (item.super) years[year].supermarkets.add(item.super);
+            if (item.ciudad) years[year].cities.add(item.ciudad);
+        } catch (error) {
+            console.warn('Error procesando fecha:', item.fecha, error);
         }
-        
-        const year = parts[2]; // "2025" (índice 0: día, 1: mes, 2: año)
-        
-        if (!years[year]) {
-            years[year] = {
-                count: 0,
-                products: new Set(),
-                supermarkets: new Set(),
-                cities: new Set()
-            };
-        }
-        years[year].count++;
-        years[year].products.add(item.producto);
-        if (item.super) years[year].supermarkets.add(item.super);
-        if (item.ciudad) years[year].cities.add(item.ciudad);
     });
     
     // Mostrar tarjetas de año
@@ -609,7 +631,7 @@ function showDateSummary() {
         }
     }
     
-    // Crear gráfico de barras - AÑADE ESTO:
+    // Crear gráfico de barras - MANTÉN ESTO:
     console.log('📊 Preparando datos para gráfico...');
     console.log('Años encontrados:', Object.keys(years));
     
@@ -1985,6 +2007,7 @@ window.debugProduct = function(productName) {
     return exactMatches;
 
 };
+
 
 
 
