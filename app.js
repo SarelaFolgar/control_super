@@ -56,9 +56,50 @@ function parsearFecha(fechaStr) {
 
 function formatearFechaParaMostrar(fecha) {
     if (!fecha) return 'Fecha inválida';
-    const dateObj = fecha instanceof Date ? fecha : parsearFecha(fecha);
-    if (!dateObj || isNaN(dateObj.getTime())) return 'Fecha inválida';
+    
+    let dateObj;
+    
+    // Si ya es un objeto Date válido
+    if (fecha instanceof Date && !isNaN(fecha.getTime())) {
+        dateObj = fecha;
+    }
+    // Si es un timestamp (número)
+    else if (typeof fecha === 'number') {
+        dateObj = new Date(fecha);
+    }
+    // Si es un string
+    else if (typeof fecha === 'string') {
+        dateObj = parsearFecha(fecha);
+    }
+    // Si no es ninguno de los anteriores
+    else {
+        return 'Fecha inválida';
+    }
+    
+    if (!dateObj || isNaN(dateObj.getTime())) {
+        return 'Fecha inválida';
+    }
+    
     return dateObj.toLocaleDateString('es-ES');
+}
+
+// Función auxiliar para obtener rango de fechas
+function obtenerRangoFechas(filteredData) {
+    if (!filteredData || filteredData.length === 0) return null;
+    
+    const fechasValidas = filteredData
+        .map(p => {
+            const fechaParsed = parsearFecha(p.fecha);
+            return fechaParsed && !isNaN(fechaParsed.getTime()) ? fechaParsed : null;
+        })
+        .filter(date => date !== null);
+    
+    if (fechasValidas.length === 0) return null;
+    
+    const minFecha = new Date(Math.min(...fechasValidas.map(d => d.getTime())));
+    const maxFecha = new Date(Math.max(...fechasValidas.map(d => d.getTime())));
+    
+    return { min: minFecha, max: maxFecha };
 }
 
 // Inicialización
@@ -416,7 +457,7 @@ function searchProduct(productName) {
         
         currentProductData = exactMatches;
         
-        // CORREGIDO: Usar parsearFecha
+        // Usar parsearFecha
         exactMatches.sort((a, b) => parsearFecha(b.fecha) - parsearFecha(a.fecha));
         
         const titleElem = document.getElementById('product-title');
@@ -608,7 +649,7 @@ function updateProductSummary(productData, filters = { city: 'global', supermark
         return;
     }
     
-    // CORREGIDO: Usar parsearFecha
+    // Usar parsearFecha
     filteredData.sort((a, b) => parsearFecha(b.fecha) - parsearFecha(a.fecha));
     
     const mostRecentRecord = filteredData[0];
@@ -754,7 +795,7 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
             
             if (!groups[key]) groups[key] = { marca: marca, super: item.super, datos: [] };
             
-            // CORREGIDO: Usar parsearFecha
+            // Usar parsearFecha
             const fecha = parsearFecha(item.fecha);
             if (isNaN(fecha.getTime())) {
                 console.warn('Fecha inválida:', item.fecha);
@@ -775,7 +816,7 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
         const validGroups = {};
         for (const [key, group] of Object.entries(groups)) {
             if (group.datos.length > 0) {
-                // CORREGIDO: Usar parsearFecha
+                // Usar parsearFecha
                 group.datos.sort((a, b) => a.fecha - b.fecha);
                 validGroups[key] = group;
             }
@@ -1008,7 +1049,7 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
     Object.entries(groups).forEach(([combinacion, group]) => {
         if (group.datos.length === 0) return;
         
-        // CORREGIDO: Usar parsearFecha
+        // Usar parsearFecha
         group.datos.sort((a, b) => parsearFecha(a.fecha) - parsearFecha(b.fecha));
         
         const firstItem = group.datos[0];
@@ -1098,7 +1139,7 @@ function showTopVariations(type) {
         if (!item.producto || !item.super) return;
         
         const key = `${item.producto}||${item.marca || 'Sin marca'}||${item.super}`;
-        // CORREGIDO: Usar parsearFecha
+        // Usar parsearFecha
         const currentDate = parsearFecha(item.fecha);
         
         if (!latestProducts.has(key) || currentDate > parsearFecha(latestProducts.get(key).fecha)) {
@@ -1253,7 +1294,7 @@ function updateInflationStats() {
             if (!validCombinations.has(key)) return;
             if (item.variacion_total === null || item.variacion_total === undefined) return;
             
-            // CORREGIDO: Usar parsearFecha
+            // Usar parsearFecha
             const currentDate = parsearFecha(item.fecha);
             
             if (!latestVariations.has(key) || currentDate > parsearFecha(latestVariations.get(key).fecha)) {
@@ -1282,7 +1323,7 @@ function updateInflationStats() {
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
             
-            // CORREGIDO: Usar parsearFecha
+            // Usar parsearFecha
             const fechaParsed = parsearFecha(item.fecha);
             const itemYear = fechaParsed ? fechaParsed.getFullYear().toString() : null;
             if (itemYear !== selectedYear) return;
@@ -1441,6 +1482,8 @@ function showFilterResults(filterType, value) {
     
     const uniqueProductsInFilter = [...new Set(filteredData.map(p => p.producto))];
     
+    const rangoFechas = obtenerRangoFechas(filteredData);
+    
     results.innerHTML = `
         <h3>${value}</h3>
         <div class="filter-stats">
@@ -1454,11 +1497,9 @@ function showFilterResults(filterType, value) {
             </div>
             <div>
                 <small>Rango de fechas</small>
-                <p>${filteredData.length > 0 ? 
-                    formatearFechaParaMostrar(Math.min(...filteredData.map(p => parsearFecha(p.fecha)?.getTime()))) + 
-                    ' - ' + 
-                    formatearFechaParaMostrar(Math.max(...filteredData.map(p => parsearFecha(p.fecha)?.getTime()))) 
-                    : '-'}</p>
+                <p>${rangoFechas ? 
+                    formatearFechaParaMostrar(rangoFechas.min) + ' - ' + formatearFechaParaMostrar(rangoFechas.max) 
+                    : 'Fechas no disponibles'}</p>
             </div>
         </div>
         <div class="filter-products">
