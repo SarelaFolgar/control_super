@@ -552,7 +552,7 @@ def main():
     
     if 'fecha_dt' in df_transformado.columns:
         # Convertir fecha datetime a string con formato DD-MM-YYYY
-        df_transformado['fecha'] = df_transformado['fecha_dt'].dt.strftime('%d-%m-%Y')
+        df_transformado['fecha'] = df_transformado['fecha_dt'].dt.strftime('%d/%m/%Y')
         
         # Eliminar la columna datetime (opcional, pero mantiene el JSON limpio)
         df_transformado = df_transformado.drop('fecha_dt', axis=1)
