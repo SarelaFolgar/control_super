@@ -2360,4 +2360,20 @@ body {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     transform: translateX(3px);
+    text-decoration: none; /* ¡IMPORTANTE! */
+}
+
+/* Si sigue azul, añade esto: */
+.nav-link-externo:link,
+.nav-link-externo:visited,
+.nav-link-externo:hover,
+.nav-link-externo:active {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+}
+
+.nav-link-externo.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-weight: 600;
 }
