@@ -220,8 +220,8 @@ function updateStats() {
 
 // Configurar navegación
 function setupNavigation() {
-    // Navegación lateral
-    document.querySelectorAll('.nav-link').forEach(link => {
+    // Navegación lateral - SOLO para enlaces internos
+    document.querySelectorAll('.nav-link:not([href])').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const action = this.dataset.action;
@@ -233,11 +233,27 @@ function setupNavigation() {
                 document.body.style.overflow = '';
             }
             
-            // Actualizar estado activo
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            // Actualizar estado activo (solo enlaces internos)
+            document.querySelectorAll('.nav-link:not([href])').forEach(l => l.classList.remove('active'));
             this.classList.add('active');
             
             handleNavigationAction(action);
+        });
+    });
+    
+    // Navegación lateral - PARA ENLACES EXTERNOS (como agregar.html)
+    document.querySelectorAll('.nav-link-externo').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Cerrar menú en móvil
+            if (window.innerWidth <= 992) {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar) sidebar.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            // Permitir que el navegador siga el enlace normalmente
+            // No hacer preventDefault() ni cambiar clases
+            console.log('Navegando a:', this.href);
         });
     });
     
@@ -1934,4 +1950,5 @@ window.debugProduct = function(productName) {
     });
     
     return exactMatches;
+
 };
