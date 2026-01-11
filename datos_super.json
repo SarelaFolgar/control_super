@@ -10117,12 +10117,12 @@
     "ultimo_precio_neto_2025":19.6,
     "primer_precio_neto_2025":19.6,
     "ultimo_precio_neto_2026":19.98,
-    "primer_precio_neto_2026":199.8,
+    "primer_precio_neto_2026":19.98,
     "variacion_actual":1.94,
     "variacion_total":1.94,
     "variacion_2024":null,
     "variacion_2025":0.0,
-    "variacion_2026":-90.0
+    "variacion_2026":0.0
   },
   {
     "fecha":"26-12-2025",
@@ -16392,11 +16392,11 @@
     "fecha":"05-01-2026",
     "super":"spar borbalan",
     "producto":"jamon serrano",
-    "cantidad":100.0,
+    "cantidad":1000.0,
     "unidad":"g",
     "marca":"el pozo",
     "precio":19.98,
-    "precio_neto":199.8,
+    "precio_neto":19.98,
     "ano":2026,
     "mes":"enero",
     "ciudad":"valle gran rey",
@@ -16408,12 +16408,12 @@
     "ultimo_precio_neto_2025":19.6,
     "primer_precio_neto_2025":19.6,
     "ultimo_precio_neto_2026":19.98,
-    "primer_precio_neto_2026":199.8,
-    "variacion_actual":-90.0,
+    "primer_precio_neto_2026":19.98,
+    "variacion_actual":0.0,
     "variacion_total":1.94,
     "variacion_2024":null,
     "variacion_2025":0.0,
-    "variacion_2026":-90.0
+    "variacion_2026":0.0
   },
   {
     "fecha":"08-01-2026",
@@ -16759,12 +16759,12 @@
     "ultimo_precio_neto_2025":19.6,
     "primer_precio_neto_2025":19.6,
     "ultimo_precio_neto_2026":19.98,
-    "primer_precio_neto_2026":199.8,
+    "primer_precio_neto_2026":19.98,
     "variacion_actual":0.0,
     "variacion_total":1.94,
     "variacion_2024":null,
     "variacion_2025":0.0,
-    "variacion_2026":-90.0
+    "variacion_2026":0.0
   },
   {
     "fecha":"11-01-2026",
