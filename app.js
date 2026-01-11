@@ -546,7 +546,27 @@ function showDateSummary() {
     productosData.forEach(item => {
         if (!item.fecha) return;
         try {
-            const year = item.fecha.split('-')[0];
+            // FORMATO: "30/12/2025" -> extraer año
+            let year;
+            
+            // Intentar múltiples formatos
+            if (item.fecha.includes('/')) {
+                // Formato DD/MM/YYYY
+                const parts = item.fecha.split('/');
+                year = parts[2]; // Última parte es el año
+            } else if (item.fecha.includes('-')) {
+                // Formato YYYY-MM-DD
+                year = item.fecha.split('-')[0];
+            } else {
+                console.warn('Formato de fecha no reconocido:', item.fecha);
+                return;
+            }
+            
+            if (!year || year.length !== 4) {
+                console.warn('Año no válido en fecha:', item.fecha);
+                return;
+            }
+            
             if (!years[year]) {
                 years[year] = {
                     count: 0,
@@ -560,7 +580,7 @@ function showDateSummary() {
             if (item.super) years[year].supermarkets.add(item.super);
             if (item.ciudad) years[year].cities.add(item.ciudad);
         } catch (error) {
-            console.warn('Error procesando fecha:', item.fecha);
+            console.warn('Error procesando fecha:', item.fecha, error);
         }
     });
     
@@ -611,66 +631,6 @@ function showDateSummary() {
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     const dateNavLink = document.querySelector('[data-action="by-date"]');
     if (dateNavLink) dateNavLink.classList.add('active');
-}
-
-// Crear gráfico de años
-function createYearChart(years) {
-    const canvas = document.getElementById('records-chart');
-    if (!canvas) return;
-    
-    // Destruir gráfico anterior si existe
-    const existingChart = Chart.getChart(canvas);
-    if (existingChart) {
-        existingChart.destroy();
-    }
-    
-    const sortedYears = Object.keys(years).sort();
-    const counts = sortedYears.map(year => years[year].count);
-    
-    if (sortedYears.length === 0 || counts.length === 0) return;
-    
-    const ctx = canvas.getContext('2d');
-    try {
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: sortedYears,
-                datasets: [{
-                    label: 'Registros',
-                    data: counts,
-                    backgroundColor: 'rgba(74, 111, 165, 0.7)',
-                    borderColor: 'rgba(74, 111, 165, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Número de registros'
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Año'
-                        }
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error('❌ Error creando gráfico de años:', error);
-    }
 }
 
 // Función para mostrar resumen de producto
@@ -1961,4 +1921,5 @@ window.debugProduct = function(productName) {
     return exactMatches;
 
 };
+
 
