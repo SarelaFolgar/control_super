@@ -6,6 +6,9 @@ import pandas as pd
 import json
 from datetime import datetime
 import os
+import requests  # Añadido
+import base64    # Añadido
+from github import Github  # Añadido - necesitarás instalar PyGithub
 
 app = FastAPI(title="API Control Super", description="API para recibir datos de compras")
 
@@ -31,17 +34,55 @@ class Producto(BaseModel):
 class Compra(BaseModel):
     productos: List[Producto]
 
+def trigger_github_workflow():
+    """Dispara el workflow en GitHub"""
+    github_token = os.getenv("GITHUB_TOKEN")
+    if not github_token:
+        print("⚠️  GITHUB_TOKEN no configurado - no se puede disparar workflow")
+        return False
+    
+    repo_owner = "targaryen666"  # Cambia si es diferente
+    repo_name = "control_super"
+    
+    url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/dispatches"
+    
+    headers = {
+        "Authorization": f"token {github_token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+    
+    data = {
+        "event_type": "process-data",
+        "client_payload": {
+            "message": "Nuevos datos agregados via API",
+            "timestamp": datetime.now().isoformat()
+        }
+    }
+    
+    try:
+        response = requests.post(url, json=data, headers=headers)
+        if response.status_code == 204:
+            print("✅ Workflow disparado exitosamente en GitHub")
+            return True
+        else:
+            print(f"❌ Error al disparar workflow: {response.status_code}")
+            print(f"Respuesta: {response.text}")
+            return False
+    except Exception as e:
+        print(f"❌ Excepción al disparar workflow: {str(e)}")
+        return False
+
 @app.get("/")
 def read_root():
     return {"message": "API Control Super funcionando", "status": "ok"}
 
 @app.post("/api/agregar-compra")
 async def agregar_compra(compra: Compra):
-    """Recibe una compra y la guarda en el CSV"""
+    """Recibe una compra, la guarda en el CSV y dispara el workflow"""
     try:
         print(f"📦 Recibiendo compra con {len(compra.productos)} productos")
         
-        # Convertir a DataFrame
+        # 1. VALIDAR Y PREPARAR DATOS
         nuevos_datos = []
         for producto in compra.productos:
             nuevos_datos.append({
@@ -57,26 +98,72 @@ async def agregar_compra(compra: Compra):
         df_nuevo = pd.DataFrame(nuevos_datos)
         print(f"✅ Datos convertidos a DataFrame: {len(df_nuevo)} registros")
         
-        # Guardar temporalmente (en producción, aquí se guardaría en el CSV)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        archivo_temp = f"compra_{timestamp}.csv"
-        df_nuevo.to_csv(archivo_temp, index=False)
+        # 2. OBTENER GITHUB TOKEN
+        github_token = os.getenv("GITHUB_TOKEN")
+        if not github_token:
+            print("❌ GITHUB_TOKEN no configurado en variables de entorno")
+            return {
+                "status": "error",
+                "message": "Configuración incompleta del servidor"
+            }
         
-        print(f"💾 Compra guardada temporalmente como {archivo_temp}")
+        # 3. CONECTAR CON GITHUB
+        g = Github(github_token)
+        repo = g.get_repo("targaryen666/control_super")  # Cambia si es diferente
         
-        # Aquí más tarde conectaremos con GitHub para actualizar el CSV real
-        # Por ahora solo confirmamos recepción
+        # 4. LEER CSV ACTUAL
+        try:
+            csv_content = repo.get_contents("datos_super.csv")
+            # Decodificar contenido base64
+            contenido_decodificado = base64.b64decode(csv_content.content).decode('utf-8')
+            df_actual = pd.read_csv(pd.compat.StringIO(contenido_decodificado))
+            sha_actual = csv_content.sha
+            print(f"📂 CSV actual cargado: {len(df_actual)} registros existentes")
+        except Exception as e:
+            print(f"⚠️  No se pudo cargar CSV existente, creando nuevo: {str(e)}")
+            df_actual = pd.DataFrame()  # DataFrame vacío si no existe
+            sha_actual = None
+        
+        # 5. COMBINAR DATOS
+        df_combinado = pd.concat([df_actual, df_nuevo], ignore_index=True)
+        print(f"📊 Datos combinados: {len(df_combinado)} registros totales")
+        
+        # 6. GUARDAR NUEVO CSV
+        new_csv_content = df_combinado.to_csv(index=False)
+        
+        if sha_actual:
+            # Actualizar archivo existente
+            commit = repo.update_file(
+                path="datos_super.csv",
+                message=f"📥 Agregar {len(df_nuevo)} productos via API",
+                content=new_csv_content,
+                sha=sha_actual
+            )
+        else:
+            # Crear nuevo archivo
+            commit = repo.create_file(
+                path="datos_super.csv",
+                message=f"📥 Crear CSV con {len(df_nuevo)} productos via API",
+                content=new_csv_content
+            )
+        
+        print(f"💾 CSV actualizado en GitHub: {len(df_combinado)} registros")
+        
+        # 7. DISPARAR WORKFLOW
+        workflow_disparado = trigger_github_workflow()
         
         return {
             "status": "success",
-            "message": f"Compra recibida con {len(df_nuevo)} productos",
-            "productos": len(df_nuevo),
-            "archivo": archivo_temp,
-            "nota": "Los datos se procesarán automáticamente en breve"
+            "message": f"✅ Compra guardada con {len(df_nuevo)} productos",
+            "total_registros": len(df_combinado),
+            "workflow_disparado": workflow_disparado,
+            "nota": "Workflow se ejecutará para procesar datos y generar JSON"
         }
         
     except Exception as e:
         print(f"❌ Error procesando compra: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 @app.get("/api/status")
@@ -85,7 +172,8 @@ def get_status():
     return {
         "status": "online",
         "timestamp": datetime.now().isoformat(),
-        "version": "1.0"
+        "version": "1.0",
+        "github_token_configured": bool(os.getenv("GITHUB_TOKEN"))
     }
 
 if __name__ == "__main__":
