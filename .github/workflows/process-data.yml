@@ -29,11 +29,12 @@ jobs:
         run: |
           cd funciones_python
           python procesar_datos.py
+          cd ..  # VOLVER AL DIRECTORIO PRINCIPAL
           
       - name: 💾 Commit y push cambios
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-          git add ../datos_super.json
+          git add datos_super.json
           git commit -m "🔄 Actualizar JSON automáticamente" || echo "No hay cambios"
           git push
