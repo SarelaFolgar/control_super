@@ -2095,4 +2095,250 @@ body {
 
 .info-card {
     border-left: none !important;
+
+}
+
+/* ============================================
+   FORMULARIO AGREGAR DATOS
+   ============================================ */
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+}
+
+.container h1 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Formulario */
+#compra-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--dark-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Producto individual */
+.producto-item {
+    background: var(--light-color);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.producto-item h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Sugerencias */
+.sugerencias {
+    position: absolute;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    max-height: 200px;
+    overflow-y: auto;
+    width: calc(100% - 3rem);
+    z-index: 10;
+    display: none;
+    box-shadow: var(--shadow);
+}
+
+.sugerencia-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.sugerencia-item:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.sugerencia-item:last-child {
+    border-bottom: none;
+}
+
+/* Precio calculado */
+.precio-calculado {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: white;
+    border-radius: var(--border-radius-sm);
+    border: 1px dashed var(--border-color);
+}
+
+.precio-calculado span {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+/* Botones del formulario */
+.btn-eliminar {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    transition: var(--transition);
+}
+
+.btn-eliminar:hover {
+    background: #c82333;
+    transform: scale(1.05);
+}
+
+.form-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-primary, .btn-secondary, .btn-cancel {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+    flex: 1;
+    justify-content: center;
+    min-width: 200px;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #3a5a8c;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a7a1b;
+    transform: translateY(-2px);
+}
+
+.btn-cancel {
+    background: var(--medium-color);
+    color: var(--dark-color);
+}
+
+.btn-cancel:hover {
+    background: var(--border-color);
+    transform: translateY(-2px);
+}
+
+/* Mensajes */
+.mensaje {
+    padding: 1rem;
+    border-radius: var(--border-radius-sm);
+    margin-top: 1rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.mensaje.success {
+    background: rgba(107, 142, 35, 0.1);
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.mensaje.error {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid #dc3545;
+    color: #dc3545;
+}
+
+.mensaje.info {
+    background: rgba(74, 111, 165, 0.1);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-buttons {
+        flex-direction: column;
+    }
+    
+    .btn-primary, .btn-secondary, .btn-cancel {
+        min-width: 100%;
+    }
 }
