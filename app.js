@@ -25,6 +25,42 @@ const screens = {
     date: document.getElementById('date-screen')
 };
 
+// Funciones helper para fechas
+function parsearFecha(fechaStr) {
+    if (!fechaStr) return null;
+    
+    try {
+        // Si ya es una fecha válida
+        if (fechaStr instanceof Date && !isNaN(fechaStr)) {
+            return fechaStr;
+        }
+        
+        // Formato DD-MM-YYYY
+        if (fechaStr.includes('-') && fechaStr.split('-')[0].length === 2) {
+            const [dia, mes, año] = fechaStr.split('-').map(Number);
+            return new Date(año, mes - 1, dia);
+        }
+        
+        // Formato DD/MM/YYYY (por si acaso)
+        if (fechaStr.includes('/') && fechaStr.split('/')[0].length === 2) {
+            const [dia, mes, año] = fechaStr.split('/').map(Number);
+            return new Date(año, mes - 1, dia);
+        }
+        
+        // Intento por defecto
+        return new Date(fechaStr);
+    } catch {
+        return null;
+    }
+}
+
+function formatearFechaParaMostrar(fecha) {
+    if (!fecha) return 'Fecha inválida';
+    const dateObj = fecha instanceof Date ? fecha : parsearFecha(fecha);
+    if (!dateObj || isNaN(dateObj.getTime())) return 'Fecha inválida';
+    return dateObj.toLocaleDateString('es-ES');
+}
+
 // Inicialización
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('🚀 Iniciando aplicación...');
@@ -34,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setupSearch();
         setupNavigation();
         setupMobileMenu();
-        updateStats(); // Asegurar que se actualicen las estadísticas
+        updateStats();
         console.log('✅ Aplicación inicializada correctamente');
     } catch (error) {
         console.error('❌ Error en inicialización:', error);
@@ -44,16 +80,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Configurar elementos DOM adicionales
 function setupAdditionalElements() {
-    // Configurar botones de tabs
     document.querySelectorAll('.tab-btn').forEach(tab => {
         tab.addEventListener('click', function() {
             const tabType = this.dataset.tab;
-            
-            // Actualizar tabs activos
             document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
-            
-            // Mostrar contenido correspondiente
             if (tabType === 'increases') {
                 showTopVariations('increases');
             } else {
@@ -73,15 +104,14 @@ function setupMobileMenu() {
     if (menuToggle && sidebar) {
         menuToggle.addEventListener('click', () => {
             sidebar.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevenir scroll
+            document.body.style.overflow = 'hidden';
         });
 
         closeMenu.addEventListener('click', () => {
             sidebar.classList.remove('active');
-            document.body.style.overflow = ''; // Restaurar scroll
+            document.body.style.overflow = '';
         });
 
-        // Cerrar menú al hacer clic fuera en móvil
         mainContent.addEventListener('click', () => {
             if (window.innerWidth <= 992 && sidebar.classList.contains('active')) {
                 sidebar.classList.remove('active');
@@ -106,24 +136,17 @@ async function loadData() {
         productosData = await response.json();
         console.log(`✅ ${productosData.length} registros cargados`);
         
-        // Procesar datos
         processData();
         
-        // Actualizar fecha en sidebar
         const now = new Date();
         const updateText = now.toLocaleDateString('es-ES') + ' ' + 
                           now.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
         
-        // Usar optional chaining para evitar errores
         const sidebarUpdate = document.getElementById('sidebar-update');
-        if (sidebarUpdate) {
-            sidebarUpdate.textContent = updateText;
-        }
+        if (sidebarUpdate) sidebarUpdate.textContent = updateText;
         
         const lastUpdate = document.getElementById('last-update');
-        if (lastUpdate) {
-            lastUpdate.textContent = updateText;
-        }
+        if (lastUpdate) lastUpdate.textContent = updateText;
             
     } catch (error) {
         console.error('❌ Error cargando datos:', error);
@@ -136,22 +159,13 @@ async function loadData() {
 
 // Procesar datos
 function processData() {
-    // Productos únicos
     uniqueProducts = [...new Set(productosData.map(p => p.producto))].sort();
-    
-    // Supermercados
     supermarkets = new Set(productosData.map(p => p.super).filter(Boolean));
-    
-    // Ciudades
     cities = new Set(productosData.map(p => p.ciudad).filter(Boolean));
-    
-    // Marcas
     brands = new Set(productosData.map(p => p.marca).filter(Boolean));
     
-    // Años disponibles dinámicamente
     availableYears.clear();
     productosData.forEach(item => {
-        // Buscar campos de variación por año dinámicamente
         for (const key in item) {
             if (key.startsWith('variacion_') && key !== 'variacion_total') {
                 const year = key.replace('variacion_', '');
@@ -166,7 +180,6 @@ function processData() {
     console.log(`🏪 ${supermarkets.size} supermercados`);
     console.log(`🏙️ ${cities.size} ciudades`);
     console.log(`🏷️ ${brands.size} marcas`);
-    console.log(`📅 Años disponibles:`, Array.from(availableYears).sort());
 }
 
 // Actualizar estadísticas
@@ -174,7 +187,6 @@ function updateStats() {
     console.log('📈 Actualizando estadísticas...');
     
     try {
-        // Actualizar contadores principales
         const totalProductsElem = document.getElementById('total-products');
         const totalSupermarketsElem = document.getElementById('total-supermarkets');
         const totalCitiesElem = document.getElementById('total-cities');
@@ -192,15 +204,8 @@ function updateStats() {
         if (allProductsCountElem) allProductsCountElem.textContent = uniqueProducts.length;
         if (allProductsRecordsElem) allProductsRecordsElem.textContent = productosData.length;
         
-        // Calcular rango de fechas
         const fechas = productosData
-            .map(p => {
-                try {
-                    return new Date(p.fecha);
-                } catch {
-                    return null;
-                }
-            })
+            .map(p => parsearFecha(p.fecha))
             .filter(date => date && !isNaN(date.getTime()));
         
         if (fechas.length > 0 && dateRangeElem) {
@@ -220,38 +225,30 @@ function updateStats() {
 
 // Configurar navegación
 function setupNavigation() {
-    // Navegación lateral - PARA TODOS LOS ENLACES .nav-link
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
-            // Si tiene href y es un enlace real (no #), dejar que navegue normalmente
             const href = this.getAttribute('href');
             if (href && href !== '#' && href !== '') {
-                // Solo cerrar menú en móvil
                 if (window.innerWidth <= 992) {
                     const sidebar = document.getElementById('sidebar');
                     if (sidebar) sidebar.classList.remove('active');
                     document.body.style.overflow = '';
                 }
-                console.log('Navegando a:', href);
-                return; // Permitir navegación normal
+                return;
             }
             
-            // Para enlaces internos (sin href o href="#")
             e.preventDefault();
             const action = this.dataset.action;
             
             if (!action) return;
             
-            // Cerrar menú en móvil
             if (window.innerWidth <= 992) {
                 const sidebar = document.getElementById('sidebar');
                 if (sidebar) sidebar.classList.remove('active');
                 document.body.style.overflow = '';
             }
             
-            // Actualizar estado activo (solo enlaces internos)
             document.querySelectorAll('.nav-link').forEach(l => {
-                // Solo quitar active de enlaces internos
                 const lHref = l.getAttribute('href');
                 if (!lHref || lHref === '#' || lHref === '') {
                     l.classList.remove('active');
@@ -263,10 +260,6 @@ function setupNavigation() {
         });
     });
     
-    // ELIMINA ESTE BLOQUE COMPLETO (ya no es necesario):
-    // document.querySelectorAll('.nav-link-externo').forEach(link => { ... });
-    
-    // Botones de estadísticas
     document.querySelectorAll('.stat-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const action = this.dataset.action;
@@ -274,7 +267,6 @@ function setupNavigation() {
         });
     });
     
-    // Acciones rápidas
     document.querySelectorAll('.action-card').forEach(btn => {
         btn.addEventListener('click', function() {
             const action = this.dataset.action;
@@ -282,7 +274,6 @@ function setupNavigation() {
         });
     });
     
-    // Botones de variación
     document.querySelectorAll('.variation-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const action = this.dataset.action;
@@ -328,30 +319,20 @@ function setupSearch() {
     const searchBtn = document.getElementById('search-btn');
     const suggestions = document.getElementById('suggestions');
     
-    if (!searchInput || !searchBtn) {
-        console.error('❌ Elementos de búsqueda no encontrados');
-        return;
-    }
+    if (!searchInput || !searchBtn) return;
     
-    // Buscar al hacer clic
     searchBtn.addEventListener('click', () => {
         const query = searchInput.value.trim();
-        if (query) {
-            searchProduct(query);
-        }
+        if (query) searchProduct(query);
     });
     
-    // Buscar con Enter
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const query = searchInput.value.trim();
-            if (query) {
-                searchProduct(query);
-            }
+            if (query) searchProduct(query);
         }
     });
     
-    // Autocompletado
     searchInput.addEventListener('input', function() {
         const query = this.value.toLowerCase().trim();
         const suggestionsElem = document.getElementById('suggestions');
@@ -390,7 +371,6 @@ function setupSearch() {
         suggestionsElem.style.display = 'block';
     });
     
-    // Cerrar sugerencias al hacer clic fuera
     document.addEventListener('click', (e) => {
         if (suggestions && 
             !searchInput.contains(e.target) && 
@@ -411,7 +391,6 @@ function searchProduct(productName) {
     showLoading('Buscando producto...');
     
     try {
-        // Buscar coincidencias EXACTAS
         const exactMatches = productosData.filter(p => 
             p.producto && p.producto.toLowerCase() === query
         );
@@ -435,41 +414,25 @@ function searchProduct(productName) {
             }
         }
         
-        // Guardar datos actuales para el filtro
         currentProductData = exactMatches;
         
-        // Ordenar por fecha
-        exactMatches.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        // CORREGIDO: Usar parsearFecha
+        exactMatches.sort((a, b) => parsearFecha(b.fecha) - parsearFecha(a.fecha));
         
-        // Actualizar título
         const titleElem = document.getElementById('product-title');
         if (titleElem) {
             titleElem.textContent = exactMatches[0].producto;
         }
         
-        // Resetear filtros
-        currentFilters = {
-            city: 'global',
-            supermarket: 'global',
-            brand: 'global'
-        };
+        currentFilters = { city: 'global', supermarket: 'global', brand: 'global' };
         
-        // Mostrar resumen
         updateProductSummary(exactMatches, currentFilters);
-        
-        // Crear gráfico
         const { ciudades, supermercados, marcas } = createPriceChart(exactMatches, currentFilters);
-        
-        // Configurar filtros
         setupFilters(exactMatches, ciudades, supermercados, marcas);
-        
-        // Mostrar detalles
         showBrandDetails(exactMatches);
         
-        // Cambiar pantalla
         showScreen('results');
         
-        // Actualizar navegación
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         const mainNavLink = document.querySelector('[data-action="main"]');
         if (mainNavLink) mainNavLink.classList.add('active');
@@ -489,7 +452,6 @@ function showAllProducts() {
     showScreen('products');
     updateAllProductsList();
     
-    // Actualizar navegación
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     const allProductsNavLink = document.querySelector('[data-action="all-products"]');
     if (allProductsNavLink) allProductsNavLink.classList.add('active');
@@ -506,13 +468,10 @@ function updateAllProductsList() {
         const item = document.createElement('div');
         item.className = 'product-item';
         item.innerHTML = `<p>${product}</p>`;
-        item.addEventListener('click', () => {
-            searchProduct(product);
-        });
+        item.addEventListener('click', () => searchProduct(product));
         productsGrid.appendChild(item);
     });
     
-    // Configurar filtro de productos
     const filterInput = document.getElementById('products-filter');
     const clearBtn = document.getElementById('clear-filter');
     
@@ -537,122 +496,56 @@ function updateAllProductsList() {
     }
 }
 
-// Mostrar resumen por fecha - VERSIÓN CORREGIDA DEFINITIVAMENTE
+// Mostrar resumen por fecha
 function showDateSummary() {
     showScreen('date');
     
-    // Agrupar por año
     const years = {};
     
-    // DEBUG: Mostrar primeros registros
-    console.log('=== DEBUG showDateSummary ===');
-    console.log('Total registros:', productosData.length);
-    console.log('Primeros 3 registros:');
-    productosData.slice(0, 3).forEach((item, i) => {
-        console.log(`  ${i}: fecha="${item.fecha}", producto="${item.producto}", super="${item.super}", ciudad="${item.ciudad}"`);
-    });
-    
-    // Procesar cada registro
     productosData.forEach(item => {
-        if (!item.fecha) {
-            console.warn('Registro sin fecha:', item);
-            return;
-        }
+        if (!item.fecha) return;
         
         try {
             let year = null;
             
-            // Formato DD-MM-YYYY (tu formato)
             if (item.fecha.includes('-')) {
                 const parts = item.fecha.split('-');
                 if (parts.length === 3) {
-                    // Verificar qué formato es
-                    // Si la tercera parte tiene 4 dígitos, es DD-MM-YYYY
-                    if (parts[2].length === 4) {
-                        year = parts[2]; // DD-MM-YYYY
-                        console.log(`  Fecha "${item.fecha}" -> formato DD-MM-YYYY, año: ${year}`);
-                    }
-                    // Si la primera parte tiene 4 dígitos, es YYYY-MM-DD
-                    else if (parts[0].length === 4) {
-                        year = parts[0]; // YYYY-MM-DD
-                        console.log(`  Fecha "${item.fecha}" -> formato YYYY-MM-DD, año: ${year}`);
-                    }
+                    if (parts[2].length === 4) year = parts[2];
+                    else if (parts[0].length === 4) year = parts[0];
                 }
             }
             
-            // Si no se pudo obtener con split, intentar con Date
             if (!year) {
-                console.log(`  Intentando parsear "${item.fecha}" como Date...`);
-                const dateObj = new Date(item.fecha);
-                if (!isNaN(dateObj.getTime())) {
-                    year = dateObj.getFullYear().toString();
-                    console.log(`  Parseado exitoso, año: ${year}`);
-                }
+                const dateObj = parsearFecha(item.fecha);
+                if (dateObj && !isNaN(dateObj.getTime())) year = dateObj.getFullYear().toString();
             }
             
-            // Si aún no hay año, usar el campo "ano" si existe
-            if (!year && item.ano) {
-                year = item.ano.toString();
-                console.log(`  Usando campo "ano": ${year}`);
-            }
+            if (!year && item.ano) year = item.ano.toString();
+            if (!year) return;
             
-            if (!year) {
-                console.warn(`No se pudo obtener año de: ${item.fecha}`);
-                return;
-            }
-            
-            // Inicializar estructura para este año si no existe
             if (!years[year]) {
-                years[year] = {
-                    count: 0,
-                    products: new Set(),
-                    supermarkets: new Set(),
-                    cities: new Set()
-                };
+                years[year] = { count: 0, products: new Set(), supermarkets: new Set(), cities: new Set() };
             }
             
-            // Agregar datos - ¡ESTO ES LO IMPORTANTE!
             years[year].count++;
-            
-            // Asegurarse de que el producto no sea null/undefined
-            if (item.producto && item.producto.trim() !== '') {
-                years[year].products.add(item.producto.trim());
-            }
-            
-            // Asegurarse de que el supermercado no sea null/undefined
-            if (item.super && item.super.trim() !== '') {
-                years[year].supermarkets.add(item.super.trim());
-            }
-            
-            // Asegurarse de que la ciudad no sea null/undefined
-            if (item.ciudad && item.ciudad.trim() !== '') {
-                years[year].cities.add(item.ciudad.trim());
-            }
+            if (item.producto && item.producto.trim() !== '') years[year].products.add(item.producto.trim());
+            if (item.super && item.super.trim() !== '') years[year].supermarkets.add(item.super.trim());
+            if (item.ciudad && item.ciudad.trim() !== '') years[year].cities.add(item.ciudad.trim());
             
         } catch (error) {
             console.warn('Error procesando registro:', item, error);
         }
     });
     
-    // DEBUG: Mostrar resumen por año
-    console.log('=== RESUMEN POR AÑO ===');
-    Object.keys(years).sort().forEach(year => {
-        const data = years[year];
-        console.log(`Año ${year}: ${data.count} registros, ${data.products.size} productos, ${data.supermarkets.size} supermercados, ${data.cities.size} ciudades`);
-    });
-    
-    // Mostrar tarjetas de año
     const yearCards = document.getElementById('year-cards');
     if (yearCards) {
         yearCards.innerHTML = '';
         
-        const sortedYears = Object.keys(years).sort((a, b) => b - a); // Más reciente primero
-        
-        console.log(`Años encontrados (ordenados): ${sortedYears.join(', ')}`);
+        const sortedYears = Object.keys(years).sort((a, b) => b - a);
         
         if (sortedYears.length === 0) {
             yearCards.innerHTML = '<p class="no-data">No hay datos por año disponibles</p>';
-            console.log('No se encontraron años');
         } else {
             sortedYears.forEach(year => {
                 const data = years[year];
@@ -684,32 +577,19 @@ function showDateSummary() {
         }
     }
     
-    // Crear gráfico de barras
-    console.log('📊 Preparando datos para gráfico...');
-    
-    // Crear objeto simple para el gráfico
     const chartData = {};
-    Object.keys(years).forEach(year => {
-        chartData[year] = years[year].count;
-    });
+    Object.keys(years).forEach(year => chartData[year] = years[year].count);
     
-    console.log('Datos para gráfico:', chartData);
-    
-    // Asegurarse de que el canvas exista
     const canvas = document.getElementById('records-chart');
-    if (!canvas) {
-        console.error('❌ Canvas #records-chart no encontrado en el DOM');
-        return;
-    }
+    if (!canvas) return;
     
-    // Crear el gráfico inmediatamente
     createYearChart(chartData);
     
-    // Actualizar navegación
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     const dateNavLink = document.querySelector('[data-action="by-date"]');
     if (dateNavLink) dateNavLink.classList.add('active');
 }
+
 // Función para mostrar resumen de producto
 function updateProductSummary(productData, filters = { city: 'global', supermarket: 'global', brand: 'global' }) {
     if (!productData || productData.length === 0) {
@@ -717,35 +597,24 @@ function updateProductSummary(productData, filters = { city: 'global', supermark
         return;
     }
     
-    // Aplicar filtros a los datos
     let filteredData = productData;
     
-    if (filters.city !== 'global') {
-        filteredData = filteredData.filter(item => item.ciudad === filters.city);
-    }
-    
-    if (filters.supermarket !== 'global') {
-        filteredData = filteredData.filter(item => item.super === filters.supermarket);
-    }
-    
-    if (filters.brand !== 'global') {
-        filteredData = filteredData.filter(item => item.marca === filters.brand);
-    }
+    if (filters.city !== 'global') filteredData = filteredData.filter(item => item.ciudad === filters.city);
+    if (filters.supermarket !== 'global') filteredData = filteredData.filter(item => item.super === filters.supermarket);
+    if (filters.brand !== 'global') filteredData = filteredData.filter(item => item.marca === filters.brand);
     
     if (filteredData.length === 0) {
         setSummaryPlaceholders();
         return;
     }
     
-    // Ordenar por fecha
-    filteredData.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+    // CORREGIDO: Usar parsearFecha
+    filteredData.sort((a, b) => parsearFecha(b.fecha) - parsearFecha(a.fecha));
     
-    // PRECIO ACTUAL
     const mostRecentRecord = filteredData[0];
     const currentPrice = mostRecentRecord.precio || 0;
     setElementText('current-price', `${currentPrice.toFixed(2)}€`);
     
-    // VARIACIÓN MEDIA
     const groupedVariations = new Map();
     
     filteredData.forEach(item => {
@@ -755,16 +624,10 @@ function updateProductSummary(productData, filters = { city: 'global', supermark
         
         if (item.variacion_total !== null && item.variacion_total !== undefined && !isNaN(item.variacion_total)) {
             if (!groupedVariations.has(key)) {
-                groupedVariations.set(key, {
-                    count: 1,
-                    total: item.variacion_total
-                });
+                groupedVariations.set(key, { count: 1, total: item.variacion_total });
             } else {
                 const existing = groupedVariations.get(key);
-                groupedVariations.set(key, {
-                    count: existing.count + 1,
-                    total: existing.total + item.variacion_total
-                });
+                groupedVariations.set(key, { count: existing.count + 1, total: existing.total + item.variacion_total });
             }
         }
     });
@@ -788,20 +651,17 @@ function updateProductSummary(productData, filters = { city: 'global', supermark
         variationElem.className = `variation-large ${avgVariation >= 0 ? 'positive' : 'negative'}`;
     }
     
-    // Registros
     setElementText('total-records-result', filteredData.length);
     
-    // Última fecha
     if (document.getElementById('last-record-date')) {
         try {
-            const lastDate = new Date(mostRecentRecord.fecha);
-            setElementText('last-record-date', lastDate.toLocaleDateString('es-ES'));
+            const lastDate = parsearFecha(mostRecentRecord.fecha);
+            setElementText('last-record-date', formatearFechaParaMostrar(lastDate));
         } catch {
             setElementText('last-record-date', '-');
         }
     }
     
-    // Actualizar contextos según filtros
     let contextText = '';
     const activeFilters = [];
     
@@ -809,11 +669,7 @@ function updateProductSummary(productData, filters = { city: 'global', supermark
     if (filters.supermarket !== 'global') activeFilters.push(`Super: ${filters.supermarket}`);
     if (filters.brand !== 'global') activeFilters.push(`Marca: ${filters.brand}`);
     
-    if (activeFilters.length === 0) {
-        contextText = 'Todos los datos';
-    } else {
-        contextText = activeFilters.join(' | ');
-    }
+    contextText = activeFilters.length === 0 ? 'Todos los datos' : activeFilters.join(' | ');
     
     setElementText('current-price-context', contextText);
     setElementText('variation-context', contextText);
@@ -821,35 +677,23 @@ function updateProductSummary(productData, filters = { city: 'global', supermark
     setElementText('date-context', contextText);
 }
 
-// Helper para establecer texto de elementos de forma segura
 function setElementText(elementId, text) {
     const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = text;
-    }
+    if (element) element.textContent = text;
 }
 
-// Helper para establecer placeholders en resumen
 function setSummaryPlaceholders() {
     const placeholders = {
-        'current-price': '-',
-        'total-variation': '-',
-        'total-records-result': '0',
-        'last-record-date': '-',
-        'current-price-context': 'Sin datos con filtros',
-        'variation-context': 'Sin datos con filtros',
-        'records-context': 'Sin datos con filtros',
+        'current-price': '-', 'total-variation': '-', 'total-records-result': '0',
+        'last-record-date': '-', 'current-price-context': 'Sin datos con filtros',
+        'variation-context': 'Sin datos con filtros', 'records-context': 'Sin datos con filtros',
         'date-context': 'Sin datos con filtros'
     };
     
-    for (const [id, text] of Object.entries(placeholders)) {
-        setElementText(id, text);
-    }
+    for (const [id, text] of Object.entries(placeholders)) setElementText(id, text);
     
     const variationElem = document.getElementById('total-variation');
-    if (variationElem) {
-        variationElem.className = 'variation-large';
-    }
+    if (variationElem) variationElem.className = 'variation-large';
 }
 
 // Función para crear gráfico de precios
@@ -857,37 +701,23 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
     console.log('📈 Creando gráfico (Marca + Supermercado)');
     
     const canvas = document.getElementById('price-chart');
-    if (!canvas) {
-        console.error('❌ Canvas no encontrado');
-        return { ciudades: [], supermercados: [], marcas: [] };
-    }
+    if (!canvas) return { ciudades: [], supermercados: [], marcas: [] };
     
-    // Limpiar mensajes de error previos
     const chartContainer = canvas.parentElement.parentElement;
     const existingError = chartContainer.querySelector('.chart-info-message');
     if (existingError) existingError.remove();
     
-    // Destruir gráfico anterior
     if (currentChart instanceof Chart) {
         currentChart.destroy();
         currentChart = null;
     }
     
     try {
-        // Aplicar filtros a los datos
         let filteredData = productData;
         
-        if (filters.city !== 'global') {
-            filteredData = filteredData.filter(item => item.ciudad === filters.city);
-        }
-        
-        if (filters.supermarket !== 'global') {
-            filteredData = filteredData.filter(item => item.super === filters.supermarket);
-        }
-        
-        if (filters.brand !== 'global') {
-            filteredData = filteredData.filter(item => item.marca === filters.brand);
-        }
+        if (filters.city !== 'global') filteredData = filteredData.filter(item => item.ciudad === filters.city);
+        if (filters.supermarket !== 'global') filteredData = filteredData.filter(item => item.super === filters.supermarket);
+        if (filters.brand !== 'global') filteredData = filteredData.filter(item => item.marca === filters.brand);
         
         console.log(`🌍 Datos después de filtros:`, filteredData.length, 'registros');
         
@@ -896,14 +726,7 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
             currentChart = new Chart(ctx, {
                 type: 'line',
                 data: { datasets: [] },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { type: 'time', title: { display: true, text: 'Fecha' } },
-                        y: { title: { display: true, text: 'Precio (€)' } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', title: { display: true, text: 'Fecha' } }, y: { title: { display: true, text: 'Precio (€)' } } } }
             });
             
             const infoDiv = document.createElement('div');
@@ -914,7 +737,6 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
             return { ciudades: [], supermercados: [], marcas: [] };
         }
         
-        // Agrupar por MARCA + SUPERMERCADO
         const groups = {};
         const ciudadesDisponibles = new Set();
         const supermercadosDisponibles = new Set();
@@ -923,28 +745,17 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
         filteredData.forEach(item => {
             if (!item || !item.super) return;
             
-            if (item.ciudad) {
-                ciudadesDisponibles.add(item.ciudad);
-            }
-            if (item.super) {
-                supermercadosDisponibles.add(item.super);
-            }
-            if (item.marca) {
-                marcasDisponibles.add(item.marca);
-            }
+            if (item.ciudad) ciudadesDisponibles.add(item.ciudad);
+            if (item.super) supermercadosDisponibles.add(item.super);
+            if (item.marca) marcasDisponibles.add(item.marca);
             
             const marca = item.marca || 'Sin marca';
             const key = `${marca} | ${item.super}`;
             
-            if (!groups[key]) {
-                groups[key] = {
-                    marca: marca,
-                    super: item.super,
-                    datos: []
-                };
-            }
+            if (!groups[key]) groups[key] = { marca: marca, super: item.super, datos: [] };
             
-            const fecha = new Date(item.fecha);
+            // CORREGIDO: Usar parsearFecha
+            const fecha = parsearFecha(item.fecha);
             if (isNaN(fecha.getTime())) {
                 console.warn('Fecha inválida:', item.fecha);
                 return;
@@ -956,39 +767,26 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
                 return;
             }
             
-            groups[key].datos.push({
-                fecha: fecha,
-                precio: precio,
-                ciudad: item.ciudad || 'Desconocida',
-                precio_neto: item.precio_neto
-            });
+            groups[key].datos.push({ fecha: fecha, precio: precio, ciudad: item.ciudad || 'Desconocida', precio_neto: item.precio_neto });
         });
         
         console.log('Combinaciones encontradas (Marca + Super):', Object.keys(groups).length);
         
-        // Ordenar cada grupo por fecha
         const validGroups = {};
         for (const [key, group] of Object.entries(groups)) {
             if (group.datos.length > 0) {
+                // CORREGIDO: Usar parsearFecha
                 group.datos.sort((a, b) => a.fecha - b.fecha);
                 validGroups[key] = group;
             }
         }
         
-        // Si no hay grupos válidos
         if (Object.keys(validGroups).length === 0) {
             const ctx = canvas.getContext('2d');
             currentChart = new Chart(ctx, {
                 type: 'line',
                 data: { datasets: [] },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { type: 'time', title: { display: true, text: 'Fecha' } },
-                        y: { title: { display: true, text: 'Precio (€)' } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', title: { display: true, text: 'Fecha' } }, y: { title: { display: true, text: 'Precio (€)' } } } }
             });
             
             const infoDiv = document.createElement('div');
@@ -996,20 +794,11 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
             infoDiv.innerHTML = '<p><i class="fas fa-info-circle"></i> No hay suficientes datos para mostrar líneas en el gráfico</p>';
             chartContainer.appendChild(infoDiv);
             
-            return { 
-                ciudades: Array.from(ciudadesDisponibles), 
-                supermercados: Array.from(supermercadosDisponibles),
-                marcas: Array.from(marcasDisponibles)
-            };
+            return { ciudades: Array.from(ciudadesDisponibles), supermercados: Array.from(supermercadosDisponibles), marcas: Array.from(marcasDisponibles) };
         }
         
-        // Preparar datasets para Chart.js
         const datasets = [];
-        const colors = [
-            '#4a6fa5', '#6b8e23', '#8b4513', '#2c3e50', '#7d3c98',
-            '#16a085', '#e67e22', '#3498db', '#1abc9c', '#9b59b6',
-            '#34495e', '#27ae60', '#8e44ad', '#2c3e50', '#f39c12'
-        ];
+        const colors = ['#4a6fa5', '#6b8e23', '#8b4513', '#2c3e50', '#7d3c98', '#16a085', '#e67e22', '#3498db', '#1abc9c', '#9b59b6', '#34495e', '#27ae60', '#8e44ad', '#2c3e50', '#f39c12'];
         
         Object.entries(validGroups).forEach(([combinacion, group], index) => {
             const { marca, super: supermercado, datos } = group;
@@ -1025,12 +814,9 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
                 }
             }
             
-            const datasetConfig = {
+            datasets.push({
                 label: label,
-                data: datos.map(d => ({
-                    x: d.fecha,
-                    y: d.precio
-                })),
+                data: datos.map(d => ({ x: d.fecha, y: d.precio })),
                 borderColor: colors[index % colors.length],
                 backgroundColor: colors[index % colors.length] + '20',
                 borderWidth: datos.length >= 2 ? 2 : 0,
@@ -1042,42 +828,22 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
                 pointBorderColor: '#fff',
                 pointBorderWidth: 1,
                 showLine: datos.length >= 2
-            };
-            
-            datasets.push(datasetConfig);
+            });
         });
         
         console.log('Datasets preparados:', datasets.length);
         
-        // Obtener contexto del canvas
         const ctx = canvas.getContext('2d');
         
-        // Configuración del gráfico
         const config = {
             type: 'line',
-            data: {
-                datasets: datasets
-            },
+            data: { datasets: datasets },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
+                interaction: { intersect: false, mode: 'index' },
                 plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            font: {
-                                size: 11
-                            },
-                            padding: 8,
-                            usePointStyle: true,
-                            pointStyle: 'circle',
-                            boxWidth: 8
-                        }
-                    },
+                    legend: { position: 'top', labels: { font: { size: 11 }, padding: 8, usePointStyle: true, pointStyle: 'circle', boxWidth: 8 } },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -1095,58 +861,24 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
                 scales: {
                     x: {
                         type: 'time',
-                        time: {
-                            unit: 'month',
-                            displayFormats: {
-                                month: 'MMM yyyy'
-                            },
-                            tooltipFormat: 'dd/MM/yyyy'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Fecha',
-                            font: {
-                                size: 12,
-                                weight: 'bold'
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        }
+                        time: { unit: 'month', displayFormats: { month: 'MMM yyyy' }, tooltipFormat: 'dd/MM/yyyy' },
+                        title: { display: true, text: 'Fecha', font: { size: 12, weight: 'bold' } },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
                     },
                     y: {
                         beginAtZero: false,
-                        title: {
-                            display: true,
-                            text: 'Precio (€)',
-                            font: {
-                                size: 12,
-                                weight: 'bold'
-                            }
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return value.toFixed(2) + '€';
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        }
+                        title: { display: true, text: 'Precio (€)', font: { size: 12, weight: 'bold' } },
+                        ticks: { callback: function(value) { return value.toFixed(2) + '€'; } },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
                     }
                 }
             }
         };
         
-        // Crear el gráfico
         currentChart = new Chart(ctx, config);
-        
         console.log('✅ Gráfico creado exitosamente');
         
-        return { 
-            ciudades: Array.from(ciudadesDisponibles), 
-            supermercados: Array.from(supermercadosDisponibles),
-            marcas: Array.from(marcasDisponibles)
-        };
+        return { ciudades: Array.from(ciudadesDisponibles), supermercados: Array.from(supermercadosDisponibles), marcas: Array.from(marcasDisponibles) };
         
     } catch (error) {
         console.error('❌ Error al crear gráfico:', error);
@@ -1155,22 +887,12 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
         currentChart = new Chart(ctx, {
             type: 'line',
             data: { datasets: [] },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { type: 'time', title: { display: true, text: 'Fecha' } },
-                    y: { title: { display: true, text: 'Precio (€)' } }
-                }
-            }
+            options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', title: { display: true, text: 'Fecha' } }, y: { title: { display: true, text: 'Precio (€)' } } } }
         });
         
         const errorDiv = document.createElement('div');
         errorDiv.className = 'chart-info-message';
-        errorDiv.innerHTML = `
-            <p><i class="fas fa-info-circle"></i> Error al crear el gráfico</p>
-            <p><small>Intenta buscar otro producto o cambiar los filtros</small></p>
-        `;
+        errorDiv.innerHTML = `<p><i class="fas fa-info-circle"></i> Error al crear el gráfico</p><p><small>Intenta buscar otro producto o cambiar los filtros</small></p>`;
         chartContainer.appendChild(errorDiv);
         
         return { ciudades: [], supermercados: [], marcas: [] };
@@ -1187,22 +909,16 @@ function setupFilters(productData, ciudades, supermercados, marcas) {
     
     if (!citySelect || !supermarketSelect || !brandSelect || !applyBtn || !resetBtn) return;
     
-    // Actualizar selectores
     updateFilterSelector(citySelect, ciudades, currentFilters.city);
     updateFilterSelector(supermarketSelect, supermercados, currentFilters.supermarket);
     updateFilterSelector(brandSelect, marcas, currentFilters.brand);
     
-    // Al aplicar filtros
     applyBtn.addEventListener('click', function() {
         const selectedCity = citySelect.value;
         const selectedSupermarket = supermarketSelect.value;
         const selectedBrand = brandSelect.value;
         
-        currentFilters = {
-            city: selectedCity,
-            supermarket: selectedSupermarket,
-            brand: selectedBrand
-        };
+        currentFilters = { city: selectedCity, supermarket: selectedSupermarket, brand: selectedBrand };
         
         console.log(`🌍 Aplicando filtros: Ciudad=${selectedCity}, Supermercado=${selectedSupermarket}, Marca=${selectedBrand}`);
         
@@ -1215,7 +931,6 @@ function setupFilters(productData, ciudades, supermercados, marcas) {
         }, 100);
     });
     
-    // Al restablecer
     resetBtn.addEventListener('click', function() {
         citySelect.value = 'global';
         supermarketSelect.value = 'global';
@@ -1234,19 +949,15 @@ function setupFilters(productData, ciudades, supermercados, marcas) {
     });
 }
 
-// Actualizar selector de filtros
 function updateFilterSelector(selectElement, options, selectedValue) {
     if (!selectElement) return;
     
     const currentValue = selectElement.value;
-    
-    // Guardar la primera opción (global)
     const firstOption = selectElement.options[0];
     selectElement.innerHTML = '';
     if (firstOption) selectElement.appendChild(firstOption);
     
     options.sort();
-    
     options.forEach(option => {
         const opt = document.createElement('option');
         opt.value = option;
@@ -1254,11 +965,8 @@ function updateFilterSelector(selectElement, options, selectedValue) {
         selectElement.appendChild(opt);
     });
     
-    if (options.includes(currentValue)) {
-        selectElement.value = currentValue;
-    } else {
-        selectElement.value = selectedValue;
-    }
+    if (options.includes(currentValue)) selectElement.value = currentValue;
+    else selectElement.value = selectedValue;
 }
 
 // Mostrar detalles por marca/supermercado
@@ -1273,27 +981,17 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
         return;
     }
     
-    // Aplicar filtros a los datos
     let filteredData = productData;
     
-    if (filters.city !== 'global') {
-        filteredData = filteredData.filter(item => item.ciudad === filters.city);
-    }
-    
-    if (filters.supermarket !== 'global') {
-        filteredData = filteredData.filter(item => item.super === filters.supermarket);
-    }
-    
-    if (filters.brand !== 'global') {
-        filteredData = filteredData.filter(item => item.marca === filters.brand);
-    }
+    if (filters.city !== 'global') filteredData = filteredData.filter(item => item.ciudad === filters.city);
+    if (filters.supermarket !== 'global') filteredData = filteredData.filter(item => item.super === filters.supermarket);
+    if (filters.brand !== 'global') filteredData = filteredData.filter(item => item.marca === filters.brand);
     
     if (filteredData.length === 0) {
         container.innerHTML = '<p class="no-data">No hay datos con los filtros aplicados</p>';
         return;
     }
     
-    // Agrupar por MARCA + SUPERMERCADO
     const groups = {};
     filteredData.forEach(item => {
         if (!item || !item.super) return;
@@ -1301,24 +999,17 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
         const marca = item.marca || 'Sin marca';
         const key = `${marca} | ${item.super}`;
         
-        if (!groups[key]) {
-            groups[key] = {
-                marca: marca,
-                super: item.super,
-                datos: []
-            };
-        }
-        
+        if (!groups[key]) groups[key] = { marca: marca, super: item.super, datos: [] };
         groups[key].datos.push(item);
     });
     
     console.log('Grupos para detalles (Marca + Super):', Object.keys(groups).length);
     
-    // Crear tarjetas para cada grupo
     Object.entries(groups).forEach(([combinacion, group]) => {
         if (group.datos.length === 0) return;
         
-        group.datos.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+        // CORREGIDO: Usar parsearFecha
+        group.datos.sort((a, b) => parsearFecha(a.fecha) - parsearFecha(b.fecha));
         
         const firstItem = group.datos[0];
         const lastItem = group.datos[group.datos.length - 1];
@@ -1349,12 +1040,12 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
                 <div>
                     <small>Primer precio neto</small>
                     <p>${firstPrice.toFixed(2)}€</p>
-                    <small class="date">${new Date(firstItem.fecha).toLocaleDateString('es-ES')}</small>
+                    <small class="date">${formatearFechaParaMostrar(firstItem.fecha)}</small>
                 </div>
                 <div>
                     <small>Último precio neto</small>
                     <p>${lastPrice.toFixed(2)}€</p>
-                    <small class="date">${new Date(lastItem.fecha).toLocaleDateString('es-ES')}</small>
+                    <small class="date">${formatearFechaParaMostrar(lastItem.fecha)}</small>
                 </div>
                 <div>
                     <small>Variación</small>
@@ -1382,22 +1073,16 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
 function showVariationAnalysis() {
     showScreen('variation');
     
-    // Configurar event listeners para los botones grandes
     document.querySelectorAll('.variation-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const action = this.dataset.action;
-            if (action === 'top-increases') {
-                showTopVariations('increases');
-            } else if (action === 'top-decreases') {
-                showTopVariations('decreases');
-            }
+            if (action === 'top-increases') showTopVariations('increases');
+            else if (action === 'top-decreases') showTopVariations('decreases');
         });
     });
     
-    // Mostrar subidas por defecto
     showTopVariations('increases');
     
-    // Actualizar navegación
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     const variationNavLink = document.querySelector('[data-action="variation-analysis"]');
     if (variationNavLink) variationNavLink.classList.add('active');
@@ -1407,16 +1092,16 @@ function showVariationAnalysis() {
 function showTopVariations(type) {
     showLoading('Calculando variaciones...');
     
-    // Agrupar por producto, marca y supermercado, tomando el MÁS RECIENTE de cada uno
     const latestProducts = new Map();
     
     productosData.forEach(item => {
         if (!item.producto || !item.super) return;
         
         const key = `${item.producto}||${item.marca || 'Sin marca'}||${item.super}`;
-        const currentDate = new Date(item.fecha);
+        // CORREGIDO: Usar parsearFecha
+        const currentDate = parsearFecha(item.fecha);
         
-        if (!latestProducts.has(key) || currentDate > latestProducts.get(key).fecha) {
+        if (!latestProducts.has(key) || currentDate > parsearFecha(latestProducts.get(key).fecha)) {
             latestProducts.set(key, {
                 fecha: currentDate,
                 producto: item.producto,
@@ -1427,11 +1112,9 @@ function showTopVariations(type) {
         }
     });
     
-    // Convertir a array y filtrar productos con variación
     const productsWithVariation = Array.from(latestProducts.values())
         .filter(item => item.variacion_total !== null && item.variacion_total !== 0);
     
-    // Ordenar
     if (type === 'increases') {
         productsWithVariation.sort((a, b) => b.variacion_total - a.variacion_total);
         const titleElem = document.querySelector('#variation-screen .screen-title h2');
@@ -1442,7 +1125,6 @@ function showTopVariations(type) {
         if (titleElem) titleElem.textContent = 'Mayores Bajadas';
     }
     
-    // Mostrar top 15
     const containerId = type === 'increases' ? 'top-increases' : 'top-decreases';
     const container = document.getElementById(containerId);
     const otherContainerId = type === 'increases' ? 'top-decreases' : 'top-increases';
@@ -1478,7 +1160,7 @@ function showTopVariations(type) {
                                 ${item.variacion_total >= 0 ? '+' : ''}${item.variacion_total.toFixed(1)}%
                             </span>
                         </div>
-                        <small>Última actualización: ${new Date(item.fecha).toLocaleDateString('es-ES')}</small>
+                        <small>Última actualización: ${formatearFechaParaMostrar(item.fecha)}</small>
                     </div>
                     <button class="view-btn" onclick="searchProduct('${item.producto.replace(/'/g, "\\'")}')">
                         <i class="fas fa-chart-line"></i>
@@ -1489,12 +1171,9 @@ function showTopVariations(type) {
         }
     }
     
-    // Activar tab correspondiente
     document.querySelectorAll('#variation-screen .tab-btn').forEach(btn => {
         btn.classList.remove('active');
-        if (btn.dataset.tab === type) {
-            btn.classList.add('active');
-        }
+        if (btn.dataset.tab === type) btn.classList.add('active');
     });
     
     hideLoading();
@@ -1505,7 +1184,6 @@ function showInflationAnalysis() {
     showScreen('inflation');
     updateInflationStats();
     
-    // Configurar event listeners para filtros
     const cityFilter = document.getElementById('city-inflation-filter');
     const yearFilter = document.getElementById('year-inflation-filter');
     
@@ -1515,12 +1193,8 @@ function showInflationAnalysis() {
     }
     
     if (yearFilter) {
-        // Limpiar opciones existentes
-        while (yearFilter.options.length > 1) {
-            yearFilter.remove(1);
-        }
+        while (yearFilter.options.length > 1) yearFilter.remove(1);
         
-        // Añadir opción para cada año disponible dinámicamente
         const sortedYears = Array.from(availableYears).sort();
         sortedYears.forEach(year => {
             const option = document.createElement('option');
@@ -1532,7 +1206,6 @@ function showInflationAnalysis() {
         yearFilter.addEventListener('change', updateInflationStats);
     }
     
-    // Actualizar navegación
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     const inflationNavLink = document.querySelector('[data-action="inflation-analysis"]');
     if (inflationNavLink) inflationNavLink.classList.add('active');
@@ -1549,63 +1222,42 @@ function updateInflationStats() {
     const selectedCity = cityFilter.value;
     const selectedYear = yearFilter.value;
     
-    // Filtrar por ciudad si es necesario
     let filteredData = productosData;
-    if (selectedCity !== 'global') {
-        filteredData = filteredData.filter(item => item.ciudad === selectedCity);
-    }
+    if (selectedCity !== 'global') filteredData = filteredData.filter(item => item.ciudad === selectedCity);
     
     let result = null;
     let excludedProducts = 0;
     let totalCombinations = 0;
     
     if (selectedYear === 'total') {
-        // CÁLCULO PARA INFLACIÓN TOTAL
-        // Requisito: ≥3 registros en total por combinación
         const combinationCounts = new Map();
         
-        // Contar registros totales por combinación
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
-            
             const key = `${item.producto}||${item.super}||${item.marca}`;
             combinationCounts.set(key, (combinationCounts.get(key) || 0) + 1);
         });
         
         totalCombinations = combinationCounts.size;
-        
-        // Filtrar solo combinaciones con ≥3 registros TOTALES
         const validCombinations = new Set();
         combinationCounts.forEach((count, key) => {
-            if (count > 2) {  // count > 2 es equivalente a count >= 3
-                validCombinations.add(key);
-            } else {
-                excludedProducts++;
-            }
+            if (count > 2) validCombinations.add(key);
+            else excludedProducts++;
         });
         
-        // Obtener la variación más reciente de cada combinación válida
         const latestVariations = new Map();
         
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
-            
             const key = `${item.producto}||${item.super}||${item.marca}`;
-            
-            // Solo procesar combinaciones válidas (≥3 registros totales)
             if (!validCombinations.has(key)) return;
-            
-            // Solo si tiene variacion_total
             if (item.variacion_total === null || item.variacion_total === undefined) return;
             
-            const currentDate = new Date(item.fecha);
+            // CORREGIDO: Usar parsearFecha
+            const currentDate = parsearFecha(item.fecha);
             
-            // Tomar el registro más reciente
-            if (!latestVariations.has(key) || currentDate > latestVariations.get(key).fecha) {
-                latestVariations.set(key, {
-                    fecha: currentDate,
-                    variacion: item.variacion_total
-                });
+            if (!latestVariations.has(key) || currentDate > parsearFecha(latestVariations.get(key).fecha)) {
+                latestVariations.set(key, { fecha: currentDate, variacion: item.variacion_total });
             }
         });
         
@@ -1615,8 +1267,7 @@ function updateInflationStats() {
         result = {
             title: 'Inflación Total',
             description: 'Variación media de precios (solo productos con ≥3 registros totales)',
-            inflation: validVariations.length > 0 ? 
-                validVariations.reduce((a, b) => a + b, 0) / validVariations.length : 0,
+            inflation: validVariations.length > 0 ? validVariations.reduce((a, b) => a + b, 0) / validVariations.length : 0,
             productCount: validProductsCount,
             recordCount: validVariations.length,
             excludedCount: excludedProducts,
@@ -1625,21 +1276,17 @@ function updateInflationStats() {
         };
         
     } else {
-        // CÁLCULO PARA AÑO ESPECÍFICO (ej: 2025)
-        // Requisito: ≥3 registros en ESE AÑO específico
         const yearField = `variacion_${selectedYear}`;
-        
-        // Contar registros del año específico por combinación
         const combinationYearCounts = new Map();
         
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
             
-            // Verificar que sea del año correcto
-            const itemYear = new Date(item.fecha).getFullYear().toString();
+            // CORREGIDO: Usar parsearFecha
+            const fechaParsed = parsearFecha(item.fecha);
+            const itemYear = fechaParsed ? fechaParsed.getFullYear().toString() : null;
             if (itemYear !== selectedYear) return;
             
-            // Verificar que tenga variación para este año
             if (item[yearField] === null || item[yearField] === undefined) return;
             
             const key = `${item.producto}||${item.super}||${item.marca}`;
@@ -1647,43 +1294,29 @@ function updateInflationStats() {
         });
         
         totalCombinations = combinationYearCounts.size;
-        
-        // Filtrar solo combinaciones con ≥3 registros en ESTE AÑO
         const validCombinations = new Set();
         combinationYearCounts.forEach((count, key) => {
-            if (count > 2) {  // count > 2 es equivalente a count >= 3
-                validCombinations.add(key);
-            } else {
-                excludedProducts++;
-            }
+            if (count > 2) validCombinations.add(key);
+            else excludedProducts++;
         });
         
-        // Obtener la variación más reciente de cada combinación válida PARA ESTE AÑO
         const latestVariations = new Map();
         
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
             
-            // Verificar que sea del año correcto
-            const itemYear = new Date(item.fecha).getFullYear().toString();
+            const fechaParsed = parsearFecha(item.fecha);
+            const itemYear = fechaParsed ? fechaParsed.getFullYear().toString() : null;
             if (itemYear !== selectedYear) return;
             
             const key = `${item.producto}||${item.super}||${item.marca}`;
-            
-            // Solo procesar combinaciones válidas (≥3 registros en este año)
             if (!validCombinations.has(key)) return;
-            
-            // Solo si tiene variación para este año
             if (item[yearField] === null || item[yearField] === undefined) return;
             
-            const currentDate = new Date(item.fecha);
+            const currentDate = parsearFecha(item.fecha);
             
-            // Tomar el registro más reciente
-            if (!latestVariations.has(key) || currentDate > latestVariations.get(key).fecha) {
-                latestVariations.set(key, {
-                    fecha: currentDate,
-                    variacion: item[yearField]
-                });
+            if (!latestVariations.has(key) || currentDate > parsearFecha(latestVariations.get(key).fecha)) {
+                latestVariations.set(key, { fecha: currentDate, variacion: item[yearField] });
             }
         });
         
@@ -1693,8 +1326,7 @@ function updateInflationStats() {
         result = {
             title: `Inflación ${selectedYear}`,
             description: `Variación media durante el año ${selectedYear} (solo productos con ≥3 registros en ${selectedYear})`,
-            inflation: validVariations.length > 0 ? 
-                validVariations.reduce((a, b) => a + b, 0) / validVariations.length : 0,
+            inflation: validVariations.length > 0 ? validVariations.reduce((a, b) => a + b, 0) / validVariations.length : 0,
             productCount: validProductsCount,
             recordCount: validVariations.length,
             excludedCount: excludedProducts,
@@ -1703,7 +1335,6 @@ function updateInflationStats() {
         };
     }
     
-    // Mostrar resultados (MANTIENE EL MISMO HTML QUE TU VERSIÓN ORIGINAL)
     statsContainer.innerHTML = `
         <div class="inflation-stat-card highlight">
             <div class="inflation-stat-icon">
@@ -1715,12 +1346,7 @@ function updateInflationStats() {
                     ${result.inflation >= 0 ? '+' : ''}${result.inflation.toFixed(1)}%
                 </p>
                 <small>${result.description}</small>
-                ${result.excludedCount > 0 ? 
-                    `<br><small class="excluded-info">
-                        <i class="fas fa-filter"></i> 
-                        ${result.excludedCount} productos excluidos (menos de 3 registros)
-                    </small>` : ''
-                }
+                ${result.excludedCount > 0 ? `<br><small class="excluded-info"><i class="fas fa-filter"></i> ${result.excludedCount} productos excluidos (menos de 3 registros)</small>` : ''}
             </div>
         </div>
         
@@ -1732,9 +1358,7 @@ function updateInflationStats() {
                 <h4>Productos Analizados</h4>
                 <p class="inflation-stat-number">${result.productCount}</p>
                 <small>Combinaciones con suficientes datos (≥3 registros)</small>
-                ${result.totalCombinations > 0 ? 
-                    `<br><small>De ${result.totalCombinations} combinaciones totales</small>` : ''
-                }
+                ${result.totalCombinations > 0 ? `<br><small>De ${result.totalCombinations} combinaciones totales</small>` : ''}
             </div>
         </div>
         
@@ -1775,7 +1399,7 @@ function updateInflationStats() {
     `;
 }
 
-// Mostrar filtros (pantalla separada)
+// Mostrar filtros
 function showFilterScreen(filterType, options) {
     const container = document.getElementById('filter-options');
     const results = document.getElementById('filter-results');
@@ -1785,54 +1409,38 @@ function showFilterScreen(filterType, options) {
     container.innerHTML = '';
     results.innerHTML = '';
     
-    if (filterType === 'supermarket') {
-        document.getElementById('filter-title').textContent = 'Filtrar por Supermercado';
-    } else if (filterType === 'city') {
-        document.getElementById('filter-title').textContent = 'Filtrar por Ciudad';
-    } else if (filterType === 'brand') {
-        document.getElementById('filter-title').textContent = 'Filtrar por Marca';
-    }
+    if (filterType === 'supermarket') document.getElementById('filter-title').textContent = 'Filtrar por Supermercado';
+    else if (filterType === 'city') document.getElementById('filter-title').textContent = 'Filtrar por Ciudad';
+    else if (filterType === 'brand') document.getElementById('filter-title').textContent = 'Filtrar por Marca';
     
-    // Crear botones de opciones
     options.forEach(option => {
         if (!option) return;
-        
         const button = document.createElement('button');
         button.className = 'filter-option';
         button.innerHTML = `<i class="fas fa-${filterType === 'supermarket' ? 'store' : filterType === 'city' ? 'city' : 'tag'}"></i> ${option}`;
-        button.addEventListener('click', () => {
-            showFilterResults(filterType, option);
-        });
+        button.addEventListener('click', () => showFilterResults(filterType, option));
         container.appendChild(button);
     });
     
     showScreen('filter');
     
-    // Actualizar navegación
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
     const filterNavLink = document.querySelector(`[data-action="by-${filterType}"]`);
     if (filterNavLink) filterNavLink.classList.add('active');
 }
 
-// Mostrar resultados de filtro (pantalla separada)
+// Mostrar resultados de filtro
 function showFilterResults(filterType, value) {
     const results = document.getElementById('filter-results');
     if (!results) return;
     
-    // Filtrar datos
     let filteredData;
-    if (filterType === 'supermarket') {
-        filteredData = productosData.filter(p => p.super === value);
-    } else if (filterType === 'city') {
-        filteredData = productosData.filter(p => p.ciudad === value);
-    } else if (filterType === 'brand') {
-        filteredData = productosData.filter(p => p.marca === value);
-    }
+    if (filterType === 'supermarket') filteredData = productosData.filter(p => p.super === value);
+    else if (filterType === 'city') filteredData = productosData.filter(p => p.ciudad === value);
+    else if (filterType === 'brand') filteredData = productosData.filter(p => p.marca === value);
     
-    // Productos únicos en este filtro
     const uniqueProductsInFilter = [...new Set(filteredData.map(p => p.producto))];
     
-    // Mostrar resultados
     results.innerHTML = `
         <h3>${value}</h3>
         <div class="filter-stats">
@@ -1846,13 +1454,11 @@ function showFilterResults(filterType, value) {
             </div>
             <div>
                 <small>Rango de fechas</small>
-                <p>${
-                    filteredData.length > 0 ? 
-                    new Date(Math.min(...filteredData.map(p => new Date(p.fecha)))).toLocaleDateString('es-ES') + 
+                <p>${filteredData.length > 0 ? 
+                    formatearFechaParaMostrar(Math.min(...filteredData.map(p => parsearFecha(p.fecha)?.getTime()))) + 
                     ' - ' + 
-                    new Date(Math.max(...filteredData.map(p => new Date(p.fecha)))).toLocaleDateString('es-ES') 
-                    : '-'
-                }</p>
+                    formatearFechaParaMostrar(Math.max(...filteredData.map(p => parsearFecha(p.fecha)?.getTime()))) 
+                    : '-'}</p>
             </div>
         </div>
         <div class="filter-products">
@@ -1869,7 +1475,7 @@ function showFilterResults(filterType, value) {
     `;
 }
 
-// Crear gráfico de años - VERSIÓN MEJORADA
+// Crear gráfico de años
 function createYearChart(years) {
     console.log('📊 Creando gráfico de años con datos:', years);
     
@@ -1879,7 +1485,6 @@ function createYearChart(years) {
         return;
     }
     
-    // Destruir gráfico anterior si existe
     const existingChart = Chart.getChart(canvas);
     if (existingChart) {
         console.log('Destruyendo gráfico anterior');
@@ -1894,8 +1499,6 @@ function createYearChart(years) {
     
     if (sortedYears.length === 0 || counts.length === 0) {
         console.warn('No hay datos para el gráfico');
-        
-        // Mostrar mensaje en el canvas
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = '14px Arial';
@@ -1907,8 +1510,6 @@ function createYearChart(years) {
     
     const ctx = canvas.getContext('2d');
     try {
-        console.log('Intentando crear gráfico...');
-        
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -1925,9 +1526,7 @@ function createYearChart(years) {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -1939,25 +1538,11 @@ function createYearChart(years) {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Número de registros',
-                            font: {
-                                weight: 'bold'
-                            }
-                        },
-                        ticks: {
-                            precision: 0
-                        }
+                        title: { display: true, text: 'Número de registros', font: { weight: 'bold' } },
+                        ticks: { precision: 0 }
                     },
                     x: {
-                        title: {
-                            display: true,
-                            text: 'Año',
-                            font: {
-                                weight: 'bold'
-                            }
-                        }
+                        title: { display: true, text: 'Año', font: { weight: 'bold' } }
                     }
                 }
             }
@@ -1965,8 +1550,6 @@ function createYearChart(years) {
         console.log('✅ Gráfico creado exitosamente');
     } catch (error) {
         console.error('❌ Error creando gráfico:', error);
-        
-        // Mostrar mensaje de error
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = '14px Arial';
         ctx.fillStyle = '#d9534f';
@@ -1975,16 +1558,12 @@ function createYearChart(years) {
     }
 }
 
-
 // Event Listeners adicionales
 function initEventListeners() {
-    // Botones de volver
     document.querySelectorAll('.back-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const backTo = this.dataset.back || 'main';
             showScreen(backTo);
-            
-            // Actualizar navegación
             if (backTo === 'main') {
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 const mainNavLink = document.querySelector('[data-action="main"]');
@@ -1993,21 +1572,13 @@ function initEventListeners() {
         });
     });
     
-    // Tabs en pantalla de variación
     document.querySelectorAll('#variation-screen .tab-btn').forEach(tab => {
         tab.addEventListener('click', function() {
             const tabType = this.dataset.tab;
-            
-            // Actualizar tabs activos
             document.querySelectorAll('#variation-screen .tab-btn').forEach(t => t.classList.remove('active'));
             this.classList.add('active');
-            
-            // Mostrar contenido
-            if (tabType === 'increases') {
-                showTopVariations('increases');
-            } else {
-                showTopVariations('decreases');
-            }
+            if (tabType === 'increases') showTopVariations('increases');
+            else showTopVariations('decreases');
         });
     });
     setupAdditionalElements();
@@ -2015,33 +1586,25 @@ function initEventListeners() {
 
 // Mostrar/ocultar pantallas
 function showScreen(screenName) {
-    // Cerrar menú en móvil
     if (window.innerWidth <= 992) {
         const sidebar = document.getElementById('sidebar');
         if (sidebar) sidebar.classList.remove('active');
         document.body.style.overflow = '';
     }
     
-    // Ocultar todas las pantallas
     Object.values(screens).forEach(screen => {
         if (screen) screen.classList.remove('active');
     });
     
-    // Mostrar pantalla solicitada
-    if (screens[screenName]) {
-        screens[screenName].classList.add('active');
-    }
+    if (screens[screenName]) screens[screenName].classList.add('active');
 }
 
 // Utilidades
 function showLoading(message = 'Cargando...') {
     const loading = document.getElementById('loading');
     const loadingMessage = document.getElementById('loading-message');
-    
     if (loading) {
-        if (loadingMessage && message) {
-            loadingMessage.textContent = message;
-        }
+        if (loadingMessage && message) loadingMessage.textContent = message;
         loading.classList.remove('hidden');
     }
 }
@@ -2054,14 +1617,10 @@ function hideLoading() {
 function showError(message) {
     const errorToast = document.getElementById('error-toast');
     const errorMessage = document.getElementById('error-message');
-    
     if (errorToast && errorMessage) {
         errorMessage.textContent = message;
         errorToast.classList.remove('hidden');
-        
-        setTimeout(() => {
-            errorToast.classList.add('hidden');
-        }, 5000);
+        setTimeout(() => errorToast.classList.add('hidden'), 5000);
     } else {
         alert(message);
     }
@@ -2096,21 +1655,11 @@ window.debugProduct = function(productName) {
     console.log('Por supermercado:');
     Object.entries(groups).forEach(([superName, items]) => {
         console.log(`  ${superName}: ${items.length} registros`);
-        items.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+        items.sort((a, b) => parsearFecha(a.fecha) - parsearFecha(b.fecha));
         console.log(`    Fechas: ${items[0].fecha} → ${items[items.length-1].fecha}`);
         console.log(`    Precios: ${items[0].precio} → ${items[items.length-1].precio}`);
         console.log(`    Precios netos: ${items[0].precio_neto} → ${items[items.length-1].precio_neto}`);
     });
     
     return exactMatches;
-
 };
-
-
-
-
-
-
-
-
-
