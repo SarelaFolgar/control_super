@@ -16468,5 +16468,32 @@
     "variacion_2024":null,
     "variacion_2025":null,
     "variacion_2026":0.0
+  },
+  {
+    "fecha":"09\/01\/2026",
+    "mes":"enero",
+    "ano":2026,
+    "super":"spar borbalan",
+    "producto":"chocolate",
+    "cantidad":210.0,
+    "unidad":"g",
+    "marca":"kinder maxi",
+    "precio":4.29,
+    "precio_neto":20.43,
+    "ciudad":"valle gran rey",
+    "categoria":"chocolate",
+    "ultimo_precio_neto":20.43,
+    "primer_precio_neto":18.95,
+    "ultimo_precio_neto_2024":null,
+    "primer_precio_neto_2024":null,
+    "ultimo_precio_neto_2025":20.43,
+    "primer_precio_neto_2025":18.95,
+    "ultimo_precio_neto_2026":20.43,
+    "primer_precio_neto_2026":20.43,
+    "variacion_actual":0.0,
+    "variacion_total":7.81,
+    "variacion_2024":null,
+    "variacion_2025":7.81,
+    "variacion_2026":0.0
   }
 ]
