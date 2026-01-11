@@ -575,8 +575,8 @@ def main():
         except:
             pass  # Si falla, dejar como está
 
-df_transformado.to_json("../datos_super.json", orient="records", indent=2, force_ascii=False)
-print(f"✅ JSON guardado: {len(df_transformado)} registros")
+    df_transformado.to_json("../datos_super.json", orient="records", indent=2, force_ascii=False)
+    print(f"✅ JSON guardado: {len(df_transformado)} registros")
 
 # 5. EJECUTAR AUTOMÁTICAMENTE SI SE LLAMA DIRECTAMENTE
 if __name__ == "__main__":
