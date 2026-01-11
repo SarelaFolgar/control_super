@@ -30,11 +30,6 @@ jobs:
           cd funciones_python
           python procesar_datos.py
           
-      - name: 📊 Mostrar resultados
-        run: |
-          echo "Procesamiento completado"
-          ls -la ../*.json
-          
       - name: 💾 Commit y push cambios
         run: |
           git config --global user.name 'GitHub Actions'
