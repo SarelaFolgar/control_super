@@ -107,13 +107,8 @@ def calcular_precio_neto(df):
 
 def calcular_mes_ano(df):
     """
-    Calcula el año y mes en español a partir de la fecha en formato DD/MM/AAAA.
-    
-    Args:
-        df (pd.DataFrame): DataFrame con columna 'fecha' en formato DD/MM/AAAA
-        
-    Returns:
-        pd.DataFrame: DataFrame con nuevas columnas 'mes' y 'ano'
+    Calcula el año y mes en español a partir de la fecha.
+    Ahora mantiene fechas en formato YYYY-MM-DD.
     """    
     # Diccionario de meses en español
     meses_espanol = {
@@ -122,32 +117,27 @@ def calcular_mes_ano(df):
         9: 'septiembre', 10: 'octubre', 11: 'noviembre', 12: 'diciembre'
     }
     
-    # Convertir la columna fecha a datetime
-    df['fecha_dt'] = pd.to_datetime(df['fecha'], format='%d/%m/%Y', errors='coerce')
+    print("🔄 Procesando fechas para YYYY-MM-DD...")
     
-    # Extraer año y mes numérico
+    # 1. Convertir a datetime (aceptar DD/MM/YYYY o YYYY-MM-DD)
+    df['fecha_dt'] = pd.to_datetime(df['fecha'], dayfirst=True, errors='coerce')
+    
+    # 2. Extraer año y mes
     df['ano'] = df['fecha_dt'].dt.year
     df['mes_num'] = df['fecha_dt'].dt.month
-    
-    # Convertir mes numérico a español
     df['mes'] = df['mes_num'].map(meses_espanol)
     
-    # Eliminar columnas temporales
+    # 3. ✅ IMPORTANTE: Convertir fecha a formato YYYY-MM-DD
+    df['fecha'] = df['fecha_dt'].dt.strftime('%Y-%m-%d')
+    
+    # 4. Eliminar columnas temporales
     df = df.drop(['fecha_dt', 'mes_num'], axis=1)
     
-    # Reordenar columnas si es necesario
-    columnas = list(df.columns)
-    if 'fecha' in columnas and 'mes' in columnas and 'ano' in columnas:
-        # Poner mes y año después de fecha
-        columnas.remove('mes')
-        columnas.remove('ano')
-        fecha_index = columnas.index('fecha')
-        columnas.insert(fecha_index + 1, 'mes')
-        columnas.insert(fecha_index + 2, 'ano')
-        df = df[columnas]
-    
-    print(f"✅ Columnas 'mes' y 'ano' añadidas al DataFrame")
-    print(f"   Años únicos: {sorted(df['ano'].unique())}")
+    # Estadísticas
+    fechas_validas = df['fecha'].notna().sum()
+    print(f"✅ Fechas procesadas: {fechas_validas}/{len(df)}")
+    print(f"   Formato final: YYYY-MM-DD")
+    print(f"   Años únicos: {sorted(df['ano'].dropna().unique())}")
     
     return df
 
