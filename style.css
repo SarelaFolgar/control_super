@@ -2342,3 +2342,22 @@ body {
         min-width: 100%;
     }
 }
+
+.nav-link-externo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 0.25rem;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.nav-link-externo:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateX(3px);
+}
