@@ -339,24 +339,6 @@ async function enviarCompra() {
         
     } catch (error) {
         console.error('Error enviando compra:', error);
-        mostrarMensaje(`❌ Error al enviar: ${error.message}`, 'error');
-    }
-}
-        
-        // Limpiar formulario después de 3 segundos
-        setTimeout(() => {
-            document.getElementById('compra-form').reset();
-            configurarFecha();
-            // Mantener solo un producto
-            const productosContainer = document.getElementById('productos-container');
-            while (productosContainer.children.length > 1) {
-                productosContainer.lastChild.remove();
-            }
-            contadorProductos = 1;
-        }, 3000);
-        
-    } catch (error) {
-        console.error('Error enviando compra:', error);
         mostrarMensaje('Error al enviar la compra: ' + error.message, 'error');
     }
 }
@@ -375,4 +357,60 @@ function mostrarMensaje(texto, tipo = 'info') {
             mensajeDiv.className = 'mensaje';
         }, 5000);
     }
+}
+
+// Formatear fecha para JSON
+function formatearFechaParaJSON(fechaInput) {
+    const fecha = new Date(fechaInput);
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    return `${año}-${mes}-${dia}`;
+}
+
+// Modifica la función validarDatos para usar el formato correcto:
+function validarDatos() {
+    const fecha = document.getElementById('fecha').value;
+    const supermercadoSelect = document.getElementById('supermercado');
+    const supermercado = supermercadoSelect.value === 'otro' 
+        ? document.getElementById('nuevo-super').value.trim()
+        : supermercadoSelect.value;
+    
+    // Validar campos básicos
+    if (!fecha) {
+        mostrarMensaje('Debe seleccionar una fecha', 'error');
+        return false;
+    }
+    
+    if (!supermercado) {
+        mostrarMensaje('Debe seleccionar o escribir un supermercado', 'error');
+        return false;
+    }
+    
+    // Validar productos
+    const productosValidos = [];
+    
+    for (let i = 1; i <= contadorProductos; i++) {
+        const producto = document.getElementById(`producto-${i}`).value.trim();
+        const cantidad = parseFloat(document.getElementById(`cantidad-${i}`).value);
+        const precio = parseFloat(document.getElementById(`precio-${i}`).value);
+        const marca = document.getElementById(`marca-${i}`).value.trim() || 'no aplica';
+        
+        if (!producto || isNaN(cantidad) || cantidad <= 0 || isNaN(precio) || precio <= 0) {
+            mostrarMensaje(`Producto ${i}: Complete todos los campos correctamente`, 'error');
+            return false;
+        }
+        
+        productosValidos.push({
+            fecha: formatearFechaParaJSON(fecha), // Usar formato correcto
+            super: supermercado.toLowerCase(),
+            producto: producto.toLowerCase(),
+            cantidad: cantidad,
+            unidad: document.getElementById(`unidad-${i}`).value,
+            marca: marca.toLowerCase(),
+            precio: precio
+        });
+    }
+    
+    return productosValidos;
 }
