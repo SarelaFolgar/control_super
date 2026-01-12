@@ -1,5 +1,10 @@
 name: Process New Data
 
+# AÑADE ESTAS 3 LÍNEAS PARA QUE NO DE ERROR EL CSV:
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false  # ¡IMPORTANTE: false!
+
 on:
   workflow_dispatch:  # Permite ejecución manual
   push:
