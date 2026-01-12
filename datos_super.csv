@@ -58,7 +58,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 17/04/2025,spar borbalan,galletas,760.0,g,cuetara,4.2
 12/03/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
 12/03/2025,fruteria,aguacates,1000.0,g,no aplica,7.4
-12/03/2025,fruteria,queso fresco,1000.0,g,no aplica,16.85
+12/03/2025,fruteria,queso fresco,1000.0,g,flor valsequillo,16.85
 10/03/2025,spar borbalan,tomate natural,400.0,g,spar,0.79
 08/03/2025,spar borbalan,papel de horno,1.0,ud,spar,1.0
 08/03/2025,spar borbalan,leche,1000.0,g,kaiku sin lactosa,1.45
@@ -89,7 +89,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 22/02/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
 22/02/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.5
 21/02/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
-21/02/2025,fruteria,queso fresco,1000.0,g,quesos flor valsequillo,16.85
+21/02/2025,fruteria,queso fresco,1000.0,g,flor valsequillo,16.85
 21/02/2025,fruteria,lechuga,1.0,ud,batavia,1.59
 20/02/2025,spar borbalan,pimientos,1000.0,g,no aplica,3.6
 17/02/2025,spar borbalan,munchitos,160.0,g,matutano,2.55
@@ -157,7 +157,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 28/01/2025,spar borbalan,pimiento rojo,1000.0,g,no aplica,2.84
 28/01/2025,spar borbalan,chorizo perro,2.0,ud,el palmero,1.38
 28/01/2025,spar borbalan,tomate cherry,250.0,g,normal,2.16
-28/01/2025,spar borbalan,queso fresco,1000.0,g,quesos flor valsequillo,11.95
+28/01/2025,spar borbalan,queso fresco,1000.0,g,flor valsequillo,11.95
 20/01/2025,spar borbalan,potitos,400.0,g,spar,2.39
 20/01/2025,spar borbalan,lechuga,1.0,ud,batavia,2.25
 20/01/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
@@ -184,7 +184,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 16/01/2025,spar borbalan,natillas vainilla,500.0,g,spar,1.73
 16/01/2025,spar borbalan,pimiento verde,1000.0,g,no aplica,2.7
 16/01/2025,spar borbalan,manzanas,1000.0,g,royal,1.96
-14/01/2025,spar playa,queso fresco,1000.0,g,quesos flor valsequillo,16.25
+14/01/2025,spar playa,queso fresco,1000.0,g,flor valsequillo,16.25
 14/01/2025,spar playa,patatillas paja,500.0,g,palichips,4.99
 14/01/2025,spar playa,galletas maria sin gluten,200.0,g,schar,2.58
 14/01/2025,spar playa,mermelada de arandanos,410.0,g,spar,3.49
@@ -313,7 +313,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 26/12/2025,spar borbalan,lechuga,1.0,ud,batavia,1.45
 26/12/2025,spar borbalan,platanos,1000.0,g,canarias,1.69
 26/12/2025,spar borbalan,queso gouda,1000.0,g,bonissimo,8.33
-26/12/2025,spar borbalan,queso fresco,1000.0,g,quesos flor valsequillo,12.59
+26/12/2025,spar borbalan,queso fresco,1000.0,g,flor valsequillo,12.59
 26/12/2025,spar borbalan,jamon serrano,100.0,g,el pozo,1.96
 26/12/2025,spar borbalan,chocolate,125.0,g,kinder chocobons,3.39
 26/12/2025,spar borbalan,yogur fresa,480.0,g,danone,1.79
@@ -544,7 +544,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 04/01/2026,spar borbalan,filipinos,128.0,g,artiach,1.55
 05/01/2026,spar borbalan,cafe,250.0,g,carioca,3.99
 05/01/2026,spar borbalan,queso gouda,1000.0,g,castillo,10.7
-05/01/2026,spar borbalan,queso fresco,1000.0,g,quesos flor valsequillo,12.59
+05/01/2026,spar borbalan,queso fresco,1000.0,g,flor valsequillo,12.59
 05/01/2026,spar borbalan,patatillas,140.0,g,lays mediterraneas,2.28
 05/01/2026,spar borbalan,patatillas,165.0,g,pringles,1.73
 05/01/2026,spar borbalan,jamon serrano,1000.0,g,el pozo,19.98
