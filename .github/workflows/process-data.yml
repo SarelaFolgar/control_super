@@ -1,31 +1,22 @@
 name: Process New Data
 
-concurrency:
-  group: "process-data-${{ github.ref }}"
-  cancel-in-progress: false
-
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Permite ejecución manual
   push:
     paths:
-      - 'datos_super.csv'
-    branches: [ main ]
-  repository_dispatch:
+      - 'datos_super.csv'  # Se activa cuando cambia el CSV manualmente
+  repository_dispatch:  # PARA QUE LA API PUEDA DISPARARLO
     types: [process-data]
 
 jobs:
   process-data:
     runs-on: ubuntu-latest
     
-    permissions:
-      contents: write
-      
     steps:
       - name: 📥 Checkout código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
           
       - name: 🐍 Configurar Python
         uses: actions/setup-python@v4
@@ -40,32 +31,12 @@ jobs:
         run: |
           cd funciones_python
           python procesar_datos.py
-          cd ..
-          
-      - name: 🔍 Verificar cambios
-        id: check_changes
-        run: |
-          git status
-          if git diff --quiet HEAD datos_super.json; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "✅ No hay cambios en el JSON"
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "📝 Hay cambios para commit"
-          fi
+          cd ..  # VOLVER AL DIRECTORIO PRINCIPAL
           
       - name: 💾 Commit y push cambios
-        if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
           git add datos_super.json
-          git commit -m "🔄 Actualizar JSON automáticamente"
-          sleep 2
-          git pull --rebase origin main
+          git commit -m "🔄 Actualizar JSON automáticamente [skip ci]" || echo "No hay cambios"
           git push origin HEAD:main
-          
-      - name: 📋 No hay cambios
-        if: steps.check_changes.outputs.has_changes == 'false'
-        run: |
-          echo "✅ No se detectaron cambios en el JSON, omitiendo commit"
