@@ -34,6 +34,23 @@ class Producto(BaseModel):
 class Compra(BaseModel):
     productos: List[Producto]
 
+def convertir_fecha_formato(fecha_str):
+    """
+    Convierte fecha de YYYY-MM-DD a DD/MM/YYYY
+    """
+    try:
+        if '-' in fecha_str:
+            parts = fecha_str.split('-')
+            if len(parts) == 3:
+                # Si es YYYY-MM-DD, convertir a DD/MM/YYYY
+                if len(parts[0]) == 4:  # YYYY al principio
+                    return f"{parts[2]}/{parts[1]}/{parts[0]}"  # DD/MM/YYYY
+                elif len(parts[2]) == 4:  # YYYY al final
+                    return f"{parts[0]}/{parts[1]}/{parts[2]}"  # Ya está bien
+        return fecha_str
+    except Exception:
+        return fecha_str
+
 def trigger_github_workflow():
     """Dispara el workflow en GitHub"""
     github_token = os.getenv("GITHUB_TOKEN")
@@ -86,7 +103,7 @@ async def agregar_compra(compra: Compra):
         nuevos_datos = []
         for producto in compra.productos:
             nuevos_datos.append({
-                "fecha": producto.fecha,
+                "fecha": convertir_fecha_formato(producto.fecha),
                 "super": producto.super,
                 "producto": producto.producto,
                 "cantidad": producto.cantidad,
