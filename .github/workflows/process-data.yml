@@ -1,49 +1,58 @@
 name: Process New Data
 
-
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
+  group: "process-data-${{ github.ref }}"
+  cancel-in-progress: false
 
 on:
-  workflow_dispatch:  # Permite ejecución manual
+  workflow_dispatch:
   push:
     paths:
-      - 'datos_super.csv'  # Se activa cuando cambia el CSV manualmente
-  repository_dispatch:  # PARA QUE LA API PUEDA DISPARARLO
+      - 'datos_super.csv'
+    branches: [ main ]
+  repository_dispatch:
     types: [process-data]
 
 jobs:
   process-data:
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: write
+      
     steps:
-      - name: 📥 Checkout código
+      - name: 📥 Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
           
-      - name: 🐍 Configurar Python
+      - name: 🐍 Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
           
-      - name: 📦 Instalar dependencias
-        run: |
-          pip install pandas numpy
+      - name: 📦 Install dependencies
+        run: pip install pandas numpy
           
-      - name: 🏃‍♂️ Ejecutar procesamiento
-        run: |
-          cd funciones_python
-          python procesar_datos.py
-          cd ..  # VOLVER AL DIRECTORIO PRINCIPAL
+      - name: 🏃‍♂️ Process data
+        run: cd funciones_python && python procesar_datos.py
           
-      - name: 💾 Commit y push cambios
+      - name: 🔍 Check for changes
+        id: check_changes
         run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'actions@github.com'
+          if git diff --quiet datos_super.json; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: 💾 Commit and push
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config user.name 'GitHub Actions'
+          git config user.email 'actions@github.com'
           git add datos_super.json
-          git commit -m "🔄 Actualizar JSON automáticamente [skip ci]" || echo "No hay cambios"
-          sleep 5
+          git commit -m "🔄 Update JSON from CSV"
+          git pull --rebase origin main
           git push origin HEAD:main
