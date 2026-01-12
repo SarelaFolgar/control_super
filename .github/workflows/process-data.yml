@@ -4,7 +4,7 @@ on:
   workflow_dispatch:  # Permite ejecución manual
   push:
     paths:
-      - 'datos_super.csv'  # Se activa cuando cambia el CSV manualment
+      - 'datos_super.csv'  # Se activa cuando cambia el CSV manualmente
   repository_dispatch:  # PARA QUE LA API PUEDA DISPARARLO
     types: [process-data]
 
