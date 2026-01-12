@@ -359,6 +359,7 @@ def main():
     # 2. TUS DICCIONARIOS (los que usas en Python)
     dic_ciudad_super = {
       "alcampo":"tenerife",
+        "multitienda nk2":"tenerife",
       "charco":"valle gran rey",
       "flor del valle":"valle gran rey",
       "fruteria":"valle gran rey",
