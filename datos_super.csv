@@ -7,8 +7,6 @@ fecha,super,producto,cantidad,unidad,marca,precio
 07/07/2025,spar borbalan,patatillas,140.0,g,lays mediterraneas,2.28
 07/07/2025,spar borbalan,patatillas,165.0,g,pringles,2.17
 07/07/2025,spar borbalan,crema solar,200.0,g,nivea,15.29
-19/05/2025,hiperdino,estropajos,10.0,ud,no aplica,1.69
-19/05/2025,hiperdino,pasta de dientes,150.0,g,colgate,2.82
 18/05/2025,olivier,patatillas,125.0,g,lays,1.5
 18/05/2025,olivier,patatillas,125.0,g,lays,1.5
 18/05/2025,olivier,huevos,6.0,ud,el taro,1.8
@@ -30,14 +28,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 25/04/2025,spar borbalan,munchitos,160.0,g,matutano,2.55
 25/04/2025,spar borbalan,pan,70.0,g,no aplica,0.57
 25/04/2025,spar borbalan,fuet,170.0,g,el pozo,4.95
-26/04/2025,hiperdino,condones,12.0,ud,durex,6.89
-26/04/2025,hiperdino,papel higienico,12.0,ud,hiperdino,2.35
-26/04/2025,hiperdino,aceite de oliva virgen extra,1000.0,g,ybarra,6.99
-26/04/2025,hiperdino,detergente lavadora,3375.0,g,ariel basico,13.67
-26/04/2025,hiperdino,chorizo,80.0,g,revilla,1.0
 26/04/2025,spar borbalan,yogur fresa,480.0,g,danone,1.79
-26/04/2025,hiperdino,yogur fresa,480.0,g,danone,1.7
-26/04/2025,hiperdino,desodorante,75.0,g,hiperdino,1.26
 25/04/2025,spar borbalan,potitos,400.0,g,spar,2.39
 25/04/2025,spar borbalan,natillas vainilla,500.0,g,spar,1.73
 25/04/2025,spar borbalan,chocolate,125.0,g,nestle,1.96
@@ -65,12 +56,6 @@ fecha,super,producto,cantidad,unidad,marca,precio
 15/03/2025,spar borbalan,ajos,1000.0,g,no aplica,6.95
 17/04/2025,spar borbalan,chocolate,125.0,g,nestle,1.96
 17/04/2025,spar borbalan,galletas,760.0,g,cuetara,4.2
-05/04/2025,hiperdino,zanahorias,1000.0,g,bouquet,1.24
-05/04/2025,hiperdino,maiz palomitas,250.0,g,hiperdino,0.62
-05/04/2025,hiperdino,cebolla,1000.0,g,no aplica,1.57
-05/04/2025,hiperdino,lechuga,1.0,ud,batavia,1.38
-05/04/2025,hiperdino,ketchup,545.0,g,libby's,2.52
-05/04/2025,hiperdino,leche,1000.0,g,asturiana entera,1.32
 12/03/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
 12/03/2025,fruteria,aguacates,1000.0,g,no aplica,7.4
 12/03/2025,fruteria,queso fresco,1000.0,g,no aplica,16.85
@@ -100,29 +85,13 @@ fecha,super,producto,cantidad,unidad,marca,precio
 03/03/2025,spar borbalan,pan,550.0,g,no aplica,0.85
 26/02/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
 26/02/2025,fruteria,aguacates,1000.0,g,no aplica,7.4
-22/02/2025,hiperdino,queso semicurado,1000.0,g,lomo gallego,10.29
-22/02/2025,hiperdino,queso fresco,1000.0,g,la vaca afortunada,8.39
-22/02/2025,hiperdino,chocolate,150.0,g,hiperdino,1.19
-22/02/2025,hiperdino,leche condensada,450.0,g,la lechera sin lactosa,3.49
-22/02/2025,hiperdino,tampones,44.0,ud,tampax compak,4.86
-22/02/2025,hiperdino,tampones,16.0,ud,tampax compak pearl,4.59
-22/02/2025,hiperdino,maiz,420.0,g,hiperdino,2.69
 22/02/2025,spar borbalan,papel de horno,1.0,ud,spar,1.0
 22/02/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
 22/02/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.5
-22/02/2025,hiperdino,tomate natural,450.0,g,hiperdino,0.54
-22/02/2025,hiperdino,cereales,500.0,g,hiperdino,2.14
-21/02/2025,hiperdino,chocolate,100.0,g,nestle dolca,1.23
-22/02/2025,hiperdino,insecticida,750.0,g,ifa,2.55
-22/02/2025,hiperdino,bayetas,3.0,ud,hiperdino,1.68
-22/02/2025,hiperdino,platanos,1000.0,g,canarias,1.45
 21/02/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
 21/02/2025,fruteria,queso fresco,1000.0,g,quesos flor valsequillo,16.85
 21/02/2025,fruteria,lechuga,1.0,ud,batavia,1.59
 20/02/2025,spar borbalan,pimientos,1000.0,g,no aplica,3.6
-20/02/2025,hiperdino,bicarbonato de sodio,200.0,g,carmencita,1.47
-20/02/2025,hiperdino,papel de horno,1.0,ud,hiperdino,1.03
-20/02/2025,hiperdino,pimientos,1000.0,g,no aplica,3.58
 17/02/2025,spar borbalan,munchitos,160.0,g,matutano,2.55
 17/02/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
 17/02/2025,spar borbalan,pan,125.0,g,no aplica,0.59
@@ -146,34 +115,6 @@ fecha,super,producto,cantidad,unidad,marca,precio
 05/02/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
 05/02/2025,spar borbalan,aguacates,1000.0,g,no aplica,4.25
 05/02/2025,spar playa,fresas,1000.0,g,no aplica,9.25
-03/02/2025,hiperdino,aceite de oliva virgen extra,1000.0,g,ybarra,9.95
-03/02/2025,hiperdino,papel de cocina,4.0,ud,suavecel,1.99
-03/02/2025,hiperdino,leche condensada,450.0,g,la lechera sin lactosa,3.62
-03/02/2025,hiperdino,arroz,1000.0,g,brillante,1.88
-03/02/2025,hiperdino,bolsas zip,20.0,ud,ifa,0.89
-03/02/2025,hiperdino,crema de cacahuete,500.0,g,just loading,2.82
-03/02/2025,hiperdino,galletas flor sin gluten,400.0,g,gullon,3.24
-03/02/2025,hiperdino,galletas maria sin gluten,200.0,g,schar,2.08
-03/02/2025,hiperdino,garbanzos,580.0,g,hiperdino,0.74
-03/02/2025,hiperdino,harina,1000.0,g,pan,2.36
-03/02/2025,hiperdino,leche,1000.0,g,hiperdino sin lactosa,0.85
-03/02/2025,hiperdino,lechuga,1.0,ud,batavia,1.67
-03/02/2025,hiperdino,mayonesa,450.0,g,ybarra,1.55
-03/02/2025,hiperdino,miel,500.0,g,hiperdino,2.62
-03/02/2025,hiperdino,nata,500.0,g,asturiana,2.61
-03/02/2025,hiperdino,natillas chocolate,500.0,g,ifa,1.04
-03/02/2025,hiperdino,natillas vainilla,500.0,g,ifa,1.04
-03/02/2025,hiperdino,pan de molde sin gluten,350.0,g,sinblat,3.15
-03/02/2025,hiperdino,pasta sin gluten,450.0,g,la islena,2.27
-03/02/2025,hiperdino,pizza sin gluten,420.0,g,casa tarradellas,3.49
-03/02/2025,hiperdino,queso fresco,1000.0,g,quesos flor valsequillo,8.9
-03/02/2025,hiperdino,tomate cherry,250.0,g,pera,1.29
-03/02/2025,hiperdino,tortitas de arroz,100.0,g,ecocesta,1.25
-03/02/2025,hiperdino,yogur griego,1000.0,g,ifa,2.39
-03/02/2025,hiperdino,chocolate,100.0,g,nestle dolca,0.93
-03/02/2025,hiperdino,lavavajillas,1000.0,g,hiperdino,1.42
-03/02/2025,hiperdino,papel higienico,12.0,ud,hiperdino,2.3801
-03/02/2025,hiperdino,huevos,12.0,ud,rujamar,2.48
 02/02/2025,spar borbalan,mayonesa,750.0,g,ybarra,3.95
 02/02/2025,spar borbalan,lavavajillas,935.0,g,disiclin,1.79
 02/02/2025,spar borbalan,pan,260.0,g,no aplica,1.25
