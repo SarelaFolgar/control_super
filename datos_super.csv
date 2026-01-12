@@ -345,7 +345,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 04/02/2025,alcampo,champu,300.0,g,garnier,3.56
 04/02/2025,alcampo,harina,1000.0,g,pan,2.02
 04/02/2025,alcampo,atun,6.0,ud,alcampo,4.19
-04/02/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+04/02/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
 04/02/2025,alcampo,crema de cacahuete,500.0,g,alcampo,2.78
 04/02/2025,alcampo,papel higienico,12.0,ud,alcampo,2.38
 04/02/2025,alcampo,lavavajillas,4000.0,g,alcampo,2.85
@@ -370,7 +370,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 06/04/2025,alcampo,lechuga,1.0,ud,batavia,1.59
 06/04/2025,alcampo,corn flakes sin gluten,375.0,g,nacional,1.99
 06/04/2025,alcampo,harina,1000.0,g,pan,2.02
-06/04/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
+06/04/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.18
 06/04/2025,alcampo,pasta sin gluten,500.0,g,alcampo,1.9
 06/04/2025,alcampo,tomate natural,400.0,g,alcampo,0.51
 06/04/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.3
@@ -406,7 +406,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 20/05/2025,alcampo,harina,1000.0,g,pan,2.0
 20/05/2025,alcampo,bicarbonato de sodio,200.0,g,alcampo,0.71
 20/05/2025,alcampo,bolsas basura,40.0,ud,alcampo,1.64
-20/05/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
+20/05/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.18
 20/05/2025,alcampo,pasta sin gluten,500.0,g,alcampo,1.9
 20/05/2025,alcampo,anacardos,200.0,g,casa ricardo,3.75
 20/05/2025,alcampo,estropajos,10.0,ud,rozenbal,1.61
@@ -426,7 +426,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 23/07/2025,alcampo,yogur fresa,480.0,g,danone,1.59
 23/07/2025,alcampo,papadelta,73.0,g,grefusa,1.61
 23/07/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.5
-23/07/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+23/07/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
 23/07/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
 23/07/2025,alcampo,tomate natural,800.0,g,alcampo,0.86
 23/07/2025,alcampo,pimientos,500.0,g,no aplica,2.49
@@ -448,7 +448,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 19/08/2025,alcampo,cafe,500.0,g,lavazza,16.1
 19/08/2025,alcampo,harina,1000.0,g,pan,1.99
 19/08/2025,alcampo,atun,6.0,ud,alcampo,4.11
-19/08/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
+19/08/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.18
 19/08/2025,alcampo,papel de cocina,4.0,ud,renova,1.78
 19/08/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.16
 19/08/2025,alcampo,acondicionador,685.0,g,tresemme,4.78
@@ -462,7 +462,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 02/09/2025,alcampo,champu,350.0,g,herbal essences,3.85
 02/09/2025,alcampo,leche condensada,450.0,g,la lechera sin lactosa,3.14
 02/09/2025,alcampo,leche,6000.0,g,pascual entera,7.62
-02/09/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+02/09/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
 02/09/2025,alcampo,tomate natural,800.0,g,alcampo,0.86
 02/09/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo,2.1
 02/09/2025,alcampo,corn flakes sin gluten,250.0,g,schar,1.74
@@ -477,7 +477,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 09/11/2025,alcampo,harina,1000.0,g,pan,2.03
 09/11/2025,alcampo,leche,6000.0,g,pascual entera,7.26
 09/11/2025,alcampo,aceite de girasol,5000.0,g,alcampo,7.35
-09/11/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+09/11/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
 09/11/2025,alcampo,miel,500.0,g,alcampo,2.58
 09/11/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
 09/11/2025,alcampo,pegamento,3.0,g,alcampo,1.75
@@ -530,7 +530,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 27/12/2025,alcampo,harina,1000.0,g,pan,2.02
 27/12/2025,alcampo,leche,6000.0,g,pascual entera,7.26
 27/12/2025,alcampo,potitos,400.0,g,alcampo,2.11
-27/12/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
+27/12/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
 27/12/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
 27/12/2025,alcampo,tomate natural,400.0,g,alcampo,0.53
 27/12/2025,alcampo,pasta sin gluten,500.0,g,pasta d'oro,1.89
