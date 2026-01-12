@@ -1300,7 +1300,7 @@ body {
     gap: 0.5rem;
 }
 
-.city-select, .supermarket-select, .brand-select {
+.city-select, .supermarket-select, .brand-select, .price-type-select {
     padding: 0.6rem 0.8rem;
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-sm);
@@ -1315,7 +1315,7 @@ body {
     max-width: 100%;
 }
 
-.city-select:focus, .supermarket-select:focus, .brand-select:focus {
+.city-select:focus, .supermarket-select:focus, .brand-select:focus, .price-type-select:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
@@ -1330,7 +1330,7 @@ body {
     box-sizing: border-box;
 }
 
-.reset-btn, .apply-filters-btn {
+.reset-btn {
     padding: 0.6rem 1.25rem;
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-sm);
@@ -1346,20 +1346,9 @@ body {
     box-sizing: border-box;
 }
 
-.apply-filters-btn {
-    background: var(--primary-color);
-    border-color: var(--primary-color);
-    color: white;
-}
-
 .reset-btn:hover {
     background: var(--medium-color);
     border-color: var(--text-light);
-}
-
-.apply-filters-btn:hover {
-    background: #3a5a8c;
-    border-color: #3a5a8c;
 }
 
 /* ============================================
@@ -2095,7 +2084,22 @@ body {
 
 .info-card {
     border-left: none !important;
+}
 
+/* ============================================
+   NUEVOS ESTILOS PARA TIPO DE PRECIO
+   ============================================ */
+#price-type-info {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(74, 111, 165, 0.05);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--primary-color);
+}
+
+#price-type-info span {
+    font-weight: 600;
+    color: var(--primary-color);
 }
 
 /* ============================================
@@ -2343,6 +2347,7 @@ body {
     }
 }
 
+/* Navegación externa */
 .nav-link-externo {
     display: flex;
     align-items: center;
@@ -2360,10 +2365,9 @@ body {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     transform: translateX(3px);
-    text-decoration: none; /* ¡IMPORTANTE! */
+    text-decoration: none;
 }
 
-/* Si sigue azul, añade esto: */
 .nav-link-externo:link,
 .nav-link-externo:visited,
 .nav-link-externo:hover,
