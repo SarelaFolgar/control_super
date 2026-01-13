@@ -11,7 +11,8 @@ let currentSearchTerm = '';
 let currentFilters = {
     city: 'global',
     supermarket: 'global',
-    brand: 'global'
+    brand: 'global',
+    priceType: 'precio_neto' // Nuevo filtro: tipo de precio
 };
 
 // Elementos DOM
@@ -100,6 +101,20 @@ function obtenerRangoFechas(filteredData) {
     const maxFecha = new Date(Math.max(...fechasValidas.map(d => d.getTime())));
     
     return { min: minFecha, max: maxFecha };
+}
+
+// Obtener etiqueta para tipo de precio
+function getPriceTypeLabel(priceType) {
+    return priceType === 'precio_neto' ? 'Precio neto (€/unidad)' : 'Precio real (€)';
+}
+
+// Obtener campo de precio según tipo
+function getPriceField(item) {
+    if (currentFilters.priceType === 'precio_neto') {
+        return item.precio_neto !== undefined ? item.precio_neto : item.precio;
+    } else {
+        return item.precio !== undefined ? item.precio : item.precio_neto;
+    }
 }
 
 // Inicialización
@@ -465,7 +480,12 @@ function searchProduct(productName) {
             titleElem.textContent = exactMatches[0].producto;
         }
         
-        currentFilters = { city: 'global', supermarket: 'global', brand: 'global' };
+        currentFilters = { 
+            city: 'global', 
+            supermarket: 'global', 
+            brand: 'global',
+            priceType: 'precio_neto' // Por defecto precio neto
+        };
         
         updateProductSummary(exactMatches, currentFilters);
         const { ciudades, supermercados, marcas } = createPriceChart(exactMatches, currentFilters);
@@ -632,7 +652,7 @@ function showDateSummary() {
 }
 
 // Función para mostrar resumen de producto
-function updateProductSummary(productData, filters = { city: 'global', supermarket: 'global', brand: 'global' }) {
+function updateProductSummary(productData, filters = { city: 'global', supermarket: 'global', brand: 'global', priceType: 'precio_neto' }) {
     if (!productData || productData.length === 0) {
         setSummaryPlaceholders();
         return;
@@ -653,7 +673,7 @@ function updateProductSummary(productData, filters = { city: 'global', supermark
     filteredData.sort((a, b) => parsearFecha(b.fecha) - parsearFecha(a.fecha));
     
     const mostRecentRecord = filteredData[0];
-    const currentPrice = mostRecentRecord.precio || 0;
+    const currentPrice = getPriceField(mostRecentRecord) || 0;
     setElementText('current-price', `${currentPrice.toFixed(2)}€`);
     
     const groupedVariations = new Map();
@@ -738,8 +758,9 @@ function setSummaryPlaceholders() {
 }
 
 // Función para crear gráfico de precios
-function createPriceChart(productData, filters = { city: 'global', supermarket: 'global', brand: 'global' }) {
+function createPriceChart(productData, filters = { city: 'global', supermarket: 'global', brand: 'global', priceType: 'precio_neto' }) {
     console.log('📈 Creando gráfico (Marca + Supermercado)');
+    console.log('Tipo de precio seleccionado:', filters.priceType);
     
     const canvas = document.getElementById('price-chart');
     if (!canvas) return { ciudades: [], supermercados: [], marcas: [] };
@@ -751,6 +772,15 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
     if (currentChart instanceof Chart) {
         currentChart.destroy();
         currentChart = null;
+    }
+    
+    // Actualizar información del tipo de precio
+    const priceTypeInfo = document.getElementById('price-type-info');
+    if (priceTypeInfo) {
+        const span = priceTypeInfo.querySelector('span');
+        if (span) {
+            span.textContent = getPriceTypeLabel(filters.priceType);
+        }
     }
     
     try {
@@ -767,7 +797,27 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
             currentChart = new Chart(ctx, {
                 type: 'line',
                 data: { datasets: [] },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', title: { display: true, text: 'Fecha' } }, y: { title: { display: true, text: 'Precio (€)' } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        x: { 
+                            type: 'time', 
+                            title: { 
+                                display: true, 
+                                text: 'Fecha',
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        }, 
+                        y: { 
+                            title: { 
+                                display: true, 
+                                text: getPriceTypeLabel(filters.priceType),
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        } 
+                    } 
+                }
             });
             
             const infoDiv = document.createElement('div');
@@ -802,13 +852,19 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
                 return;
             }
             
-            const precio = item.precio_neto !== undefined ? item.precio_neto : item.precio;
+            const precio = getPriceField(item);
             if (typeof precio !== 'number' || isNaN(precio)) {
                 console.warn('Precio inválido:', precio);
                 return;
             }
             
-            groups[key].datos.push({ fecha: fecha, precio: precio, ciudad: item.ciudad || 'Desconocida', precio_neto: item.precio_neto });
+            groups[key].datos.push({ 
+                fecha: fecha, 
+                precio: precio, 
+                ciudad: item.ciudad || 'Desconocida',
+                precio_neto: item.precio_neto,
+                precio_real: item.precio
+            });
         });
         
         console.log('Combinaciones encontradas (Marca + Super):', Object.keys(groups).length);
@@ -827,7 +883,27 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
             currentChart = new Chart(ctx, {
                 type: 'line',
                 data: { datasets: [] },
-                options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', title: { display: true, text: 'Fecha' } }, y: { title: { display: true, text: 'Precio (€)' } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        x: { 
+                            type: 'time', 
+                            title: { 
+                                display: true, 
+                                text: 'Fecha',
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        }, 
+                        y: { 
+                            title: { 
+                                display: true, 
+                                text: getPriceTypeLabel(filters.priceType),
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        } 
+                    } 
+                }
             });
             
             const infoDiv = document.createElement('div');
@@ -884,7 +960,16 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
                 maintainAspectRatio: false,
                 interaction: { intersect: false, mode: 'index' },
                 plugins: {
-                    legend: { position: 'top', labels: { font: { size: 11 }, padding: 8, usePointStyle: true, pointStyle: 'circle', boxWidth: 8 } },
+                    legend: { 
+                        position: 'top', 
+                        labels: { 
+                            font: { size: 11 }, 
+                            padding: 8, 
+                            usePointStyle: true, 
+                            pointStyle: 'circle', 
+                            boxWidth: 8 
+                        } 
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -902,14 +987,30 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
                 scales: {
                     x: {
                         type: 'time',
-                        time: { unit: 'month', displayFormats: { month: 'MMM yyyy' }, tooltipFormat: 'dd/MM/yyyy' },
-                        title: { display: true, text: 'Fecha', font: { size: 12, weight: 'bold' } },
+                        time: { 
+                            unit: 'month', 
+                            displayFormats: { month: 'MMM yyyy' }, 
+                            tooltipFormat: 'dd/MM/yyyy' 
+                        },
+                        title: { 
+                            display: true, 
+                            text: 'Fecha', 
+                            font: { size: 12, weight: 'bold' } 
+                        },
                         grid: { color: 'rgba(0, 0, 0, 0.05)' }
                     },
                     y: {
                         beginAtZero: false,
-                        title: { display: true, text: 'Precio (€)', font: { size: 12, weight: 'bold' } },
-                        ticks: { callback: function(value) { return value.toFixed(2) + '€'; } },
+                        title: { 
+                            display: true, 
+                            text: getPriceTypeLabel(filters.priceType), 
+                            font: { size: 12, weight: 'bold' } 
+                        },
+                        ticks: { 
+                            callback: function(value) { 
+                                return value.toFixed(2) + '€'; 
+                            } 
+                        },
                         grid: { color: 'rgba(0, 0, 0, 0.05)' }
                     }
                 }
@@ -919,7 +1020,11 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
         currentChart = new Chart(ctx, config);
         console.log('✅ Gráfico creado exitosamente');
         
-        return { ciudades: Array.from(ciudadesDisponibles), supermercados: Array.from(supermercadosDisponibles), marcas: Array.from(marcasDisponibles) };
+        return { 
+            ciudades: Array.from(ciudadesDisponibles), 
+            supermercados: Array.from(supermercadosDisponibles), 
+            marcas: Array.from(marcasDisponibles) 
+        };
         
     } catch (error) {
         console.error('❌ Error al crear gráfico:', error);
@@ -928,7 +1033,27 @@ function createPriceChart(productData, filters = { city: 'global', supermarket: 
         currentChart = new Chart(ctx, {
             type: 'line',
             data: { datasets: [] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', title: { display: true, text: 'Fecha' } }, y: { title: { display: true, text: 'Precio (€)' } } } }
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                scales: { 
+                    x: { 
+                        type: 'time', 
+                        title: { 
+                            display: true, 
+                            text: 'Fecha',
+                            font: { size: 12, weight: 'bold' }
+                        } 
+                    }, 
+                    y: { 
+                        title: { 
+                            display: true, 
+                            text: getPriceTypeLabel(filters.priceType),
+                            font: { size: 12, weight: 'bold' }
+                        } 
+                    } 
+                } 
+            }
         });
         
         const errorDiv = document.createElement('div');
@@ -945,38 +1070,57 @@ function setupFilters(productData, ciudades, supermercados, marcas) {
     const citySelect = document.getElementById('city-filter');
     const supermarketSelect = document.getElementById('supermarket-filter');
     const brandSelect = document.getElementById('brand-filter');
-    const applyBtn = document.getElementById('apply-filters');
+    const priceTypeSelect = document.getElementById('price-type-filter');
     const resetBtn = document.getElementById('reset-filter');
     
-    if (!citySelect || !supermarketSelect || !brandSelect || !applyBtn || !resetBtn) return;
+    if (!citySelect || !supermarketSelect || !brandSelect || !priceTypeSelect || !resetBtn) return;
     
     updateFilterSelector(citySelect, ciudades, currentFilters.city);
     updateFilterSelector(supermarketSelect, supermercados, currentFilters.supermarket);
     updateFilterSelector(brandSelect, marcas, currentFilters.brand);
     
-    applyBtn.addEventListener('click', function() {
+    // Configurar evento de cambio para cada filtro
+    const applyFilter = () => {
         const selectedCity = citySelect.value;
         const selectedSupermarket = supermarketSelect.value;
         const selectedBrand = brandSelect.value;
+        const selectedPriceType = priceTypeSelect.value;
         
-        currentFilters = { city: selectedCity, supermarket: selectedSupermarket, brand: selectedBrand };
+        currentFilters = { 
+            city: selectedCity, 
+            supermarket: selectedSupermarket, 
+            brand: selectedBrand,
+            priceType: selectedPriceType
+        };
         
-        console.log(`🌍 Aplicando filtros: Ciudad=${selectedCity}, Supermercado=${selectedSupermarket}, Marca=${selectedBrand}`);
+        console.log(`🌍 Aplicando filtros automáticamente: Ciudad=${selectedCity}, Supermercado=${selectedSupermarket}, Marca=${selectedBrand}, TipoPrecio=${selectedPriceType}`);
         
-        showLoading('Aplicando filtros...');
+        showLoading('Actualizando gráfico...');
         setTimeout(() => {
             updateProductSummary(productData, currentFilters);
             createPriceChart(productData, currentFilters);
             showBrandDetails(productData, currentFilters);
             hideLoading();
         }, 100);
-    });
+    };
+    
+    // Aplicar automáticamente al cambiar cualquier filtro
+    citySelect.addEventListener('change', applyFilter);
+    supermarketSelect.addEventListener('change', applyFilter);
+    brandSelect.addEventListener('change', applyFilter);
+    priceTypeSelect.addEventListener('change', applyFilter);
     
     resetBtn.addEventListener('click', function() {
         citySelect.value = 'global';
         supermarketSelect.value = 'global';
         brandSelect.value = 'global';
-        currentFilters = { city: 'global', supermarket: 'global', brand: 'global' };
+        priceTypeSelect.value = 'precio_neto';
+        currentFilters = { 
+            city: 'global', 
+            supermarket: 'global', 
+            brand: 'global',
+            priceType: 'precio_neto'
+        };
         
         console.log('🔄 Restableciendo filtros');
         
@@ -1011,7 +1155,7 @@ function updateFilterSelector(selectElement, options, selectedValue) {
 }
 
 // Mostrar detalles por marca/supermercado
-function showBrandDetails(productData, filters = { city: 'global', supermarket: 'global', brand: 'global' }) {
+function showBrandDetails(productData, filters = { city: 'global', supermarket: 'global', brand: 'global', priceType: 'precio_neto' }) {
     const container = document.getElementById('brand-details');
     if (!container) return;
     
@@ -1055,8 +1199,8 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
         const firstItem = group.datos[0];
         const lastItem = group.datos[group.datos.length - 1];
         
-        const firstPrice = firstItem.precio_neto !== undefined ? firstItem.precio_neto : firstItem.precio;
-        const lastPrice = lastItem.precio_neto !== undefined ? lastItem.precio_neto : lastItem.precio;
+        const firstPrice = getPriceField(firstItem);
+        const lastPrice = getPriceField(lastItem);
         
         let variacion = 0;
         let variacionTexto = 'N/A';
@@ -1066,7 +1210,7 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
         }
         
         const precioPromedio = group.datos.reduce((sum, item) => {
-            const precio = item.precio_neto !== undefined ? item.precio_neto : item.precio;
+            const precio = getPriceField(item);
             return sum + precio;
         }, 0) / group.datos.length;
         
@@ -1079,12 +1223,12 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
             </div>
             <div class="brand-info">
                 <div>
-                    <small>Primer precio neto</small>
+                    <small>Primer ${filters.priceType === 'precio_neto' ? 'precio neto' : 'precio real'}</small>
                     <p>${firstPrice.toFixed(2)}€</p>
                     <small class="date">${formatearFechaParaMostrar(firstItem.fecha)}</small>
                 </div>
                 <div>
-                    <small>Último precio neto</small>
+                    <small>Último ${filters.priceType === 'precio_neto' ? 'precio neto' : 'precio real'}</small>
                     <p>${lastPrice.toFixed(2)}€</p>
                     <small class="date">${formatearFechaParaMostrar(lastItem.fecha)}</small>
                 </div>
@@ -1093,12 +1237,13 @@ function showBrandDetails(productData, filters = { city: 'global', supermarket: 
                     <p class="${variacion >= 0 ? 'positive' : 'negative'}">${variacionTexto}</p>
                 </div>
                 <div>
-                    <small>Promedio neto</small>
+                    <small>Promedio</small>
                     <p>${precioPromedio.toFixed(2)}€</p>
                 </div>
             </div>
             <div class="brand-meta">
                 <span><i class="fas fa-database"></i> ${group.datos.length} registros</span>
+                <span><i class="fas fa-money-bill-wave"></i> ${filters.priceType === 'precio_neto' ? 'Precio neto' : 'Precio real'}</span>
             </div>
         `;
         
