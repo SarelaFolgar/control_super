@@ -60,7 +60,7 @@
                 <i class="fas fa-list"></i>
                 <span>Todos los productos</span>
             </a>
-            <a href="agregar.html" class="nav-link">
+            <a href="agregar.html" class="nav-link-externo">
                 <i class="fas fa-plus-circle"></i>
                 <span>Agregar datos</span>
             </a>
@@ -270,7 +270,7 @@
                 <div class="chart-header">
                     <h3><i class="fas fa-chart-line"></i> Evolución del Precio</h3>
 
-                    <!-- Filtros Múltiples: Ciudad + Supermercado + Marca -->
+                    <!-- Filtros Múltiples: Ciudad + Supermercado + Marca + Tipo de Precio -->
                     <div class="chart-filters">
                         <div class="filters-row">
                             <div class="filter-group">
@@ -293,14 +293,19 @@
                                     <option value="global">Todas las marcas</option>
                                 </select>
                             </div>
+
+                            <div class="filter-group">
+                                <label for="price-type-filter"><i class="fas fa-money-bill-wave"></i> Tipo de precio:</label>
+                                <select id="price-type-filter" class="price-type-select" aria-label="Seleccionar tipo de precio">
+                                    <option value="precio_neto">Precio neto (€/unidad)</option>
+                                    <option value="precio">Precio real (€)</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="filters-actions">
-                            <button id="apply-filters" class="apply-filters-btn" aria-label="Aplicar filtros">
-                                <i class="fas fa-filter"></i> Aplicar Filtros
-                            </button>
                             <button id="reset-filter" class="reset-btn" aria-label="Restablecer filtros">
-                                <i class="fas fa-redo"></i> Restablecer
+                                <i class="fas fa-redo"></i> Restablecer Filtros
                             </button>
                         </div>
                     </div>
@@ -313,6 +318,7 @@
 
                 <div class="chart-info">
                     <p><i class="fas fa-info-circle"></i> Cada línea representa una combinación única de MARCA + SUPERMERCADO</p>
+                    <p id="price-type-info"><i class="fas fa-info-circle"></i> Mostrando: <span>Precio neto (€ por unidad)</span></p>
                 </div>
             </div>
 
@@ -546,11 +552,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
-
-
-
-
