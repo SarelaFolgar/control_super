@@ -16576,5 +16576,32 @@
     "variacion_2024":null,
     "variacion_2025":0.0,
     "variacion_2026":0.0
+  },
+  {
+    "fecha":"16-01-2026",
+    "super":"spar borbalan",
+    "producto":"patatillas paja",
+    "cantidad":500.0,
+    "unidad":"g",
+    "marca":"palichips",
+    "precio":4.99,
+    "precio_neto":9.98,
+    "ano":2026,
+    "mes":"enero",
+    "ciudad":"valle gran rey",
+    "categoria":"patatillas",
+    "ultimo_precio_neto":9.98,
+    "primer_precio_neto":9.98,
+    "ultimo_precio_neto_2024":null,
+    "primer_precio_neto_2024":null,
+    "ultimo_precio_neto_2025":null,
+    "primer_precio_neto_2025":null,
+    "ultimo_precio_neto_2026":9.98,
+    "primer_precio_neto_2026":9.98,
+    "variacion_actual":0.0,
+    "variacion_total":0.0,
+    "variacion_2024":null,
+    "variacion_2025":null,
+    "variacion_2026":0.0
   }
 ]
