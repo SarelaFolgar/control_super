@@ -360,6 +360,7 @@ def main():
     dic_ciudad_super = {
       "alcampo":"tenerife",
         "multitienda nk2":"tenerife",
+        "corte ingles":"tenerife",
       "charco":"valle gran rey",
       "flor del valle":"valle gran rey",
       "fruteria":"valle gran rey",
