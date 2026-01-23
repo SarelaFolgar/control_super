@@ -271,6 +271,7 @@ function addProductToComparison(productName) {
 }
 
 // Eliminar producto de la comparación
+// Eliminar producto de la comparación - VERSIÓN MEJORADA
 function removeProductFromComparison(productName) {
     const index = selectedProducts.indexOf(productName);
     if (index > -1) {
@@ -281,56 +282,13 @@ function removeProductFromComparison(productName) {
             if (selectedProducts.length > 0) {
                 updateComparisonChart();
             } else {
-                // Si no hay productos, mostrar gráfico vacío
-                const canvas = document.getElementById('price-chart');
-                const chartContainer = canvas.parentElement.parentElement;
-                const existingError = chartContainer.querySelector('.chart-info-message');
-                if (existingError) existingError.remove();
-                
-                if (currentChart instanceof Chart) {
-                    currentChart.destroy();
-                    currentChart = null;
-                }
-                
-                const ctx = canvas.getContext('2d');
-                currentChart = new Chart(ctx, {
-                    type: 'line',
-                    data: { datasets: [] },
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        scales: { 
-                            x: { 
-                                type: 'time', 
-                                title: { 
-                                    display: true, 
-                                    text: 'Fecha',
-                                    font: { size: 12, weight: 'bold' }
-                                } 
-                            }, 
-                            y: { 
-                                title: { 
-                                    display: true, 
-                                    text: getPriceTypeLabel(currentFilters.priceType),
-                                    font: { size: 12, weight: 'bold' }
-                                } 
-                            } 
-                        } 
-                    }
-                });
-                
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'chart-info-message';
-                infoDiv.innerHTML = '<p><i class="fas fa-info-circle"></i> Añade productos para comparar precios</p>';
-                chartContainer.appendChild(infoDiv);
-                
-                document.getElementById('brand-details').innerHTML = '<p class="no-data">Añade productos para ver detalles</p>';
+                updateEmptyChart();
             }
         }
     }
 }
 
-// Actualizar lista de productos seleccionados
+// Actualizar lista de productos seleccionados - VERSIÓN MEJORADA
 function updateSelectedProductsList() {
     const container = document.getElementById('selected-products-container');
     if (!container) return;
@@ -339,22 +297,11 @@ function updateSelectedProductsList() {
     
     selectedProducts.forEach(product => {
         const badge = document.createElement('div');
-        badge.style.cssText = `
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 0.5rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-        `;
-        
+        badge.className = 'product-badge';
         badge.innerHTML = `
-            <span>${product}</span>
+            <span title="${product}">${product.length > 20 ? product.substring(0, 20) + '...' : product}</span>
             <button onclick="removeProductFromComparison('${product.replace(/'/g, "\\'")}')" 
-                    style="background: none; border: none; color: #dc3545; cursor: pointer; padding: 0.2rem; border-radius: 50%;">
+                    aria-label="Eliminar ${product}">
                 <i class="fas fa-times"></i>
             </button>
         `;
@@ -362,60 +309,72 @@ function updateSelectedProductsList() {
         container.appendChild(badge);
     });
     
+    // Mostrar mensaje si no hay productos
+    if (selectedProducts.length === 0) {
+        const emptyMsg = document.createElement('div');
+        emptyMsg.style.cssText = 'color: var(--text-light); font-size: 0.9rem; font-style: italic;';
+        emptyMsg.textContent = 'Añade productos para comparar';
+        container.appendChild(emptyMsg);
+    }
+    
     // Configurar botón limpiar
     const clearBtn = document.getElementById('clear-products-btn');
     if (clearBtn) {
         clearBtn.onclick = () => {
             selectedProducts = [];
             updateSelectedProductsList();
-            
-            const canvas = document.getElementById('price-chart');
-            const chartContainer = canvas.parentElement.parentElement;
-            const existingError = chartContainer.querySelector('.chart-info-message');
-            if (existingError) existingError.remove();
-            
-            if (currentChart instanceof Chart) {
-                currentChart.destroy();
-                currentChart = null;
-            }
-            
-            const ctx = canvas.getContext('2d');
-            currentChart = new Chart(ctx, {
-                type: 'line',
-                data: { datasets: [] },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    scales: { 
-                        x: { 
-                            type: 'time', 
-                            title: { 
-                                display: true, 
-                                text: 'Fecha',
-                                font: { size: 12, weight: 'bold' }
-                            } 
-                        }, 
-                        y: { 
-                            title: { 
-                                display: true, 
-                                text: getPriceTypeLabel(currentFilters.priceType),
-                                font: { size: 12, weight: 'bold' }
-                            } 
-                        } 
-                    } 
-                }
-            });
-            
-            const infoDiv = document.createElement('div');
-            infoDiv.className = 'chart-info-message';
-            infoDiv.innerHTML = '<p><i class="fas fa-info-circle"></i> Añade productos para comparar precios</p>';
-            chartContainer.appendChild(infoDiv);
-            
-            document.getElementById('brand-details').innerHTML = '<p class="no-data">Añade productos para ver detalles</p>';
+            updateEmptyChart();
         };
     }
 }
-
+// Mostrar gráfico vacío
+function updateEmptyChart() {
+    const canvas = document.getElementById('price-chart');
+    if (!canvas) return;
+    
+    const chartContainer = canvas.parentElement.parentElement;
+    const existingError = chartContainer.querySelector('.chart-info-message');
+    if (existingError) existingError.remove();
+    
+    if (currentChart instanceof Chart) {
+        currentChart.destroy();
+        currentChart = null;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    currentChart = new Chart(ctx, {
+        type: 'line',
+        data: { datasets: [] },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            scales: { 
+                x: { 
+                    type: 'time', 
+                    title: { 
+                        display: true, 
+                        text: 'Fecha',
+                        font: { size: 12, weight: 'bold' }
+                    } 
+                }, 
+                y: { 
+                    title: { 
+                        display: true, 
+                        text: getPriceTypeLabel(currentFilters.priceType),
+                        font: { size: 12, weight: 'bold' }
+                    } 
+                } 
+            } 
+        }
+    });
+    
+    const infoDiv = document.createElement('div');
+    infoDiv.className = 'chart-info-message';
+    infoDiv.innerHTML = '<p><i class="fas fa-info-circle"></i> Añade productos para comparar precios</p>';
+    chartContainer.appendChild(infoDiv);
+    
+    document.getElementById('brand-details').innerHTML = '<p class="no-data">Añade productos para ver detalles</p>';
+}
 // Cargar datos
 async function loadData() {
     showLoading('Cargando datos...');
@@ -1926,3 +1885,4 @@ window.searchProduct = searchProduct;
 window.hideError = hideError;
 window.addProductToComparison = addProductToComparison;
 window.removeProductFromComparison = removeProductFromComparison;
+
