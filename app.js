@@ -840,7 +840,7 @@ function updateComparisonChart() {
             
             let label = `${producto}`;
             if (selectedProducts.length > 1) {
-                label = `${producto} (${marca} - ${supermercado})`;
+                label = `${producto} (${supermercado}, ${marca})`;
             }
             
             if (datos.length >= 2) {
@@ -848,7 +848,14 @@ function updateComparisonChart() {
                 const lastPrice = datos[datos.length - 1].precio;
                 if (firstPrice > 0) {
                     const variacion = ((lastPrice - firstPrice) / firstPrice) * 100;
-                    label = `${producto} ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
+                    // CAMBIO AQUÍ: Añadir supermercado y marca incluso cuando hay variación
+                    if (selectedProducts.length === 1) {
+                        // Si solo hay un producto, mostrar: "producto (supermercado, marca) +X%"
+                        label = `${producto} (${supermercado}, ${marca}) ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
+                    } else {
+                        // Si hay múltiples productos, mantener el formato original
+                        label = `${producto} (${supermercado}, ${marca}) ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
+                    }
                 }
             }
             
@@ -1124,10 +1131,7 @@ function updateBrandDetails(filteredData) {
                     <small>Promedio</small>
                     <p>${precioPromedio.toFixed(2)}€</p>
                 </div>
-                <div>
-                    <small>Registros</small>
-                    <p>${group.datos.length}</p>
-                </div>
+                <!-- CAMBIO AQUÍ: Se ha ELIMINADO el div duplicado de "Registros" -->
             </div>
             <div class="brand-meta">
                 <span><i class="fas fa-database"></i> ${group.datos.length} registros</span>
@@ -1842,3 +1846,4 @@ window.searchProduct = searchProduct;
 window.hideError = hideError;
 window.addProductToComparison = addProductToComparison;
 window.removeProductFromComparison = removeProductFromComparison;
+
