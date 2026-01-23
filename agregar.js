@@ -599,7 +599,7 @@ function actualizarProductosPorSupermercado(supermercado) {
     console.log(`🏪 ${productosEnSuper.length} productos disponibles en ${supermercado}`);
 }
 
-// Autocompletar campos basado en historial
+// Autocompletar campos basado en historial - CON DEBUG
 function autocompletarDesdeHistorial(idNum, productoNombre) {
     const supermercadoSelect = document.getElementById('supermercado');
     const supermercado = supermercadoSelect && supermercadoSelect.value === 'otro' 
@@ -618,10 +618,18 @@ function autocompletarDesdeHistorial(idNum, productoNombre) {
             item.producto === productoNombre
         );
     
+    console.log(`🔍 Buscando ${productoNombre} en ${supermercado}:`, registrosProducto.length, 'registros encontrados');
+    
     if (registrosProducto.length > 0) {
+        // Mostrar todas las fechas antes de ordenar
+        console.log('📅 Fechas encontradas (sin ordenar):');
+        registrosProducto.forEach((reg, idx) => {
+            const fechaParsed = parsearFecha(reg.fecha);
+            console.log(`  ${idx + 1}. ${reg.fecha} -> ${fechaParsed ? fechaParsed.toISOString() : 'INVÁLIDA'} | Precio: ${reg.precio}`);
+        });
+        
         // Ordenar por fecha DESCENDENTE (más reciente primero)
         registrosProducto.sort((a, b) => {
-            // Convertir fechas a timestamps para comparar
             const fechaA = parsearFecha(a.fecha);
             const fechaB = parsearFecha(b.fecha);
             
@@ -631,6 +639,13 @@ function autocompletarDesdeHistorial(idNum, productoNombre) {
             
             // Orden descendente (más reciente primero)
             return fechaB.getTime() - fechaA.getTime();
+        });
+        
+        // Mostrar orden después de ordenar
+        console.log('📅 Fechas después de ordenar:');
+        registrosProducto.forEach((reg, idx) => {
+            const fechaParsed = parsearFecha(reg.fecha);
+            console.log(`  ${idx + 1}. ${reg.fecha} -> ${fechaParsed ? fechaParsed.toISOString() : 'INVÁLIDA'} | Precio: ${reg.precio}`);
         });
         
         const ultimoRegistro = registrosProducto[0];
@@ -654,7 +669,8 @@ function autocompletarDesdeHistorial(idNum, productoNombre) {
             precioInput.value = ultimoRegistro.precio || '';
         }
         
-        console.log(`✅ Autocompletado con ÚLTIMO registro: ${productoNombre} en ${supermercado} - Marca: ${ultimoRegistro.marca} (Fecha: ${ultimoRegistro.fecha})`);
+        console.log(`✅ Autocompletado con ÚLTIMO registro: ${productoNombre} en ${supermercado}`);
+        console.log(`   Fecha: ${ultimoRegistro.fecha}, Precio: ${ultimoRegistro.precio}, Marca: ${ultimoRegistro.marca}`);
         console.log(`   Total registros encontrados: ${registrosProducto.length}`);
         
         // Calcular precio unitario
