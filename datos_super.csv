@@ -19,7 +19,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 12/05/2025,spar borbalan,pan,125.0,g,no aplica,0.59
 12/05/2025,spar borbalan,fuet,170.0,g,el pozo,4.95
 12/05/2025,spar borbalan,chocolate,210.0,g,kinder maxi,3.98
-12/05/2025,spar borbalan,leche,1000.0,g,asturiana sin lactosa,1.45
+12/05/2025,spar borbalan,leche sin lactosa,1000.0,g,asturiana,1.45
 26/04/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
 26/04/2025,spar borbalan,chorizo,80.0,g,revilla,1.0
 26/04/2025,spar borbalan,detergente lavadora,1550.0,g,ariel basico,5.95
@@ -61,7 +61,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 12/03/2025,fruteria,queso fresco,1000.0,g,flor valsequillo,16.85
 10/03/2025,spar borbalan,tomate natural,400.0,g,spar,0.79
 08/03/2025,spar borbalan,papel de horno,1.0,ud,spar,1.0
-08/03/2025,spar borbalan,leche,1000.0,g,kaiku sin lactosa,1.45
+08/03/2025,spar borbalan,leche sin lactosa,1000.0,g,kaiku,1.45
 08/03/2025,spar borbalan,potitos,400.0,g,spar,2.39
 08/03/2025,spar borbalan,pan,260.0,g,no aplica,1.25
 08/03/2025,spar borbalan,cereales,375.0,g,chocapic,3.16
@@ -75,7 +75,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 08/03/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
 08/03/2025,spar borbalan,lechuga,1.0,ud,cogollos,2.09
 08/03/2025,spar borbalan,carne picada de anojo,1000.0,g,no aplica,13.3
-08/03/2025,spar borbalan,leche,2000.0,g,asturiana entera,2.5
+08/03/2025,spar borbalan,leche entera,2000.0,g,asturiana,2.5
 04/03/2025,spar borbalan,mermelada de fresa,330.0,g,ligeresa,2.39
 04/03/2025,spar borbalan,pan,125.0,g,no aplica,0.59
 04/03/2025,olivier,patatillas,125.0,g,lays,1.5
@@ -127,7 +127,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 31/01/2025,spar borbalan,natillas vainilla,500.0,g,spar,1.73
 31/01/2025,spar borbalan,lechuga,1.0,ud,batavia,2.25
 31/01/2025,spar borbalan,chorizo perro,2.0,ud,el palmero,1.38
-31/01/2025,spar borbalan,leche,6.0,ud,asturiana entera,7.5
+31/01/2025,spar borbalan,leche entera,6.0,ud,asturiana,7.5
 30/01/2025,spar playa,patatas,1000.0,g,no aplica,1.85
 30/01/2025,spar playa,espinacas congeladas,400.0,g,spar,1.43
 30/01/2025,spar playa,harina,1000.0,g,pan,2.52
@@ -238,7 +238,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 02/01/2025,spar borbalan,bacon,200.0,g,el pozo,2.59
 02/01/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
 02/01/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
-02/01/2025,spar borbalan,leche,6.0,ud,asturiana entera,7.2
+02/01/2025,spar borbalan,leche entera,6.0,ud,asturiana,7.2
 26/12/2024,spar playa,tortitas de arroz con chocolate,120.0,g,noglut,2.75
 26/12/2024,spar playa,galletas maria sin gluten,200.0,g,schar,2.58
 26/12/2024,spar playa,pan de cadiz,250.0,g,pico,4.19
@@ -287,9 +287,9 @@ fecha,super,producto,cantidad,unidad,marca,precio
 10/12/2024,spar borbalan,bolsas basura,20.0,ud,spar,1.79
 10/12/2024,spar borbalan,pan de molde sin gluten,300.0,g,bimbo,3.65
 10/12/2024,spar borbalan,huevos,10.0,ud,el taro,3.49
-10/12/2024,spar borbalan,leche,1000.0,g,asturiana sin lactosa,1.45
+10/12/2024,spar borbalan,leche sin lactosa,1000.0,g,asturiana,1.45
 10/12/2024,spar borbalan,mermelada de platano,250.0,g,frutaguay,3.75
-10/12/2024,spar borbalan,estropajo nanas,1.0,ud,nanas,1.79
+10/12/2024,spar borbalan,estropajo acero,1.0,ud,nanas,1.79
 10/12/2024,spar borbalan,galletas maria sin gluten,200.0,g,schar,2.58
 10/12/2024,spar borbalan,yogur frutos del bosque,500.0,g,kalise,1.49
 10/12/2024,spar borbalan,yogur fresa,500.0,g,kalise,1.49
@@ -319,7 +319,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 26/12/2025,spar borbalan,yogur fresa,480.0,g,danone,1.79
 26/12/2025,spar borbalan,tomate cherry,250.0,g,pera,1.25
 01/09/2025,spar borbalan,jamon serrano,220.0,g,navidul,4.81
-01/09/2025,spar borbalan,leche,1000.0,g,asturiana entera,1.26
+01/09/2025,spar borbalan,leche entera,1000.0,g,asturiana,1.26
 15/12/2025,spar borbalan,muesli chocolate,500.0,g,spar,2.79
 15/12/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
 15/12/2025,spar borbalan,cebolla,1000.0,g,no aplica,2.29
@@ -340,12 +340,12 @@ fecha,super,producto,cantidad,unidad,marca,precio
 04/02/2025,alcampo,yogur griego,1000.0,g,alcampo,2.69
 04/02/2025,alcampo,tortitas de arroz,115.0,g,ecocesta,1.25
 04/02/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.79
-04/02/2025,alcampo,leche condensada,450.0,g,la lechera sin lactosa,3.12
+04/02/2025,alcampo,leche condensada sin lactosa,450.0,g,la lechera,3.12
 04/02/2025,alcampo,chocolate,100.0,g,nestle dolca,0.83
 04/02/2025,alcampo,champu,300.0,g,garnier,3.56
 04/02/2025,alcampo,harina,1000.0,g,pan,2.02
 04/02/2025,alcampo,atun,6.0,ud,alcampo,4.19
-04/02/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
+04/02/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
 04/02/2025,alcampo,crema de cacahuete,500.0,g,alcampo,2.78
 04/02/2025,alcampo,papel higienico,12.0,ud,alcampo,2.38
 04/02/2025,alcampo,lavavajillas,4000.0,g,alcampo,2.85
@@ -362,15 +362,15 @@ fecha,super,producto,cantidad,unidad,marca,precio
 06/04/2025,alcampo,anacardos,500.0,g,borges,4.77
 06/04/2025,alcampo,maiz palomitas,400.0,g,casa ricardo,1.04
 06/04/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.17
-06/04/2025,alcampo,leche,6000.0,g,asturiana entera,6.96
+06/04/2025,alcampo,leche entera,6000.0,g,asturiana,6.96
 06/04/2025,alcampo,cebolla,1000.0,g,no aplica,1.69
 06/04/2025,alcampo,garbanzos,400.0,g,el plato de oro,0.65
 06/04/2025,alcampo,gel de ducha,1250.0,g,instituto español,2.25
-06/04/2025,alcampo,leche,1000.0,g,lr sin lactosa,0.91
+06/04/2025,alcampo,leche sin lactosa,1000.0,g,lr,0.91
 06/04/2025,alcampo,lechuga,1.0,ud,batavia,1.59
 06/04/2025,alcampo,corn flakes sin gluten,375.0,g,nacional,1.99
 06/04/2025,alcampo,harina,1000.0,g,pan,2.02
-06/04/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.18
+06/04/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
 06/04/2025,alcampo,pasta sin gluten,500.0,g,alcampo,1.9
 06/04/2025,alcampo,tomate natural,400.0,g,alcampo,0.51
 06/04/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.3
@@ -385,18 +385,18 @@ fecha,super,producto,cantidad,unidad,marca,precio
 26/04/2025,alcampo,condones,12.0,ud,durex,6.68
 26/04/2025,alcampo,tomate cherry,250.0,g,pera,1.0
 26/04/2025,alcampo,aceite de oliva virgen extra,1000.0,g,ybarra,6.46
-26/04/2025,alcampo,leche,1000.0,g,puleva sin lactosa,1.15
+26/04/2025,alcampo,leche sin lactosa,1000.0,g,puleva,1.15
 26/04/2025,alcampo,desodorante,50.0,g,sanex,1.52
 26/04/2025,alcampo,maiz,210.0,g,bonduelle,1.74
 26/04/2025,alcampo,lechuga,1.0,ud,batavia,1.59
-26/04/2025,alcampo,leche,6000.0,g,pascual entera,6.42
+26/04/2025,alcampo,leche entera,6000.0,g,pascual,6.42
 26/04/2025,alcampo,miel,500.0,g,alcampo,2.58
 26/04/2025,alcampo,tomate natural,800.0,g,alcampo,0.87
 20/05/2025,alcampo,cereales rellenos de leche,650.0,g,alcampo,2.99
 20/05/2025,alcampo,natillas vainilla,500.0,g,alcampo,1.49
 20/05/2025,alcampo,yogur griego,1000.0,g,alcampo,2.25
 20/05/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.01
-20/05/2025,alcampo,leche,1000.0,g,asturiana sin lactosa,1.25
+20/05/2025,alcampo,leche sin lactosa,1000.0,g,asturiana,1.25
 20/05/2025,alcampo,pasta de dientes,75.0,g,colgate,1.97
 20/05/2025,alcampo,galletas,760.0,g,cuetara,3.71
 20/05/2025,alcampo,yogur fresa,480.0,g,danone,1.6
@@ -406,7 +406,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 20/05/2025,alcampo,harina,1000.0,g,pan,2.0
 20/05/2025,alcampo,bicarbonato de sodio,200.0,g,alcampo,0.71
 20/05/2025,alcampo,bolsas basura,40.0,ud,alcampo,1.64
-20/05/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.18
+20/05/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
 20/05/2025,alcampo,pasta sin gluten,500.0,g,alcampo,1.9
 20/05/2025,alcampo,anacardos,200.0,g,casa ricardo,3.75
 20/05/2025,alcampo,estropajos,10.0,ud,rozenbal,1.61
@@ -420,13 +420,13 @@ fecha,super,producto,cantidad,unidad,marca,precio
 23/07/2025,alcampo,arroz,1000.0,g,brillante,1.92
 23/07/2025,alcampo,maiz palomitas,400.0,g,casa ricardo,1.2
 23/07/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,2.97
-23/07/2025,alcampo,leche,6000.0,g,asturiana entera,7.14
-23/07/2025,alcampo,leche,1000.0,g,asturiana sin lactosa,1.4
+23/07/2025,alcampo,leche entera,6000.0,g,asturiana,7.14
+23/07/2025,alcampo,leche sin lactosa,1000.0,g,asturiana,1.4
 23/07/2025,alcampo,cebolla,1000.0,g,no aplica,3.36
 23/07/2025,alcampo,yogur fresa,480.0,g,danone,1.59
 23/07/2025,alcampo,papadelta,73.0,g,grefusa,1.61
 23/07/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.5
-23/07/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
+23/07/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
 23/07/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
 23/07/2025,alcampo,tomate natural,800.0,g,alcampo,0.86
 23/07/2025,alcampo,pimientos,500.0,g,no aplica,2.49
@@ -439,7 +439,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 19/08/2025,alcampo,anacardos,500.0,g,borges,5.9
 19/08/2025,alcampo,arroz,1000.0,g,brillante,1.92
 19/08/2025,alcampo,pizza sin gluten,420.0,g,casa tarradellas,2.96
-19/08/2025,alcampo,leche,1000.0,g,asturiana sin lactosa,1.26
+19/08/2025,alcampo,leche sin lactosa,1000.0,g,asturiana,1.26
 19/08/2025,alcampo,yogur fresa,480.0,g,danone,1.59
 19/08/2025,alcampo,papadelta,73.0,g,grefusa,1.61
 19/08/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.49
@@ -448,7 +448,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 19/08/2025,alcampo,cafe,500.0,g,lavazza,16.1
 19/08/2025,alcampo,harina,1000.0,g,pan,1.99
 19/08/2025,alcampo,atun,6.0,ud,alcampo,4.11
-19/08/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.18
+19/08/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
 19/08/2025,alcampo,papel de cocina,4.0,ud,renova,1.78
 19/08/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.16
 19/08/2025,alcampo,acondicionador,685.0,g,tresemme,4.78
@@ -460,9 +460,9 @@ fecha,super,producto,cantidad,unidad,marca,precio
 02/09/2025,alcampo,yogur fresa,480.0,g,danone,1.7
 02/09/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,3.19
 02/09/2025,alcampo,champu,350.0,g,herbal essences,3.85
-02/09/2025,alcampo,leche condensada,450.0,g,la lechera sin lactosa,3.14
-02/09/2025,alcampo,leche,6000.0,g,pascual entera,7.62
-02/09/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
+02/09/2025,alcampo,leche condensada sin lactosa,450.0,g,la lechera,3.14
+02/09/2025,alcampo,leche entera,6000.0,g,pascual,7.62
+02/09/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
 02/09/2025,alcampo,tomate natural,800.0,g,alcampo,0.86
 02/09/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo,2.1
 02/09/2025,alcampo,corn flakes sin gluten,250.0,g,schar,1.74
@@ -475,9 +475,9 @@ fecha,super,producto,cantidad,unidad,marca,precio
 09/11/2025,alcampo,papadelta,73.0,g,grefusa,1.61
 09/11/2025,alcampo,yogur griego,900.0,g,oikos,5.38
 09/11/2025,alcampo,harina,1000.0,g,pan,2.03
-09/11/2025,alcampo,leche,6000.0,g,pascual entera,7.26
+09/11/2025,alcampo,leche entera,6000.0,g,pascual,7.26
 09/11/2025,alcampo,aceite de girasol,5000.0,g,alcampo,7.35
-09/11/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
+09/11/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
 09/11/2025,alcampo,miel,500.0,g,alcampo,2.58
 09/11/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
 09/11/2025,alcampo,pegamento,3.0,g,alcampo,1.75
@@ -493,7 +493,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 02/12/2025,alcampo,yogur proteinas,400.0,g,danone,1.88
 02/12/2025,alcampo,tortitas de arroz y quinoa,120.0,g,ecocesta,1.49
 02/12/2025,alcampo,maiz palomitas,250.0,g,emicela,0.74
-02/12/2025,alcampo,leche,6000.0,g,pascual entera,7.26
+02/12/2025,alcampo,leche entera,6000.0,g,pascual,7.26
 02/12/2025,alcampo,potitos,400.0,g,alcampo,2.11
 02/12/2025,alcampo,cafe,500.0,g,alcampo,5.48
 02/12/2025,alcampo,tomate natural,400.0,g,alcampo,0.53
@@ -528,9 +528,9 @@ fecha,super,producto,cantidad,unidad,marca,precio
 27/12/2025,alcampo,galletas flor sin gluten,400.0,g,gullon,2.71
 27/12/2025,alcampo,corn flakes sin gluten,375.0,g,nestle,2.81
 27/12/2025,alcampo,harina,1000.0,g,pan,2.02
-27/12/2025,alcampo,leche,6000.0,g,pascual entera,7.26
+27/12/2025,alcampo,leche entera,6000.0,g,pascual,7.26
 27/12/2025,alcampo,potitos,400.0,g,alcampo,2.11
-27/12/2025,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.24
+27/12/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
 27/12/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
 27/12/2025,alcampo,tomate natural,400.0,g,alcampo,0.53
 27/12/2025,alcampo,pasta sin gluten,500.0,g,pasta d'oro,1.89
@@ -569,7 +569,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 09/01/2026,spar borbalan,bebida energetica,500.0,g,monster ultra paradise,1.85
 12/01/2026,fruteria,aguacates,1000.0,g,no aplica,7.5
 12/01/2026,fruteria,tomate cherry,1000.0,g,pera,7.45
-12/01/2026,multitienda nk2,leche,1000.0,g,asturiana semi,1.85
+12/01/2026,multitienda nk2,leche semi,1000.0,g,asturiana,1.85
 12/01/2026,multitienda nk2,bebida energetica,250.0,g,red bull manzana jengibre,1.7
 12/01/2026,multitienda nk2,bebida energetica,500.0,g,monster lewis hamilton,2.0
 12/01/2026,multitienda nk2,chocolate,43.0,g,kinder bueno,1.4
@@ -579,7 +579,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 04/02/2025,hiperdino,tomate cherry,250.0,g,pera,1.29
 04/02/2025,hiperdino,lechuga,1.0,ud,batavia,1.67
 04/02/2025,hiperdino,galletas maria sin gluten,200.0,g,schar,2.08
-04/02/2025,hiperdino,leche,1000.0,g,hiperdino sin lactosa,0.85
+04/02/2025,hiperdino,leche sin lactosa,1000.0,g,hiperdino,0.85
 04/02/2025,hiperdino,queso fresco,600.0,g,flor valsequillo,8.9
 04/02/2025,hiperdino,natillas chocolate,500.0,g,hiperdino,1.04
 04/02/2025,hiperdino,natillas vainilla,500.0,g,hiperdino,1.04
@@ -591,7 +591,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 04/02/2025,hiperdino,nata,500.0,g,asturiana,2.61
 23/02/2025,hiperdino,tampones,22.0,ud,tampax compak,3.24
 23/02/2025,hiperdino,yogur griego,1000.0,g,hiperdino,2.39
-23/02/2025,hiperdino,leche,1000.0,g,hiperdino sin lactosa,0.85
+23/02/2025,hiperdino,leche sin lactosa,1000.0,g,hiperdino,0.85
 23/02/2025,hiperdino,pizza sin gluten,420.0,g,casa tarradellas,3.49
 23/02/2025,hiperdino,cereales rellenos de leche,500.0,g,hiperdino,2.14
 23/02/2025,hiperdino,huevos,12.0,ud,rujamar,2.48
@@ -646,11 +646,11 @@ fecha,super,producto,cantidad,unidad,marca,precio
 23/01/2026,alcampo,galletas flor sin gluten,400.0,g,gullon,2.98
 23/01/2026,alcampo,corn flakes sin gluten,375.0,g,nacional,2.81
 23/01/2026,alcampo,harina,1000.0,g,pan,2.01
-23/01/2026,alcampo,leche,6000.0,g,asturiana entera,7.26
+23/01/2026,alcampo,leche entera,6000.0,g,pascual,7.26
 23/01/2026,alcampo,potitos,400.0,g,alcampo,2.11
 23/01/2026,alcampo,bolsas basura,40.0,ud,alcampo,1.64
-23/01/2026,alcampo,cereales rellenos de leche,400.0,g,alcampo sin gluten,2.18
-23/01/2026,alcampo,estropajo nanas,2.0,ud,alcampo,0.49
+23/01/2026,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
+23/01/2026,alcampo,estropajo acero,2.0,ud,alcampo,0.49
 23/01/2026,alcampo,papel higienico,12.0,ud,alcampo,2.25
 23/01/2026,alcampo,pasta sin gluten,500.0,g,alcampo,1.9
 23/01/2026,alcampo,tomate natural,400.0,g,alcampo,0.53
