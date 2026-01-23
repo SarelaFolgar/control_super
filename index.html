@@ -221,26 +221,7 @@
                 </div>
             </div>
 
-            <!-- Controles compactos para añadir/eliminar productos -->
-            <div class="product-controls-compact">
-                <div class="product-search-compact">
-                    <input type="text" 
-                           id="add-product-search" 
-                           placeholder="Buscar producto para añadir..."
-                           autocomplete="off">
-                    <div id="add-suggestions" class="suggestions"></div>
-                </div>
-                <button id="clear-products-btn" class="clear-compact-btn">
-                    <i class="fas fa-times"></i> Limpiar
-                </button>
-            </div>
-
-            <!-- Contenedor compacto para productos seleccionados -->
-            <div id="selected-products-compact" class="selected-products-compact">
-                <!-- Los productos seleccionados aparecerán aquí -->
-            </div>
-
-            <!-- Gráfico -->
+            <!-- Gráfico con controles integrados -->
             <div class="chart-container">
                 <div class="chart-header">
                     <h3><i class="fas fa-chart-line"></i> Evolución del Precio</h3>
@@ -269,6 +250,27 @@
                 <!-- Contenedor fijo para el gráfico -->
                 <div class="chart-wrapper">
                     <canvas id="price-chart"></canvas>
+                </div>
+
+                <!-- Controles compactos para añadir/eliminar productos DENTRO DEL CONTENEDOR DEL GRÁFICO -->
+                <div class="chart-controls-container">
+                    <div class="product-controls-compact">
+                        <div class="product-search-compact">
+                            <input type="text" 
+                                   id="add-product-search" 
+                                   placeholder="Buscar producto para añadir..."
+                                   autocomplete="off">
+                            <div id="add-suggestions" class="suggestions"></div>
+                        </div>
+                        <button id="clear-products-btn" class="clear-compact-btn">
+                            <i class="fas fa-times"></i> Limpiar
+                        </button>
+                    </div>
+
+                    <!-- Contenedor compacto para productos seleccionados -->
+                    <div id="selected-products-compact" class="selected-products-compact">
+                        <!-- Los productos seleccionados aparecerán aquí -->
+                    </div>
                 </div>
 
                 <div class="chart-info">
