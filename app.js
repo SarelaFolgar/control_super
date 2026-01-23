@@ -838,24 +838,17 @@ function updateComparisonChart() {
         Object.entries(validGroups).forEach(([combinacion, group], index) => {
             const { producto, marca, super: supermercado, datos } = group;
             
-            let label = `${producto}`;
-            if (selectedProducts.length > 1) {
-                label = `${producto} (${supermercado}, ${marca})`;
-            }
+            // BASE DE LA ETIQUETA: siempre incluir supermercado y marca
+            let label = `${producto} (${supermercado}, ${marca})`;
             
+            // Si hay suficientes datos para calcular variación, añadirla
             if (datos.length >= 2) {
                 const firstPrice = datos[0].precio;
                 const lastPrice = datos[datos.length - 1].precio;
                 if (firstPrice > 0) {
                     const variacion = ((lastPrice - firstPrice) / firstPrice) * 100;
-                    // CAMBIO AQUÍ: Añadir supermercado y marca incluso cuando hay variación
-                    if (selectedProducts.length === 1) {
-                        // Si solo hay un producto, mostrar: "producto (supermercado, marca) +X%"
-                        label = `${producto} (${supermercado}, ${marca}) ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
-                    } else {
-                        // Si hay múltiples productos, mantener el formato original
-                        label = `${producto} (${supermercado}, ${marca}) ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
-                    }
+                    // Añadir la variación al final de la etiqueta
+                    label += ` ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
                 }
             }
             
@@ -1846,4 +1839,5 @@ window.searchProduct = searchProduct;
 window.hideError = hideError;
 window.addProductToComparison = addProductToComparison;
 window.removeProductFromComparison = removeProductFromComparison;
+
 
