@@ -724,8 +724,8 @@ body {
 
 /* Badge de producto compacto */
 .product-badge-compact {
-    background: var(--primary-color);
-    color: white;
+    background: white;
+    border: 1px solid var(--border-color);
     border-radius: 16px;
     padding: 0.3rem 0.8rem;
     display: flex;
@@ -735,7 +735,7 @@ body {
     font-weight: 500;
     white-space: nowrap;
     height: 32px;
-    transition: var(--transition);
+    color: var(--text-color); /* Color del texto */
 }
 
 .product-badge-compact span {
@@ -745,9 +745,9 @@ body {
 }
 
 .product-badge-compact button {
-    background: rgba(255, 255, 255, 0.2);
+    background: none;
     border: none;
-    color: white;
+    color: #dc3545; /* X ROJA */
     cursor: pointer;
     padding: 0.2rem;
     border-radius: 50%;
@@ -762,8 +762,7 @@ body {
 }
 
 .product-badge-compact button:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
+    background: rgba(220, 53, 69, 0.1); /* Fondo rojo claro al pasar el ratón */
 }
 
 /* Mensaje cuando no hay productos */
@@ -2392,3 +2391,4 @@ body {
     font-weight: 600;
     color: var(--primary-color);
 }
+
