@@ -11,8 +11,34 @@ const AppState = {
     TIEMPO_CACHE_API: 30000, // 30 segundos
     API_URL: 'https://control-super-api.onrender.com',
     MAX_INTENTOS_API: 3,
-    TIEMPO_ESPERA_API: 10000 // 10 segundos máximo por intento
+    TIEMPO_ESPERA_API: 15000 // 15 segundos máximo por intento
 };
+
+// ============================================
+// FUNCIÓN AUXILIAR PARA PARSEAR FECHAS
+// ============================================
+function parsearFecha(fechaStr) {
+    if (!fechaStr) return null;
+    
+    try {
+        // Formato YYYY-MM-DD (el que usa tu JSON)
+        if (fechaStr.includes('-') && fechaStr.split('-')[0].length === 4) {
+            const [año, mes, dia] = fechaStr.split('-').map(Number);
+            return new Date(año, mes - 1, dia);
+        }
+        
+        // Formato DD/MM/YYYY (por si acaso)
+        if (fechaStr.includes('/') && fechaStr.split('/')[0].length === 2) {
+            const [dia, mes, año] = fechaStr.split('/').map(Number);
+            return new Date(año, mes - 1, dia);
+        }
+        
+        // Intento por defecto
+        return new Date(fechaStr);
+    } catch {
+        return null;
+    }
+}
 
 // ============================================
 // INICIALIZACIÓN
@@ -579,15 +605,28 @@ function autocompletarDesdeHistorial(idNum, productoNombre) {
         return;
     }
     
-    // Buscar el último registro para este producto en este supermercado
+    // Buscar TODOS los registros para este producto en este supermercado
     const registrosProducto = AppState.historialCompras
         .filter(item => 
             item.super === supermercado && 
             item.producto === productoNombre
-        )
-        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        );
     
     if (registrosProducto.length > 0) {
+        // Ordenar por fecha DESCENDENTE (más reciente primero)
+        registrosProducto.sort((a, b) => {
+            // Convertir fechas a timestamps para comparar
+            const fechaA = parsearFecha(a.fecha);
+            const fechaB = parsearFecha(b.fecha);
+            
+            // Si alguna fecha es inválida, ponerla al final
+            if (!fechaA || isNaN(fechaA.getTime())) return 1;
+            if (!fechaB || isNaN(fechaB.getTime())) return -1;
+            
+            // Orden descendente (más reciente primero)
+            return fechaB.getTime() - fechaA.getTime();
+        });
+        
         const ultimoRegistro = registrosProducto[0];
         
         // Autocompletar campos
@@ -609,7 +648,8 @@ function autocompletarDesdeHistorial(idNum, productoNombre) {
             precioInput.value = ultimoRegistro.precio || '';
         }
         
-        console.log(`✅ Autocompletado: ${productoNombre} en ${supermercado} - Marca: ${ultimoRegistro.marca}`);
+        console.log(`✅ Autocompletado con ÚLTIMO registro: ${productoNombre} en ${supermercado} - Marca: ${ultimoRegistro.marca} (Fecha: ${ultimoRegistro.fecha})`);
+        console.log(`   Total registros encontrados: ${registrosProducto.length}`);
         
         // Calcular precio unitario
         calcularPrecioUnitario(cantidadInput);
@@ -751,16 +791,26 @@ function verificarYAutocompletarMarca(idNum, productoNombre, supermercado, marca
 
 // Autocompletar con datos de una marca específica
 function autocompletarConMarcaEspecifica(idNum, productoNombre, supermercado, marcaEspecifica) {
-    // Buscar el último registro para esta combinación exacta
+    // Buscar TODOS los registros para esta combinación exacta
     const registros = AppState.historialCompras
         .filter(item => 
             item.super === supermercado && 
             item.producto === productoNombre &&
             item.marca === marcaEspecifica
-        )
-        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        );
     
     if (registros.length > 0) {
+        // Ordenar por fecha DESCENDENTE (más reciente primero)
+        registros.sort((a, b) => {
+            const fechaA = parsearFecha(a.fecha);
+            const fechaB = parsearFecha(b.fecha);
+            
+            if (!fechaA || isNaN(fechaA.getTime())) return 1;
+            if (!fechaB || isNaN(fechaB.getTime())) return -1;
+            
+            return fechaB.getTime() - fechaA.getTime();
+        });
+        
         const ultimoRegistro = registros[0];
         
         // Actualizar campos si existen
@@ -772,7 +822,8 @@ function autocompletarConMarcaEspecifica(idNum, productoNombre, supermercado, ma
         if (unidadSelect) unidadSelect.value = ultimoRegistro.unidad || 'g';
         if (precioInput) precioInput.value = ultimoRegistro.precio || '';
         
-        console.log(`✅ Autocompletado con marca específica: ${marcaEspecifica}`);
+        console.log(`✅ Autocompletado con ÚLTIMO registro de marca específica: ${marcaEspecifica} (Fecha: ${ultimoRegistro.fecha})`);
+        console.log(`   Total registros encontrados: ${registros.length}`);
         
         // Calcular precio unitario
         calcularPrecioUnitario(cantidadInput);
@@ -781,7 +832,6 @@ function autocompletarConMarcaEspecifica(idNum, productoNombre, supermercado, ma
         console.log(`🆕 Marca nueva detectada: ${marcaEspecifica} para ${productoNombre}`);
     }
 }
-
 // Calcular precio por kg o unidad
 function calcularPrecioUnitario(elemento) {
     if (!elemento) return;
