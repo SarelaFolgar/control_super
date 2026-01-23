@@ -231,33 +231,23 @@
                     <p class="screen-subtitle" id="product-subtitle"></p>
                 </div>
                 
-                <!-- Nuevo: Controles para añadir/eliminar productos -->
-                <div class="product-controls" style="display: flex; gap: 1rem; margin-left: auto; align-items: center;">
-                    <div class="search-container" style="position: relative; width: 300px;">
+                <!-- Nuevo: Controles para añadir/eliminar productos - MEJORADO -->
+                <div class="product-controls">
+                    <div class="search-container">
                         <input type="text" 
                                id="add-product-search" 
                                placeholder="Buscar producto para añadir..."
-                               autocomplete="off"
-                               style="width: 100%; padding: 0.6rem 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius-sm);">
-                        <div id="add-suggestions" class="suggestions" style="width: 100%;"></div>
+                               autocomplete="off">
+                        <div id="add-suggestions" class="suggestions"></div>
                     </div>
-                    <button id="clear-products-btn" class="reset-btn" style="white-space: nowrap;">
+                    <button id="clear-products-btn" class="reset-btn">
                         <i class="fas fa-times"></i> Limpiar
                     </button>
                 </div>
             </div>
 
-            <!-- Contenedor para productos seleccionados -->
-            <div id="selected-products-container" class="selected-products" style="
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.5rem;
-                margin-bottom: 1.5rem;
-                padding: 1rem;
-                background: var(--light-color);
-                border-radius: var(--border-radius);
-                border: 1px solid var(--border-color);
-            ">
+            <!-- Contenedor para productos seleccionados - COMPACTO -->
+            <div id="selected-products-container" class="selected-products">
                 <!-- Los productos seleccionados aparecerán aquí -->
             </div>
 
@@ -529,4 +519,5 @@
     </script>
 </body>
 </html>
+
 
