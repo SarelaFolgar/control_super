@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         initEventListeners();
         setupSearch();
         setupNavigation();
-        setupMobileMenu();
         setupAddProductSearch();
         updateStats();
         console.log('✅ Aplicación inicializada correctamente');
@@ -147,33 +146,6 @@ function setupAdditionalElements() {
             }
         });
     });
-}
-
-// Configurar menú móvil
-function setupMobileMenu() {
-    const menuToggle = document.getElementById('menu-toggle');
-    const closeMenu = document.getElementById('close-menu');
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('main-content');
-
-    if (menuToggle && sidebar) {
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-
-        closeMenu.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-
-        mainContent.addEventListener('click', () => {
-            if (window.innerWidth <= 992 && sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-    }
 }
 
 // Configurar búsqueda para añadir productos
@@ -271,7 +243,6 @@ function addProductToComparison(productName) {
 }
 
 // Eliminar producto de la comparación
-// Eliminar producto de la comparación - VERSIÓN MEJORADA
 function removeProductFromComparison(productName) {
     const index = selectedProducts.indexOf(productName);
     if (index > -1) {
@@ -288,18 +259,18 @@ function removeProductFromComparison(productName) {
     }
 }
 
-// Actualizar lista de productos seleccionados - VERSIÓN MEJORADA
+// Actualizar lista de productos seleccionados - VERSIÓN MEJORADA Y COMPACTA
 function updateSelectedProductsList() {
-    const container = document.getElementById('selected-products-container');
+    const container = document.getElementById('selected-products-compact');
     if (!container) return;
     
     container.innerHTML = '';
     
     selectedProducts.forEach(product => {
         const badge = document.createElement('div');
-        badge.className = 'product-badge';
+        badge.className = 'product-badge-compact';
         badge.innerHTML = `
-            <span title="${product}">${product.length > 20 ? product.substring(0, 20) + '...' : product}</span>
+            <span title="${product}">${product.length > 25 ? product.substring(0, 25) + '...' : product}</span>
             <button onclick="removeProductFromComparison('${product.replace(/'/g, "\\'")}')" 
                     aria-label="Eliminar ${product}">
                 <i class="fas fa-times"></i>
@@ -312,7 +283,7 @@ function updateSelectedProductsList() {
     // Mostrar mensaje si no hay productos
     if (selectedProducts.length === 0) {
         const emptyMsg = document.createElement('div');
-        emptyMsg.style.cssText = 'color: var(--text-light); font-size: 0.9rem; font-style: italic;';
+        emptyMsg.className = 'no-products-message';
         emptyMsg.textContent = 'Añade productos para comparar';
         container.appendChild(emptyMsg);
     }
@@ -327,6 +298,7 @@ function updateSelectedProductsList() {
         };
     }
 }
+
 // Mostrar gráfico vacío
 function updateEmptyChart() {
     const canvas = document.getElementById('price-chart');
@@ -375,6 +347,7 @@ function updateEmptyChart() {
     
     document.getElementById('brand-details').innerHTML = '<p class="no-data">Añade productos para ver detalles</p>';
 }
+
 // Cargar datos
 async function loadData() {
     showLoading('Cargando datos...');
@@ -482,12 +455,8 @@ function setupNavigation() {
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            if (href && href !== '#' && href !== '') {
-                if (window.innerWidth <= 992) {
-                    const sidebar = document.getElementById('sidebar');
-                    if (sidebar) sidebar.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
+            if (href && href !== '#' && href !== '' && href !== 'agregar.html') {
+                // Permitir navegación externa
                 return;
             }
             
@@ -496,17 +465,8 @@ function setupNavigation() {
             
             if (!action) return;
             
-            if (window.innerWidth <= 992) {
-                const sidebar = document.getElementById('sidebar');
-                if (sidebar) sidebar.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            
             document.querySelectorAll('.nav-link').forEach(l => {
-                const lHref = l.getAttribute('href');
-                if (!lHref || lHref === '#' || lHref === '') {
-                    l.classList.remove('active');
-                }
+                l.classList.remove('active');
             });
             this.classList.add('active');
             
@@ -566,6 +526,9 @@ function handleNavigationAction(action) {
             break;
         case 'by-date':
             showDateSummary();
+            break;
+        case 'agregar-datos':
+            // Navegación externa, ya está manejada por el href
             break;
     }
 }
@@ -1840,12 +1803,6 @@ function initEventListeners() {
 
 // Mostrar/ocultar pantallas
 function showScreen(screenName) {
-    if (window.innerWidth <= 992) {
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar) sidebar.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-    
     Object.values(screens).forEach(screen => {
         if (screen) screen.classList.remove('active');
     });
@@ -1885,4 +1842,3 @@ window.searchProduct = searchProduct;
 window.hideError = hideError;
 window.addProductToComparison = addProductToComparison;
 window.removeProductFromComparison = removeProductFromComparison;
-
