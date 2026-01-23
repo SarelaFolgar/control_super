@@ -119,6 +119,20 @@
                 </div>
             </div>
 
+            <!-- Botón Agregar datos en pantalla principal -->
+            <div class="quick-actions" style="margin-top: 2rem;">
+                <a href="agregar.html" class="action-card" style="text-decoration: none; display: block;">
+                    <div class="action-icon" style="background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(74, 111, 165, 0.1) 100%);">
+                        <i class="fas fa-plus-circle" style="color: var(--accent-color);"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Agregar Datos</h4>
+                        <p>Añade nuevos productos o actualiza precios existentes</p>
+                    </div>
+                    <i class="fas fa-chevron-right action-arrow"></i>
+                </a>
+            </div>
+
             <!-- Estadísticas como botones -->
             <div class="stats-buttons">
                 <button class="stat-btn" data-action="all-products">
@@ -213,84 +227,52 @@
                     <i class="fas fa-arrow-left"></i> Volver
                 </button>
                 <div class="screen-title">
-                    <h2 id="product-title">Producto</h2>
+                    <h2 id="product-title">Comparación de Productos</h2>
                     <p class="screen-subtitle" id="product-subtitle"></p>
                 </div>
-            </div>
-
-            <!-- Resumen ACTUALIZABLE con filtros -->
-            <div class="product-summary">
-                <div class="summary-card highlight">
-                    <div class="summary-icon">
-                        <i class="fas fa-euro-sign"></i>
-                    </div>
-                    <div class="summary-content">
-                        <h4>Precio Actual</h4>
-                        <p class="price-large" id="current-price">-</p>
-                        <small id="current-price-context">Último registro</small>
-                    </div>
-                </div>
                 
-                <div class="summary-card">
-                    <div class="summary-icon">
-                        <i class="fas fa-percentage"></i>
+                <!-- Nuevo: Controles para añadir/eliminar productos -->
+                <div class="product-controls" style="display: flex; gap: 1rem; margin-left: auto; align-items: center;">
+                    <div class="search-container" style="position: relative; width: 300px;">
+                        <input type="text" 
+                               id="add-product-search" 
+                               placeholder="Buscar producto para añadir..."
+                               autocomplete="off"
+                               style="width: 100%; padding: 0.6rem 1rem; border: 2px solid var(--border-color); border-radius: var(--border-radius-sm);">
+                        <div id="add-suggestions" class="suggestions" style="width: 100%;"></div>
                     </div>
-                    <div class="summary-content">
-                        <h4>Variación Media</h4>
-                        <p class="variation-large" id="total-variation">-</p>
-                        <small id="variation-context">Promedio con filtros</small>
-                    </div>
-                </div>
-                
-                <div class="summary-card">
-                    <div class="summary-icon">
-                        <i class="fas fa-history"></i>
-                    </div>
-                    <div class="summary-content">
-                        <h4>Registros</h4>
-                        <p class="number-large" id="total-records-result">-</p>
-                        <small id="records-context">Total mediciones</small>
-                    </div>
-                </div>
-                
-                <div class="summary-card">
-                    <div class="summary-icon">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <div class="summary-content">
-                        <h4>Última Actualización</h4>
-                        <p id="last-record-date">-</p>
-                        <small id="date-context">Fecha del registro</small>
-                    </div>
+                    <button id="clear-products-btn" class="reset-btn" style="white-space: nowrap;">
+                        <i class="fas fa-times"></i> Limpiar
+                    </button>
                 </div>
             </div>
 
-            <!-- Gráfico con FILTROS MÚLTIPLES -->
+            <!-- Contenedor para productos seleccionados -->
+            <div id="selected-products-container" class="selected-products" style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                margin-bottom: 1.5rem;
+                padding: 1rem;
+                background: var(--light-color);
+                border-radius: var(--border-radius);
+                border: 1px solid var(--border-color);
+            ">
+                <!-- Los productos seleccionados aparecerán aquí -->
+            </div>
+
+            <!-- Gráfico con FILTROS SIMPLIFICADOS -->
             <div class="chart-container">
                 <div class="chart-header">
                     <h3><i class="fas fa-chart-line"></i> Evolución del Precio</h3>
 
-                    <!-- Filtros Múltiples: Ciudad + Supermercado + Marca + Tipo de Precio -->
+                    <!-- Filtros Múltiples: SOLO Ciudad y Tipo de Precio -->
                     <div class="chart-filters">
                         <div class="filters-row">
                             <div class="filter-group">
                                 <label for="city-filter"><i class="fas fa-city"></i> Ciudad:</label>
                                 <select id="city-filter" class="city-select" aria-label="Seleccionar ciudad para filtrar">
                                     <option value="global">Todas las ciudades</option>
-                                </select>
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="supermarket-filter"><i class="fas fa-store"></i> Supermercado:</label>
-                                <select id="supermarket-filter" class="supermarket-select" aria-label="Seleccionar supermercado para filtrar">
-                                    <option value="global">Todos los supermercados</option>
-                                </select>
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="brand-filter"><i class="fas fa-tag"></i> Marca:</label>
-                                <select id="brand-filter" class="brand-select" aria-label="Seleccionar marca para filtrar">
-                                    <option value="global">Todas las marcas</option>
                                 </select>
                             </div>
 
@@ -302,12 +284,6 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="filters-actions">
-                            <button id="reset-filter" class="reset-btn" aria-label="Restablecer filtros">
-                                <i class="fas fa-redo"></i> Restablecer Filtros
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -317,14 +293,14 @@
                 </div>
 
                 <div class="chart-info">
-                    <p><i class="fas fa-info-circle"></i> Cada línea representa una combinación única de MARCA + SUPERMERCADO</p>
+                    <p><i class="fas fa-info-circle"></i> Cada línea representa un producto diferente. Puedes añadir más productos usando el buscador superior.</p>
                     <p id="price-type-info"><i class="fas fa-info-circle"></i> Mostrando: <span>Precio neto (€ por unidad)</span></p>
                 </div>
             </div>
 
             <!-- Detalles por Origen -->
             <div class="details-section">
-                <h3><i class="fas fa-list"></i> Detalles por Origen</h3>
+                <h3><i class="fas fa-list"></i> Detalles por Producto</h3>
                 <div id="brand-details" class="details-grid"></div>
             </div>
         </section>
