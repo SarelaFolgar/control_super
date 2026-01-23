@@ -6,13 +6,11 @@ let cities = new Set();
 let brands = new Set();
 let availableYears = new Set();
 let currentChart = null;
-let currentProductData = null;
 let currentSearchTerm = '';
+let selectedProducts = []; // Array para almacenar productos seleccionados
 let currentFilters = {
     city: 'global',
-    supermarket: 'global',
-    brand: 'global',
-    priceType: 'precio_neto' // Nuevo filtro: tipo de precio
+    priceType: 'precio_neto'
 };
 
 // Elementos DOM
@@ -126,6 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setupSearch();
         setupNavigation();
         setupMobileMenu();
+        setupAddProductSearch();
         updateStats();
         console.log('✅ Aplicación inicializada correctamente');
     } catch (error) {
@@ -174,6 +173,246 @@ function setupMobileMenu() {
                 document.body.style.overflow = '';
             }
         });
+    }
+}
+
+// Configurar búsqueda para añadir productos
+function setupAddProductSearch() {
+    const searchInput = document.getElementById('add-product-search');
+    const suggestions = document.getElementById('add-suggestions');
+    
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        
+        if (!suggestions) return;
+        
+        suggestions.innerHTML = '';
+        
+        if (query.length < 2) {
+            suggestions.style.display = 'none';
+            return;
+        }
+        
+        const matches = uniqueProducts
+            .filter(product => {
+                const productLower = product.toLowerCase();
+                // Excluir productos ya seleccionados
+                return productLower.includes(query) && 
+                       !selectedProducts.some(p => p.toLowerCase() === productLower);
+            })
+            .slice(0, 8);
+        
+        if (matches.length === 0) {
+            suggestions.style.display = 'none';
+            return;
+        }
+        
+        matches.forEach(product => {
+            const div = document.createElement('div');
+            div.className = 'suggestion-item';
+            div.innerHTML = `<i class="fas fa-plus-circle"></i> ${product}`;
+            div.addEventListener('click', () => {
+                addProductToComparison(product);
+                searchInput.value = '';
+                suggestions.innerHTML = '';
+                suggestions.style.display = 'none';
+            });
+            suggestions.appendChild(div);
+        });
+        
+        suggestions.style.display = 'block';
+    });
+    
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const query = searchInput.value.trim();
+            if (query) {
+                const exactMatch = uniqueProducts.find(p => 
+                    p.toLowerCase() === query.toLowerCase() &&
+                    !selectedProducts.some(sp => sp.toLowerCase() === p.toLowerCase())
+                );
+                if (exactMatch) {
+                    addProductToComparison(exactMatch);
+                    searchInput.value = '';
+                    suggestions.innerHTML = '';
+                    suggestions.style.display = 'none';
+                }
+            }
+        }
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (suggestions && 
+            !searchInput.contains(e.target) && 
+            !suggestions.contains(e.target)) {
+            suggestions.innerHTML = '';
+            suggestions.style.display = 'none';
+        }
+    });
+}
+
+// Añadir producto a la comparación
+function addProductToComparison(productName) {
+    if (selectedProducts.includes(productName)) {
+        showError(`"${productName}" ya está en la comparación`);
+        return;
+    }
+    
+    selectedProducts.push(productName);
+    updateSelectedProductsList();
+    
+    if (screens.results.classList.contains('active')) {
+        updateComparisonChart();
+    }
+    
+    console.log(`✅ Producto añadido: ${productName}`);
+}
+
+// Eliminar producto de la comparación
+function removeProductFromComparison(productName) {
+    const index = selectedProducts.indexOf(productName);
+    if (index > -1) {
+        selectedProducts.splice(index, 1);
+        updateSelectedProductsList();
+        
+        if (screens.results.classList.contains('active')) {
+            if (selectedProducts.length > 0) {
+                updateComparisonChart();
+            } else {
+                // Si no hay productos, mostrar gráfico vacío
+                const canvas = document.getElementById('price-chart');
+                const chartContainer = canvas.parentElement.parentElement;
+                const existingError = chartContainer.querySelector('.chart-info-message');
+                if (existingError) existingError.remove();
+                
+                if (currentChart instanceof Chart) {
+                    currentChart.destroy();
+                    currentChart = null;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                currentChart = new Chart(ctx, {
+                    type: 'line',
+                    data: { datasets: [] },
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        scales: { 
+                            x: { 
+                                type: 'time', 
+                                title: { 
+                                    display: true, 
+                                    text: 'Fecha',
+                                    font: { size: 12, weight: 'bold' }
+                                } 
+                            }, 
+                            y: { 
+                                title: { 
+                                    display: true, 
+                                    text: getPriceTypeLabel(currentFilters.priceType),
+                                    font: { size: 12, weight: 'bold' }
+                                } 
+                            } 
+                        } 
+                    }
+                });
+                
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'chart-info-message';
+                infoDiv.innerHTML = '<p><i class="fas fa-info-circle"></i> Añade productos para comparar precios</p>';
+                chartContainer.appendChild(infoDiv);
+                
+                document.getElementById('brand-details').innerHTML = '<p class="no-data">Añade productos para ver detalles</p>';
+            }
+        }
+    }
+}
+
+// Actualizar lista de productos seleccionados
+function updateSelectedProductsList() {
+    const container = document.getElementById('selected-products-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    selectedProducts.forEach(product => {
+        const badge = document.createElement('div');
+        badge.style.cssText = `
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        `;
+        
+        badge.innerHTML = `
+            <span>${product}</span>
+            <button onclick="removeProductFromComparison('${product.replace(/'/g, "\\'")}')" 
+                    style="background: none; border: none; color: #dc3545; cursor: pointer; padding: 0.2rem; border-radius: 50%;">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        container.appendChild(badge);
+    });
+    
+    // Configurar botón limpiar
+    const clearBtn = document.getElementById('clear-products-btn');
+    if (clearBtn) {
+        clearBtn.onclick = () => {
+            selectedProducts = [];
+            updateSelectedProductsList();
+            
+            const canvas = document.getElementById('price-chart');
+            const chartContainer = canvas.parentElement.parentElement;
+            const existingError = chartContainer.querySelector('.chart-info-message');
+            if (existingError) existingError.remove();
+            
+            if (currentChart instanceof Chart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+            
+            const ctx = canvas.getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: { datasets: [] },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        x: { 
+                            type: 'time', 
+                            title: { 
+                                display: true, 
+                                text: 'Fecha',
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        }, 
+                        y: { 
+                            title: { 
+                                display: true, 
+                                text: getPriceTypeLabel(currentFilters.priceType),
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        } 
+                    } 
+                }
+            });
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'chart-info-message';
+            infoDiv.innerHTML = '<p><i class="fas fa-info-circle"></i> Añade productos para comparar precios</p>';
+            chartContainer.appendChild(infoDiv);
+            
+            document.getElementById('brand-details').innerHTML = '<p class="no-data">Añade productos para ver detalles</p>';
+        };
     }
 }
 
@@ -326,6 +565,9 @@ function setupNavigation() {
     document.querySelectorAll('.action-card').forEach(btn => {
         btn.addEventListener('click', function() {
             const action = this.dataset.action;
+            if (action === 'agregar-datos') {
+                return; // Este es un enlace externo
+            }
             handleNavigationAction(action);
         });
     });
@@ -369,7 +611,7 @@ function handleNavigationAction(action) {
     }
 }
 
-// Configurar búsqueda
+// Configurar búsqueda principal
 function setupSearch() {
     const searchInput = document.getElementById('product-search');
     const searchBtn = document.getElementById('search-btn');
@@ -379,13 +621,19 @@ function setupSearch() {
     
     searchBtn.addEventListener('click', () => {
         const query = searchInput.value.trim();
-        if (query) searchProduct(query);
+        if (query) {
+            selectedProducts = [query]; // Empezar con el producto buscado
+            searchProduct(query);
+        }
     });
     
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             const query = searchInput.value.trim();
-            if (query) searchProduct(query);
+            if (query) {
+                selectedProducts = [query]; // Empezar con el producto buscado
+                searchProduct(query);
+            }
         }
     });
     
@@ -419,6 +667,7 @@ function setupSearch() {
                 searchInput.value = product;
                 suggestionsElem.innerHTML = '';
                 suggestionsElem.style.display = 'none';
+                selectedProducts = [product]; // Empezar con el producto seleccionado
                 searchProduct(product);
             });
             suggestionsElem.appendChild(div);
@@ -437,60 +686,54 @@ function setupSearch() {
     });
 }
 
-// Buscar producto
+// Buscar producto (ahora maneja múltiples productos)
 function searchProduct(productName) {
     const query = productName.toLowerCase().trim();
     if (!query) return;
     
     console.log('🔍 Buscando:', query);
     currentSearchTerm = query;
-    showLoading('Buscando producto...');
+    showLoading('Cargando productos...');
     
     try {
-        const exactMatches = productosData.filter(p => 
-            p.producto && p.producto.toLowerCase() === query
-        );
-        
-        console.log('📊 Resultados exactos encontrados:', exactMatches.length);
-        
-        if (exactMatches.length === 0) {
-            const startsWithMatches = productosData.filter(p => 
-                p.producto && p.producto.toLowerCase().startsWith(query + ' ')
+        // Verificar que todos los productos seleccionados existen
+        const allProductsExist = selectedProducts.every(product => {
+            const matches = productosData.filter(p => 
+                p.producto && p.producto.toLowerCase() === product.toLowerCase()
             );
+            return matches.length > 0;
+        });
+        
+        if (!allProductsExist) {
+            const nonExisting = selectedProducts.filter(product => {
+                const matches = productosData.filter(p => 
+                    p.producto && p.producto.toLowerCase() === product.toLowerCase()
+                );
+                return matches.length === 0;
+            });
             
-            if (startsWithMatches.length > 0) {
-                const suggestedProducts = [...new Set(startsWithMatches.map(p => p.producto))].slice(0, 3);
-                showError(`Producto no encontrado. ¿Quizás quisiste decir: ${suggestedProducts.join(', ')}?`);
-                hideLoading();
-                return;
-            } else {
-                showError('Producto no encontrado');
-                hideLoading();
-                return;
-            }
+            showError(`Producto no encontrado: ${nonExisting.join(', ')}`);
+            hideLoading();
+            return;
         }
-        
-        currentProductData = exactMatches;
-        
-        // Usar parsearFecha
-        exactMatches.sort((a, b) => parsearFecha(b.fecha) - parsearFecha(a.fecha));
         
         const titleElem = document.getElementById('product-title');
         if (titleElem) {
-            titleElem.textContent = exactMatches[0].producto;
+            if (selectedProducts.length === 1) {
+                titleElem.textContent = selectedProducts[0];
+            } else {
+                titleElem.textContent = `Comparando ${selectedProducts.length} productos`;
+            }
         }
         
         currentFilters = { 
-            city: 'global', 
-            supermarket: 'global', 
-            brand: 'global',
-            priceType: 'precio_neto' // Por defecto precio neto
+            city: 'global',
+            priceType: 'precio_neto'
         };
         
-        updateProductSummary(exactMatches, currentFilters);
-        const { ciudades, supermercados, marcas } = createPriceChart(exactMatches, currentFilters);
-        setupFilters(exactMatches, ciudades, supermercados, marcas);
-        showBrandDetails(exactMatches);
+        updateSelectedProductsList();
+        updateComparisonChart();
+        setupFiltersSimplified();
         
         showScreen('results');
         
@@ -498,13 +741,483 @@ function searchProduct(productName) {
         const mainNavLink = document.querySelector('[data-action="main"]');
         if (mainNavLink) mainNavLink.classList.add('active');
         
-        console.log('✅ Producto mostrado correctamente');
+        console.log('✅ Productos mostrados correctamente');
         
     } catch (error) {
         console.error('❌ Error en searchProduct:', error);
         showError('Error al mostrar el producto: ' + error.message);
     } finally {
         hideLoading();
+    }
+}
+
+// Actualizar gráfico de comparación
+function updateComparisonChart() {
+    console.log('📈 Actualizando gráfico de comparación...');
+    
+    const canvas = document.getElementById('price-chart');
+    if (!canvas) return;
+    
+    const chartContainer = canvas.parentElement.parentElement;
+    const existingError = chartContainer.querySelector('.chart-info-message');
+    if (existingError) existingError.remove();
+    
+    if (currentChart instanceof Chart) {
+        currentChart.destroy();
+        currentChart = null;
+    }
+    
+    // Actualizar información del tipo de precio
+    const priceTypeInfo = document.getElementById('price-type-info');
+    if (priceTypeInfo) {
+        const span = priceTypeInfo.querySelector('span');
+        if (span) {
+            span.textContent = getPriceTypeLabel(currentFilters.priceType);
+        }
+    }
+    
+    try {
+        // Obtener datos de todos los productos seleccionados
+        let allData = [];
+        selectedProducts.forEach(productName => {
+            const productData = productosData.filter(p => 
+                p.producto && p.producto.toLowerCase() === productName.toLowerCase()
+            );
+            allData = allData.concat(productData);
+        });
+        
+        // Aplicar filtro de ciudad
+        let filteredData = allData;
+        if (currentFilters.city !== 'global') {
+            filteredData = filteredData.filter(item => item.ciudad === currentFilters.city);
+        }
+        
+        console.log(`🌍 Datos después de filtros:`, filteredData.length, 'registros');
+        
+        if (!filteredData || filteredData.length === 0) {
+            const ctx = canvas.getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: { datasets: [] },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        x: { 
+                            type: 'time', 
+                            title: { 
+                                display: true, 
+                                text: 'Fecha',
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        }, 
+                        y: { 
+                            title: { 
+                                display: true, 
+                                text: getPriceTypeLabel(currentFilters.priceType),
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        } 
+                    } 
+                }
+            });
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'chart-info-message';
+            infoDiv.innerHTML = `<p><i class="fas fa-info-circle"></i> No hay datos disponibles con los filtros actuales</p>`;
+            chartContainer.appendChild(infoDiv);
+            
+            return;
+        }
+        
+        const groups = {};
+        const ciudadesDisponibles = new Set();
+        
+        filteredData.forEach(item => {
+            if (!item) return;
+            
+            if (item.ciudad) ciudadesDisponibles.add(item.ciudad);
+            
+            const producto = item.producto;
+            const marca = item.marca || 'Sin marca';
+            const supermercado = item.super || 'Sin supermercado';
+            const key = `${producto} | ${marca} | ${supermercado}`;
+            
+            if (!groups[key]) groups[key] = { producto: producto, marca: marca, super: supermercado, datos: [] };
+            
+            const fecha = parsearFecha(item.fecha);
+            if (isNaN(fecha.getTime())) {
+                console.warn('Fecha inválida:', item.fecha);
+                return;
+            }
+            
+            const precio = getPriceField(item);
+            if (typeof precio !== 'number' || isNaN(precio)) {
+                console.warn('Precio inválido:', precio);
+                return;
+            }
+            
+            groups[key].datos.push({ 
+                fecha: fecha, 
+                precio: precio,
+                ciudad: item.ciudad || 'Desconocida'
+            });
+        });
+        
+        console.log('Grupos encontrados:', Object.keys(groups).length);
+        
+        const validGroups = {};
+        for (const [key, group] of Object.entries(groups)) {
+            if (group.datos.length > 0) {
+                group.datos.sort((a, b) => a.fecha - b.fecha);
+                validGroups[key] = group;
+            }
+        }
+        
+        if (Object.keys(validGroups).length === 0) {
+            const ctx = canvas.getContext('2d');
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: { datasets: [] },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        x: { 
+                            type: 'time', 
+                            title: { 
+                                display: true, 
+                                text: 'Fecha',
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        }, 
+                        y: { 
+                            title: { 
+                                display: true, 
+                                text: getPriceTypeLabel(currentFilters.priceType),
+                                font: { size: 12, weight: 'bold' }
+                            } 
+                        } 
+                    } 
+                }
+            });
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'chart-info-message';
+            infoDiv.innerHTML = '<p><i class="fas fa-info-circle"></i> No hay suficientes datos para mostrar líneas en el gráfico</p>';
+            chartContainer.appendChild(infoDiv);
+            
+            return;
+        }
+        
+        const datasets = [];
+        const colors = ['#4a6fa5', '#6b8e23', '#8b4513', '#2c3e50', '#7d3c98', '#16a085', '#e67e22', '#3498db', '#1abc9c', '#9b59b6', '#34495e', '#27ae60', '#8e44ad', '#2c3e50', '#f39c12'];
+        
+        Object.entries(validGroups).forEach(([combinacion, group], index) => {
+            const { producto, marca, super: supermercado, datos } = group;
+            
+            let label = `${producto}`;
+            if (selectedProducts.length > 1) {
+                label = `${producto} (${marca} - ${supermercado})`;
+            }
+            
+            if (datos.length >= 2) {
+                const firstPrice = datos[0].precio;
+                const lastPrice = datos[datos.length - 1].precio;
+                if (firstPrice > 0) {
+                    const variacion = ((lastPrice - firstPrice) / firstPrice) * 100;
+                    label = `${producto} ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
+                }
+            }
+            
+            datasets.push({
+                label: label,
+                data: datos.map(d => ({ x: d.fecha, y: d.precio })),
+                borderColor: colors[index % colors.length],
+                backgroundColor: colors[index % colors.length] + '20',
+                borderWidth: datos.length >= 2 ? 2 : 0,
+                tension: 0.2,
+                fill: false,
+                pointRadius: datos.length === 1 ? 6 : 4,
+                pointHoverRadius: datos.length === 1 ? 10 : 6,
+                pointBackgroundColor: colors[index % colors.length],
+                pointBorderColor: '#fff',
+                pointBorderWidth: 1,
+                showLine: datos.length >= 2
+            });
+        });
+        
+        console.log('Datasets preparados:', datasets.length);
+        
+        const ctx = canvas.getContext('2d');
+        
+        const config = {
+            type: 'line',
+            data: { datasets: datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { intersect: false, mode: 'index' },
+                plugins: {
+                    legend: { 
+                        position: 'top', 
+                        labels: { 
+                            font: { size: 11 }, 
+                            padding: 8, 
+                            usePointStyle: true, 
+                            pointStyle: 'circle', 
+                            boxWidth: 8 
+                        } 
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const precio = context.parsed.y;
+                                const fecha = new Date(context.parsed.x);
+                                return `${precio.toFixed(2)}€ (${fecha.toLocaleDateString('es-ES')})`;
+                            },
+                            title: function(context) {
+                                return context[0].dataset.label || '';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: { 
+                            unit: 'month', 
+                            displayFormats: { month: 'MMM yyyy' }, 
+                            tooltipFormat: 'dd/MM/yyyy' 
+                        },
+                        title: { 
+                            display: true, 
+                            text: 'Fecha', 
+                            font: { size: 12, weight: 'bold' } 
+                        },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    },
+                    y: {
+                        beginAtZero: false,
+                        title: { 
+                            display: true, 
+                            text: getPriceTypeLabel(currentFilters.priceType), 
+                            font: { size: 12, weight: 'bold' } 
+                        },
+                        ticks: { 
+                            callback: function(value) { 
+                                return value.toFixed(2) + '€'; 
+                            } 
+                        },
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                    }
+                }
+            }
+        };
+        
+        currentChart = new Chart(ctx, config);
+        console.log('✅ Gráfico creado exitosamente');
+        
+        updateBrandDetails(filteredData);
+        
+    } catch (error) {
+        console.error('❌ Error al crear gráfico:', error);
+        
+        const ctx = canvas.getContext('2d');
+        currentChart = new Chart(ctx, {
+            type: 'line',
+            data: { datasets: [] },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                scales: { 
+                    x: { 
+                        type: 'time', 
+                        title: { 
+                            display: true, 
+                            text: 'Fecha',
+                            font: { size: 12, weight: 'bold' }
+                        } 
+                    }, 
+                    y: { 
+                        title: { 
+                            display: true, 
+                            text: getPriceTypeLabel(currentFilters.priceType),
+                            font: { size: 12, weight: 'bold' }
+                        } 
+                    } 
+                } 
+            }
+        });
+        
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'chart-info-message';
+        errorDiv.innerHTML = `<p><i class="fas fa-info-circle"></i> Error al crear el gráfico</p><p><small>Intenta buscar otro producto o cambiar los filtros</small></p>`;
+        chartContainer.appendChild(errorDiv);
+    }
+}
+
+// Configurar filtros simplificados (solo ciudad y tipo de precio)
+function setupFiltersSimplified() {
+    const citySelect = document.getElementById('city-filter');
+    const priceTypeSelect = document.getElementById('price-type-filter');
+    
+    if (!citySelect || !priceTypeSelect) return;
+    
+    // Obtener ciudades disponibles de los productos seleccionados
+    let ciudadesDisponibles = new Set();
+    selectedProducts.forEach(productName => {
+        const productData = productosData.filter(p => 
+            p.producto && p.producto.toLowerCase() === productName.toLowerCase()
+        );
+        productData.forEach(item => {
+            if (item.ciudad) ciudadesDisponibles.add(item.ciudad);
+        });
+    });
+    
+    updateFilterSelector(citySelect, Array.from(ciudadesDisponibles).sort(), currentFilters.city);
+    priceTypeSelect.value = currentFilters.priceType;
+    
+    // Configurar evento de cambio para cada filtro
+    const applyFilter = () => {
+        const selectedCity = citySelect.value;
+        const selectedPriceType = priceTypeSelect.value;
+        
+        currentFilters = { 
+            city: selectedCity,
+            priceType: selectedPriceType
+        };
+        
+        console.log(`🌍 Aplicando filtros automáticamente: Ciudad=${selectedCity}, TipoPrecio=${selectedPriceType}`);
+        
+        showLoading('Actualizando gráfico...');
+        setTimeout(() => {
+            updateComparisonChart();
+            hideLoading();
+        }, 100);
+    };
+    
+    // Aplicar automáticamente al cambiar cualquier filtro
+    citySelect.addEventListener('change', applyFilter);
+    priceTypeSelect.addEventListener('change', applyFilter);
+}
+
+function updateFilterSelector(selectElement, options, selectedValue) {
+    if (!selectElement) return;
+    
+    const currentValue = selectElement.value;
+    const firstOption = selectElement.options[0];
+    selectElement.innerHTML = '';
+    if (firstOption) selectElement.appendChild(firstOption);
+    
+    options.sort();
+    options.forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option;
+        opt.textContent = option;
+        selectElement.appendChild(opt);
+    });
+    
+    if (options.includes(currentValue)) selectElement.value = currentValue;
+    else selectElement.value = selectedValue;
+}
+
+// Actualizar detalles por producto
+function updateBrandDetails(filteredData) {
+    const container = document.getElementById('brand-details');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (!filteredData || filteredData.length === 0) {
+        container.innerHTML = '<p class="no-data">No hay datos de detalles</p>';
+        return;
+    }
+    
+    const groups = {};
+    filteredData.forEach(item => {
+        if (!item) return;
+        
+        const producto = item.producto;
+        const marca = item.marca || 'Sin marca';
+        const supermercado = item.super || 'Sin supermercado';
+        const key = `${producto} | ${marca} | ${supermercado}`;
+        
+        if (!groups[key]) groups[key] = { producto: producto, marca: marca, super: supermercado, datos: [] };
+        groups[key].datos.push(item);
+    });
+    
+    console.log('Grupos para detalles:', Object.keys(groups).length);
+    
+    Object.entries(groups).forEach(([combinacion, group]) => {
+        if (group.datos.length === 0) return;
+        
+        group.datos.sort((a, b) => parsearFecha(a.fecha) - parsearFecha(b.fecha));
+        
+        const firstItem = group.datos[0];
+        const lastItem = group.datos[group.datos.length - 1];
+        
+        const firstPrice = getPriceField(firstItem);
+        const lastPrice = getPriceField(lastItem);
+        
+        let variacion = 0;
+        let variacionTexto = 'N/A';
+        if (firstPrice > 0 && typeof firstPrice === 'number') {
+            variacion = ((lastPrice - firstPrice) / firstPrice) * 100;
+            variacionTexto = `${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
+        }
+        
+        const precioPromedio = group.datos.reduce((sum, item) => {
+            const precio = getPriceField(item);
+            return sum + precio;
+        }, 0) / group.datos.length;
+        
+        const card = document.createElement('div');
+        card.className = 'brand-card';
+        card.innerHTML = `
+            <div class="brand-header">
+                <h4>${group.producto}</h4>
+                <span class="super-badge">${group.super}</span>
+            </div>
+            <div class="brand-info">
+                <div>
+                    <small>Marca</small>
+                    <p>${group.marca}</p>
+                </div>
+                <div>
+                    <small>Primer ${currentFilters.priceType === 'precio_neto' ? 'precio neto' : 'precio real'}</small>
+                    <p>${firstPrice.toFixed(2)}€</p>
+                    <small class="date">${formatearFechaParaMostrar(firstItem.fecha)}</small>
+                </div>
+                <div>
+                    <small>Último ${currentFilters.priceType === 'precio_neto' ? 'precio neto' : 'precio real'}</small>
+                    <p>${lastPrice.toFixed(2)}€</p>
+                    <small class="date">${formatearFechaParaMostrar(lastItem.fecha)}</small>
+                </div>
+                <div>
+                    <small>Variación</small>
+                    <p class="${variacion >= 0 ? 'positive' : 'negative'}">${variacionTexto}</p>
+                </div>
+                <div>
+                    <small>Promedio</small>
+                    <p>${precioPromedio.toFixed(2)}€</p>
+                </div>
+                <div>
+                    <small>Registros</small>
+                    <p>${group.datos.length}</p>
+                </div>
+            </div>
+            <div class="brand-meta">
+                <span><i class="fas fa-database"></i> ${group.datos.length} registros</span>
+                <span><i class="fas fa-money-bill-wave"></i> ${currentFilters.priceType === 'precio_neto' ? 'Precio neto' : 'Precio real'}</span>
+            </div>
+        `;
+        
+        container.appendChild(card);
+    });
+    
+    if (container.innerHTML === '') {
+        container.innerHTML = '<p class="no-data">No hay datos agrupados con los filtros actuales</p>';
     }
 }
 
@@ -529,7 +1242,10 @@ function updateAllProductsList() {
         const item = document.createElement('div');
         item.className = 'product-item';
         item.innerHTML = `<p>${product}</p>`;
-        item.addEventListener('click', () => searchProduct(product));
+        item.addEventListener('click', () => {
+            selectedProducts = [product];
+            searchProduct(product);
+        });
         productsGrid.appendChild(item);
     });
     
@@ -651,610 +1367,6 @@ function showDateSummary() {
     if (dateNavLink) dateNavLink.classList.add('active');
 }
 
-// Función para mostrar resumen de producto
-function updateProductSummary(productData, filters = { city: 'global', supermarket: 'global', brand: 'global', priceType: 'precio_neto' }) {
-    if (!productData || productData.length === 0) {
-        setSummaryPlaceholders();
-        return;
-    }
-    
-    let filteredData = productData;
-    
-    if (filters.city !== 'global') filteredData = filteredData.filter(item => item.ciudad === filters.city);
-    if (filters.supermarket !== 'global') filteredData = filteredData.filter(item => item.super === filters.supermarket);
-    if (filters.brand !== 'global') filteredData = filteredData.filter(item => item.marca === filters.brand);
-    
-    if (filteredData.length === 0) {
-        setSummaryPlaceholders();
-        return;
-    }
-    
-    // Usar parsearFecha
-    filteredData.sort((a, b) => parsearFecha(b.fecha) - parsearFecha(a.fecha));
-    
-    const mostRecentRecord = filteredData[0];
-    const currentPrice = getPriceField(mostRecentRecord) || 0;
-    setElementText('current-price', `${currentPrice.toFixed(2)}€`);
-    
-    const groupedVariations = new Map();
-    
-    filteredData.forEach(item => {
-        if (!item.super || !item.marca) return;
-        
-        const key = `${item.producto}||${item.marca}||${item.super}`;
-        
-        if (item.variacion_total !== null && item.variacion_total !== undefined && !isNaN(item.variacion_total)) {
-            if (!groupedVariations.has(key)) {
-                groupedVariations.set(key, { count: 1, total: item.variacion_total });
-            } else {
-                const existing = groupedVariations.get(key);
-                groupedVariations.set(key, { count: existing.count + 1, total: existing.total + item.variacion_total });
-            }
-        }
-    });
-    
-    let avgVariation = 0;
-    if (groupedVariations.size > 0) {
-        let totalVariation = 0;
-        let totalGroups = 0;
-        
-        groupedVariations.forEach(variation => {
-            totalVariation += variation.total / variation.count;
-            totalGroups++;
-        });
-        
-        avgVariation = totalVariation / totalGroups;
-    }
-    
-    const variationElem = document.getElementById('total-variation');
-    if (variationElem) {
-        variationElem.textContent = `${avgVariation >= 0 ? '+' : ''}${avgVariation.toFixed(1)}%`;
-        variationElem.className = `variation-large ${avgVariation >= 0 ? 'positive' : 'negative'}`;
-    }
-    
-    setElementText('total-records-result', filteredData.length);
-    
-    if (document.getElementById('last-record-date')) {
-        try {
-            const lastDate = parsearFecha(mostRecentRecord.fecha);
-            setElementText('last-record-date', formatearFechaParaMostrar(lastDate));
-        } catch {
-            setElementText('last-record-date', '-');
-        }
-    }
-    
-    let contextText = '';
-    const activeFilters = [];
-    
-    if (filters.city !== 'global') activeFilters.push(`Ciudad: ${filters.city}`);
-    if (filters.supermarket !== 'global') activeFilters.push(`Super: ${filters.supermarket}`);
-    if (filters.brand !== 'global') activeFilters.push(`Marca: ${filters.brand}`);
-    
-    contextText = activeFilters.length === 0 ? 'Todos los datos' : activeFilters.join(' | ');
-    
-    setElementText('current-price-context', contextText);
-    setElementText('variation-context', contextText);
-    setElementText('records-context', contextText);
-    setElementText('date-context', contextText);
-}
-
-function setElementText(elementId, text) {
-    const element = document.getElementById(elementId);
-    if (element) element.textContent = text;
-}
-
-function setSummaryPlaceholders() {
-    const placeholders = {
-        'current-price': '-', 'total-variation': '-', 'total-records-result': '0',
-        'last-record-date': '-', 'current-price-context': 'Sin datos con filtros',
-        'variation-context': 'Sin datos con filtros', 'records-context': 'Sin datos con filtros',
-        'date-context': 'Sin datos con filtros'
-    };
-    
-    for (const [id, text] of Object.entries(placeholders)) setElementText(id, text);
-    
-    const variationElem = document.getElementById('total-variation');
-    if (variationElem) variationElem.className = 'variation-large';
-}
-
-// Función para crear gráfico de precios
-function createPriceChart(productData, filters = { city: 'global', supermarket: 'global', brand: 'global', priceType: 'precio_neto' }) {
-    console.log('📈 Creando gráfico (Marca + Supermercado)');
-    console.log('Tipo de precio seleccionado:', filters.priceType);
-    
-    const canvas = document.getElementById('price-chart');
-    if (!canvas) return { ciudades: [], supermercados: [], marcas: [] };
-    
-    const chartContainer = canvas.parentElement.parentElement;
-    const existingError = chartContainer.querySelector('.chart-info-message');
-    if (existingError) existingError.remove();
-    
-    if (currentChart instanceof Chart) {
-        currentChart.destroy();
-        currentChart = null;
-    }
-    
-    // Actualizar información del tipo de precio
-    const priceTypeInfo = document.getElementById('price-type-info');
-    if (priceTypeInfo) {
-        const span = priceTypeInfo.querySelector('span');
-        if (span) {
-            span.textContent = getPriceTypeLabel(filters.priceType);
-        }
-    }
-    
-    try {
-        let filteredData = productData;
-        
-        if (filters.city !== 'global') filteredData = filteredData.filter(item => item.ciudad === filters.city);
-        if (filters.supermarket !== 'global') filteredData = filteredData.filter(item => item.super === filters.supermarket);
-        if (filters.brand !== 'global') filteredData = filteredData.filter(item => item.marca === filters.brand);
-        
-        console.log(`🌍 Datos después de filtros:`, filteredData.length, 'registros');
-        
-        if (!filteredData || filteredData.length === 0) {
-            const ctx = canvas.getContext('2d');
-            currentChart = new Chart(ctx, {
-                type: 'line',
-                data: { datasets: [] },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    scales: { 
-                        x: { 
-                            type: 'time', 
-                            title: { 
-                                display: true, 
-                                text: 'Fecha',
-                                font: { size: 12, weight: 'bold' }
-                            } 
-                        }, 
-                        y: { 
-                            title: { 
-                                display: true, 
-                                text: getPriceTypeLabel(filters.priceType),
-                                font: { size: 12, weight: 'bold' }
-                            } 
-                        } 
-                    } 
-                }
-            });
-            
-            const infoDiv = document.createElement('div');
-            infoDiv.className = 'chart-info-message';
-            infoDiv.innerHTML = `<p><i class="fas fa-info-circle"></i> No hay datos disponibles con los filtros actuales</p>`;
-            chartContainer.appendChild(infoDiv);
-            
-            return { ciudades: [], supermercados: [], marcas: [] };
-        }
-        
-        const groups = {};
-        const ciudadesDisponibles = new Set();
-        const supermercadosDisponibles = new Set();
-        const marcasDisponibles = new Set();
-        
-        filteredData.forEach(item => {
-            if (!item || !item.super) return;
-            
-            if (item.ciudad) ciudadesDisponibles.add(item.ciudad);
-            if (item.super) supermercadosDisponibles.add(item.super);
-            if (item.marca) marcasDisponibles.add(item.marca);
-            
-            const marca = item.marca || 'Sin marca';
-            const key = `${marca} | ${item.super}`;
-            
-            if (!groups[key]) groups[key] = { marca: marca, super: item.super, datos: [] };
-            
-            // Usar parsearFecha
-            const fecha = parsearFecha(item.fecha);
-            if (isNaN(fecha.getTime())) {
-                console.warn('Fecha inválida:', item.fecha);
-                return;
-            }
-            
-            const precio = getPriceField(item);
-            if (typeof precio !== 'number' || isNaN(precio)) {
-                console.warn('Precio inválido:', precio);
-                return;
-            }
-            
-            groups[key].datos.push({ 
-                fecha: fecha, 
-                precio: precio, 
-                ciudad: item.ciudad || 'Desconocida',
-                precio_neto: item.precio_neto,
-                precio_real: item.precio
-            });
-        });
-        
-        console.log('Combinaciones encontradas (Marca + Super):', Object.keys(groups).length);
-        
-        const validGroups = {};
-        for (const [key, group] of Object.entries(groups)) {
-            if (group.datos.length > 0) {
-                // Usar parsearFecha
-                group.datos.sort((a, b) => a.fecha - b.fecha);
-                validGroups[key] = group;
-            }
-        }
-        
-        if (Object.keys(validGroups).length === 0) {
-            const ctx = canvas.getContext('2d');
-            currentChart = new Chart(ctx, {
-                type: 'line',
-                data: { datasets: [] },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    scales: { 
-                        x: { 
-                            type: 'time', 
-                            title: { 
-                                display: true, 
-                                text: 'Fecha',
-                                font: { size: 12, weight: 'bold' }
-                            } 
-                        }, 
-                        y: { 
-                            title: { 
-                                display: true, 
-                                text: getPriceTypeLabel(filters.priceType),
-                                font: { size: 12, weight: 'bold' }
-                            } 
-                        } 
-                    } 
-                }
-            });
-            
-            const infoDiv = document.createElement('div');
-            infoDiv.className = 'chart-info-message';
-            infoDiv.innerHTML = '<p><i class="fas fa-info-circle"></i> No hay suficientes datos para mostrar líneas en el gráfico</p>';
-            chartContainer.appendChild(infoDiv);
-            
-            return { ciudades: Array.from(ciudadesDisponibles), supermercados: Array.from(supermercadosDisponibles), marcas: Array.from(marcasDisponibles) };
-        }
-        
-        const datasets = [];
-        const colors = ['#4a6fa5', '#6b8e23', '#8b4513', '#2c3e50', '#7d3c98', '#16a085', '#e67e22', '#3498db', '#1abc9c', '#9b59b6', '#34495e', '#27ae60', '#8e44ad', '#2c3e50', '#f39c12'];
-        
-        Object.entries(validGroups).forEach(([combinacion, group], index) => {
-            const { marca, super: supermercado, datos } = group;
-            
-            let label = `${marca} (${supermercado})`;
-            
-            if (datos.length >= 2) {
-                const firstPrice = datos[0].precio;
-                const lastPrice = datos[datos.length - 1].precio;
-                if (firstPrice > 0) {
-                    const variacion = ((lastPrice - firstPrice) / firstPrice) * 100;
-                    label = `${marca} (${supermercado}) ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
-                }
-            }
-            
-            datasets.push({
-                label: label,
-                data: datos.map(d => ({ x: d.fecha, y: d.precio })),
-                borderColor: colors[index % colors.length],
-                backgroundColor: colors[index % colors.length] + '20',
-                borderWidth: datos.length >= 2 ? 2 : 0,
-                tension: 0.2,
-                fill: false,
-                pointRadius: datos.length === 1 ? 6 : 4,
-                pointHoverRadius: datos.length === 1 ? 10 : 6,
-                pointBackgroundColor: colors[index % colors.length],
-                pointBorderColor: '#fff',
-                pointBorderWidth: 1,
-                showLine: datos.length >= 2
-            });
-        });
-        
-        console.log('Datasets preparados:', datasets.length);
-        
-        const ctx = canvas.getContext('2d');
-        
-        const config = {
-            type: 'line',
-            data: { datasets: datasets },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { intersect: false, mode: 'index' },
-                plugins: {
-                    legend: { 
-                        position: 'top', 
-                        labels: { 
-                            font: { size: 11 }, 
-                            padding: 8, 
-                            usePointStyle: true, 
-                            pointStyle: 'circle', 
-                            boxWidth: 8 
-                        } 
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const precio = context.parsed.y;
-                                const fecha = new Date(context.parsed.x);
-                                return `${precio.toFixed(2)}€ (${fecha.toLocaleDateString('es-ES')})`;
-                            },
-                            title: function(context) {
-                                const label = context[0].dataset.label || '';
-                                return label.split(' ').slice(0, -1).join(' ');
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: { 
-                            unit: 'month', 
-                            displayFormats: { month: 'MMM yyyy' }, 
-                            tooltipFormat: 'dd/MM/yyyy' 
-                        },
-                        title: { 
-                            display: true, 
-                            text: 'Fecha', 
-                            font: { size: 12, weight: 'bold' } 
-                        },
-                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
-                    },
-                    y: {
-                        beginAtZero: false,
-                        title: { 
-                            display: true, 
-                            text: getPriceTypeLabel(filters.priceType), 
-                            font: { size: 12, weight: 'bold' } 
-                        },
-                        ticks: { 
-                            callback: function(value) { 
-                                return value.toFixed(2) + '€'; 
-                            } 
-                        },
-                        grid: { color: 'rgba(0, 0, 0, 0.05)' }
-                    }
-                }
-            }
-        };
-        
-        currentChart = new Chart(ctx, config);
-        console.log('✅ Gráfico creado exitosamente');
-        
-        return { 
-            ciudades: Array.from(ciudadesDisponibles), 
-            supermercados: Array.from(supermercadosDisponibles), 
-            marcas: Array.from(marcasDisponibles) 
-        };
-        
-    } catch (error) {
-        console.error('❌ Error al crear gráfico:', error);
-        
-        const ctx = canvas.getContext('2d');
-        currentChart = new Chart(ctx, {
-            type: 'line',
-            data: { datasets: [] },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                scales: { 
-                    x: { 
-                        type: 'time', 
-                        title: { 
-                            display: true, 
-                            text: 'Fecha',
-                            font: { size: 12, weight: 'bold' }
-                        } 
-                    }, 
-                    y: { 
-                        title: { 
-                            display: true, 
-                            text: getPriceTypeLabel(filters.priceType),
-                            font: { size: 12, weight: 'bold' }
-                        } 
-                    } 
-                } 
-            }
-        });
-        
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'chart-info-message';
-        errorDiv.innerHTML = `<p><i class="fas fa-info-circle"></i> Error al crear el gráfico</p><p><small>Intenta buscar otro producto o cambiar los filtros</small></p>`;
-        chartContainer.appendChild(errorDiv);
-        
-        return { ciudades: [], supermercados: [], marcas: [] };
-    }
-}
-
-// Configurar selectores de filtros
-function setupFilters(productData, ciudades, supermercados, marcas) {
-    const citySelect = document.getElementById('city-filter');
-    const supermarketSelect = document.getElementById('supermarket-filter');
-    const brandSelect = document.getElementById('brand-filter');
-    const priceTypeSelect = document.getElementById('price-type-filter');
-    const resetBtn = document.getElementById('reset-filter');
-    
-    if (!citySelect || !supermarketSelect || !brandSelect || !priceTypeSelect || !resetBtn) return;
-    
-    updateFilterSelector(citySelect, ciudades, currentFilters.city);
-    updateFilterSelector(supermarketSelect, supermercados, currentFilters.supermarket);
-    updateFilterSelector(brandSelect, marcas, currentFilters.brand);
-    
-    // Configurar evento de cambio para cada filtro
-    const applyFilter = () => {
-        const selectedCity = citySelect.value;
-        const selectedSupermarket = supermarketSelect.value;
-        const selectedBrand = brandSelect.value;
-        const selectedPriceType = priceTypeSelect.value;
-        
-        currentFilters = { 
-            city: selectedCity, 
-            supermarket: selectedSupermarket, 
-            brand: selectedBrand,
-            priceType: selectedPriceType
-        };
-        
-        console.log(`🌍 Aplicando filtros automáticamente: Ciudad=${selectedCity}, Supermercado=${selectedSupermarket}, Marca=${selectedBrand}, TipoPrecio=${selectedPriceType}`);
-        
-        showLoading('Actualizando gráfico...');
-        setTimeout(() => {
-            updateProductSummary(productData, currentFilters);
-            createPriceChart(productData, currentFilters);
-            showBrandDetails(productData, currentFilters);
-            hideLoading();
-        }, 100);
-    };
-    
-    // Aplicar automáticamente al cambiar cualquier filtro
-    citySelect.addEventListener('change', applyFilter);
-    supermarketSelect.addEventListener('change', applyFilter);
-    brandSelect.addEventListener('change', applyFilter);
-    priceTypeSelect.addEventListener('change', applyFilter);
-    
-    resetBtn.addEventListener('click', function() {
-        citySelect.value = 'global';
-        supermarketSelect.value = 'global';
-        brandSelect.value = 'global';
-        priceTypeSelect.value = 'precio_neto';
-        currentFilters = { 
-            city: 'global', 
-            supermarket: 'global', 
-            brand: 'global',
-            priceType: 'precio_neto'
-        };
-        
-        console.log('🔄 Restableciendo filtros');
-        
-        showLoading('Restableciendo filtros...');
-        setTimeout(() => {
-            updateProductSummary(productData, currentFilters);
-            createPriceChart(productData, currentFilters);
-            showBrandDetails(productData, currentFilters);
-            hideLoading();
-        }, 100);
-    });
-}
-
-function updateFilterSelector(selectElement, options, selectedValue) {
-    if (!selectElement) return;
-    
-    const currentValue = selectElement.value;
-    const firstOption = selectElement.options[0];
-    selectElement.innerHTML = '';
-    if (firstOption) selectElement.appendChild(firstOption);
-    
-    options.sort();
-    options.forEach(option => {
-        const opt = document.createElement('option');
-        opt.value = option;
-        opt.textContent = option;
-        selectElement.appendChild(opt);
-    });
-    
-    if (options.includes(currentValue)) selectElement.value = currentValue;
-    else selectElement.value = selectedValue;
-}
-
-// Mostrar detalles por marca/supermercado
-function showBrandDetails(productData, filters = { city: 'global', supermarket: 'global', brand: 'global', priceType: 'precio_neto' }) {
-    const container = document.getElementById('brand-details');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    if (!productData || productData.length === 0) {
-        container.innerHTML = '<p class="no-data">No hay datos de detalles</p>';
-        return;
-    }
-    
-    let filteredData = productData;
-    
-    if (filters.city !== 'global') filteredData = filteredData.filter(item => item.ciudad === filters.city);
-    if (filters.supermarket !== 'global') filteredData = filteredData.filter(item => item.super === filters.supermarket);
-    if (filters.brand !== 'global') filteredData = filteredData.filter(item => item.marca === filters.brand);
-    
-    if (filteredData.length === 0) {
-        container.innerHTML = '<p class="no-data">No hay datos con los filtros aplicados</p>';
-        return;
-    }
-    
-    const groups = {};
-    filteredData.forEach(item => {
-        if (!item || !item.super) return;
-        
-        const marca = item.marca || 'Sin marca';
-        const key = `${marca} | ${item.super}`;
-        
-        if (!groups[key]) groups[key] = { marca: marca, super: item.super, datos: [] };
-        groups[key].datos.push(item);
-    });
-    
-    console.log('Grupos para detalles (Marca + Super):', Object.keys(groups).length);
-    
-    Object.entries(groups).forEach(([combinacion, group]) => {
-        if (group.datos.length === 0) return;
-        
-        // Usar parsearFecha
-        group.datos.sort((a, b) => parsearFecha(a.fecha) - parsearFecha(b.fecha));
-        
-        const firstItem = group.datos[0];
-        const lastItem = group.datos[group.datos.length - 1];
-        
-        const firstPrice = getPriceField(firstItem);
-        const lastPrice = getPriceField(lastItem);
-        
-        let variacion = 0;
-        let variacionTexto = 'N/A';
-        if (firstPrice > 0 && typeof firstPrice === 'number') {
-            variacion = ((lastPrice - firstPrice) / firstPrice) * 100;
-            variacionTexto = `${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
-        }
-        
-        const precioPromedio = group.datos.reduce((sum, item) => {
-            const precio = getPriceField(item);
-            return sum + precio;
-        }, 0) / group.datos.length;
-        
-        const card = document.createElement('div');
-        card.className = 'brand-card';
-        card.innerHTML = `
-            <div class="brand-header">
-                <h4>${group.marca}</h4>
-                <span class="super-badge">${group.super}</span>
-            </div>
-            <div class="brand-info">
-                <div>
-                    <small>Primer ${filters.priceType === 'precio_neto' ? 'precio neto' : 'precio real'}</small>
-                    <p>${firstPrice.toFixed(2)}€</p>
-                    <small class="date">${formatearFechaParaMostrar(firstItem.fecha)}</small>
-                </div>
-                <div>
-                    <small>Último ${filters.priceType === 'precio_neto' ? 'precio neto' : 'precio real'}</small>
-                    <p>${lastPrice.toFixed(2)}€</p>
-                    <small class="date">${formatearFechaParaMostrar(lastItem.fecha)}</small>
-                </div>
-                <div>
-                    <small>Variación</small>
-                    <p class="${variacion >= 0 ? 'positive' : 'negative'}">${variacionTexto}</p>
-                </div>
-                <div>
-                    <small>Promedio</small>
-                    <p>${precioPromedio.toFixed(2)}€</p>
-                </div>
-            </div>
-            <div class="brand-meta">
-                <span><i class="fas fa-database"></i> ${group.datos.length} registros</span>
-                <span><i class="fas fa-money-bill-wave"></i> ${filters.priceType === 'precio_neto' ? 'Precio neto' : 'Precio real'}</span>
-            </div>
-        `;
-        
-        container.appendChild(card);
-    });
-    
-    if (container.innerHTML === '') {
-        container.innerHTML = '<p class="no-data">No hay datos agrupados con los filtros actuales</p>';
-    }
-}
-
 // Mostrar análisis de variación
 function showVariationAnalysis() {
     showScreen('variation');
@@ -1284,7 +1396,6 @@ function showTopVariations(type) {
         if (!item.producto || !item.super) return;
         
         const key = `${item.producto}||${item.marca || 'Sin marca'}||${item.super}`;
-        // Usar parsearFecha
         const currentDate = parsearFecha(item.fecha);
         
         if (!latestProducts.has(key) || currentDate > parsearFecha(latestProducts.get(key).fecha)) {
@@ -1348,8 +1459,8 @@ function showTopVariations(type) {
                         </div>
                         <small>Última actualización: ${formatearFechaParaMostrar(item.fecha)}</small>
                     </div>
-                    <button class="view-btn" onclick="searchProduct('${item.producto.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-chart-line"></i>
+                    <button class="view-btn" onclick="addProductToComparison('${item.producto.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-plus"></i>
                     </button>
                 `;
                 container.appendChild(itemElement);
@@ -1439,7 +1550,6 @@ function updateInflationStats() {
             if (!validCombinations.has(key)) return;
             if (item.variacion_total === null || item.variacion_total === undefined) return;
             
-            // Usar parsearFecha
             const currentDate = parsearFecha(item.fecha);
             
             if (!latestVariations.has(key) || currentDate > parsearFecha(latestVariations.get(key).fecha)) {
@@ -1468,7 +1578,6 @@ function updateInflationStats() {
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
             
-            // Usar parsearFecha
             const fechaParsed = parsearFecha(item.fecha);
             const itemYear = fechaParsed ? fechaParsed.getFullYear().toString() : null;
             if (itemYear !== selectedYear) return;
@@ -1652,8 +1761,8 @@ function showFilterResults(filterType, value) {
             ${uniqueProductsInFilter.slice(0, 10).map(product => `
                 <div class="filter-product-item">
                     <span>${product}</span>
-                    <button onclick="searchProduct('${product.replace(/'/g, "\\'")}')">
-                        <i class="fas fa-chart-line"></i>
+                    <button onclick="addProductToComparison('${product.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-plus"></i>
                     </button>
                 </div>
             `).join('')}
@@ -1815,37 +1924,5 @@ function showError(message) {
 // Hacer funciones disponibles globalmente
 window.searchProduct = searchProduct;
 window.hideError = hideError;
-
-// Función para debug
-window.debugProduct = function(productName) {
-    const exactMatches = productosData.filter(p => 
-        p.producto && p.producto.toLowerCase() === productName.toLowerCase()
-    );
-    
-    console.log('=== DEBUG PRODUCTO ===');
-    console.log('Producto buscado:', productName);
-    console.log('Coincidencias exactas:', exactMatches.length);
-    
-    const partialMatches = productosData.filter(p => 
-        p.producto && p.producto.toLowerCase().includes(productName.toLowerCase())
-    );
-    console.log('Coincidencias parciales:', partialMatches.length);
-    
-    const groups = {};
-    exactMatches.forEach(item => {
-        const key = item.super || 'Sin supermercado';
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(item);
-    });
-    
-    console.log('Por supermercado:');
-    Object.entries(groups).forEach(([superName, items]) => {
-        console.log(`  ${superName}: ${items.length} registros`);
-        items.sort((a, b) => parsearFecha(a.fecha) - parsearFecha(b.fecha));
-        console.log(`    Fechas: ${items[0].fecha} → ${items[items.length-1].fecha}`);
-        console.log(`    Precios: ${items[0].precio} → ${items[items.length-1].precio}`);
-        console.log(`    Precios netos: ${items[0].precio_neto} → ${items[items.length-1].precio_neto}`);
-    });
-    
-    return exactMatches;
-};
+window.addProductToComparison = addProductToComparison;
+window.removeProductFromComparison = removeProductFromComparison;
