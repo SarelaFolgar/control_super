@@ -21,7 +21,13 @@ function parsearFecha(fechaStr) {
     if (!fechaStr) return null;
     
     try {
-        // Formato YYYY-MM-DD (el que usa tu JSON)
+        // Formato DD-MM-YYYY (el que tienes en tus datos)
+        if (fechaStr.includes('-') && fechaStr.split('-')[0].length === 2) {
+            const [dia, mes, año] = fechaStr.split('-').map(Number);
+            return new Date(año, mes - 1, dia);
+        }
+        
+        // Formato YYYY-MM-DD (por si acaso hay datos en este formato)
         if (fechaStr.includes('-') && fechaStr.split('-')[0].length === 4) {
             const [año, mes, dia] = fechaStr.split('-').map(Number);
             return new Date(año, mes - 1, dia);
