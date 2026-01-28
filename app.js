@@ -1648,7 +1648,6 @@ function updateInflationStats() {
                 <h4>Combinaciones Analizadas</h4>
                 <p class="inflation-stat-number">${result.productCount}</p>
                 <small>Producto + Marca + Supermercado + Cantidad</small>
-                <small>Cantidad promedio: ${result.promedioCantidad}${result.unidad}</small>
                 ${result.totalCombinations > 0 ? `<br><small>De ${result.totalCombinations} combinaciones totales</small>` : ''}
             </div>
         </div>
@@ -1661,7 +1660,6 @@ function updateInflationStats() {
                 <h4>Variaciones Válidas</h4>
                 <p class="inflation-stat-number">${result.recordCount}</p>
                 <small>Variaciones después de aplicar filtros</small>
-                <small>Considerando cantidad específica</small>
             </div>
         </div>
         
@@ -1684,7 +1682,6 @@ function updateInflationStats() {
             <div class="inflation-stat-content">
                 <h4>Nota Metodológica</h4>
                 <p>Se excluyeron ${result.excludedCount} combinaciones por tener menos de 3 registros.</p>
-                <small>Ahora se considera producto, marca, supermercado Y cantidad específica.</small>
             </div>
         </div>
         ` : ''}
@@ -1917,6 +1914,7 @@ window.searchProduct = searchProduct;
 window.hideError = hideError;
 window.addProductToComparison = addProductToComparison;
 window.removeProductFromComparison = removeProductFromComparison;
+
 
 
 
