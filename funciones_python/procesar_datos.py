@@ -361,6 +361,7 @@ def main():
       "alcampo":"tenerife",
         "multitienda nk2":"tenerife",
         "corte ingles":"tenerife",
+        "mercadona av ppe":"tenerife",
       "charco":"valle gran rey",
       "flor del valle":"valle gran rey",
       "fruteria":"valle gran rey",
