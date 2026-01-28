@@ -75,7 +75,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 08/03/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
 08/03/2025,spar borbalan,lechuga,1.0,ud,cogollos,2.09
 08/03/2025,spar borbalan,carne picada de anojo,1000.0,g,no aplica,13.3
-08/03/2025,spar borbalan,leche entera,2000.0,g,asturiana,2.5
+08/03/2025,spar borbalan,leche entera,6000.0,g,asturiana,7.5
 04/03/2025,spar borbalan,mermelada de fresa,330.0,g,ligeresa,2.39
 04/03/2025,spar borbalan,pan,125.0,g,no aplica,0.59
 04/03/2025,olivier,patatillas,125.0,g,lays,1.5
@@ -127,7 +127,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 31/01/2025,spar borbalan,natillas vainilla,500.0,g,spar,1.73
 31/01/2025,spar borbalan,lechuga,1.0,ud,batavia,2.25
 31/01/2025,spar borbalan,chorizo perro,2.0,ud,el palmero,1.38
-31/01/2025,spar borbalan,leche entera,6.0,ud,asturiana,7.5
+31/01/2025,spar borbalan,leche entera,6000.0,g,asturiana,7.5
 30/01/2025,spar playa,patatas,1000.0,g,no aplica,1.85
 30/01/2025,spar playa,espinacas congeladas,400.0,g,spar,1.43
 30/01/2025,spar playa,harina,1000.0,g,pan,2.52
@@ -238,7 +238,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 02/01/2025,spar borbalan,bacon,200.0,g,el pozo,2.59
 02/01/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
 02/01/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
-02/01/2025,spar borbalan,leche entera,6.0,ud,asturiana,7.2
+02/01/2025,spar borbalan,leche entera,6000.0,g,asturiana,7.2
 26/12/2024,spar playa,tortitas de arroz con chocolate,120.0,g,noglut,2.75
 26/12/2024,spar playa,galletas maria sin gluten,200.0,g,schar,2.58
 26/12/2024,spar playa,pan de cadiz,250.0,g,pico,4.19
@@ -319,7 +319,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 26/12/2025,spar borbalan,yogur fresa,480.0,g,danone,1.79
 26/12/2025,spar borbalan,tomate cherry,250.0,g,pera,1.25
 01/09/2025,spar borbalan,jamon serrano,220.0,g,navidul,4.81
-01/09/2025,spar borbalan,leche entera,1000.0,g,asturiana,1.26
+01/09/2025,spar borbalan,leche entera,6000.0,g,asturiana,7.56
 15/12/2025,spar borbalan,muesli chocolate,500.0,g,spar,2.79
 15/12/2025,spar borbalan,yogur griego,900.0,g,oikos,5.19
 15/12/2025,spar borbalan,cebolla,1000.0,g,no aplica,2.29
