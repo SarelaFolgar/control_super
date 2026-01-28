@@ -1339,7 +1339,11 @@ function showTopVariations(type) {
     productosData.forEach(item => {
         if (!item.producto || !item.super) return;
         
-        const key = `${item.producto}||${item.marca || 'Sin marca'}||${item.super}`;
+        // AÑADIR CANTIDAD A LA CLAVE - CAMBIO PRINCIPAL
+        const cantidad = item.cantidad || 0;
+        const unidad = item.unidad || 'g';
+        const key = `${item.producto}||${item.marca || 'Sin marca'}||${item.super}||${cantidad}${unidad}`;
+        
         const currentDate = parsearFecha(item.fecha);
         
         if (!latestProducts.has(key) || currentDate > parsearFecha(latestProducts.get(key).fecha)) {
@@ -1348,6 +1352,8 @@ function showTopVariations(type) {
                 producto: item.producto,
                 marca: item.marca || 'Sin marca',
                 super: item.super,
+                cantidad: cantidad,
+                unidad: unidad,
                 variacion_total: item.variacion_total || 0
             });
         }
@@ -1394,6 +1400,7 @@ function showTopVariations(type) {
                         <div class="product-details">
                             <span><i class="fas fa-tag"></i> ${item.marca}</span>
                             <span><i class="fas fa-store"></i> ${item.super}</span>
+                            <span><i class="fas fa-weight-hanging"></i> ${item.cantidad}${item.unidad}</span>
                         </div>
                         <div class="top-stats">
                             <span>Variación total</span>
@@ -1475,7 +1482,12 @@ function updateInflationStats() {
         
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
-            const key = `${item.producto}||${item.super}||${item.marca}`;
+            
+            // AÑADIR CANTIDAD A LA CLAVE - CAMBIO PRINCIPAL
+            const cantidad = item.cantidad || 0;
+            const unidad = item.unidad || 'g';
+            const key = `${item.producto}||${item.super}||${item.marca}||${cantidad}${unidad}`;
+            
             combinationCounts.set(key, (combinationCounts.get(key) || 0) + 1);
         });
         
@@ -1490,19 +1502,35 @@ function updateInflationStats() {
         
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
-            const key = `${item.producto}||${item.super}||${item.marca}`;
+            
+            // AÑADIR CANTIDAD A LA CLAVE - CONSISTENCIA
+            const cantidad = item.cantidad || 0;
+            const unidad = item.unidad || 'g';
+            const key = `${item.producto}||${item.super}||${item.marca}||${cantidad}${unidad}`;
+            
             if (!validCombinations.has(key)) return;
             if (item.variacion_total === null || item.variacion_total === undefined) return;
             
             const currentDate = parsearFecha(item.fecha);
             
             if (!latestVariations.has(key) || currentDate > parsearFecha(latestVariations.get(key).fecha)) {
-                latestVariations.set(key, { fecha: currentDate, variacion: item.variacion_total });
+                latestVariations.set(key, { 
+                    fecha: currentDate, 
+                    variacion: item.variacion_total,
+                    cantidad: cantidad,
+                    unidad: unidad
+                });
             }
         });
         
         const validVariations = Array.from(latestVariations.values()).map(v => v.variacion);
         const validProductsCount = latestVariations.size;
+        
+        // Calcular promedio de cantidad para mostrar en resultados
+        const promedioCantidad = Array.from(latestVariations.values()).reduce((sum, v) => sum + v.cantidad, 0) / validProductsCount;
+        const unidadMasComun = Array.from(latestVariations.values()).length > 0 
+            ? Array.from(latestVariations.values())[0].unidad 
+            : 'g';
         
         result = {
             title: 'Inflación Total',
@@ -1512,7 +1540,9 @@ function updateInflationStats() {
             recordCount: validVariations.length,
             excludedCount: excludedProducts,
             totalCombinations: totalCombinations,
-            year: 'Total'
+            year: 'Total',
+            promedioCantidad: promedioCantidad.toFixed(0),
+            unidad: unidadMasComun
         };
         
     } else {
@@ -1528,7 +1558,11 @@ function updateInflationStats() {
             
             if (item[yearField] === null || item[yearField] === undefined) return;
             
-            const key = `${item.producto}||${item.super}||${item.marca}`;
+            // AÑADIR CANTIDAD A LA CLAVE - CAMBIO PRINCIPAL
+            const cantidad = item.cantidad || 0;
+            const unidad = item.unidad || 'g';
+            const key = `${item.producto}||${item.super}||${item.marca}||${cantidad}${unidad}`;
+            
             combinationYearCounts.set(key, (combinationYearCounts.get(key) || 0) + 1);
         });
         
@@ -1548,19 +1582,34 @@ function updateInflationStats() {
             const itemYear = fechaParsed ? fechaParsed.getFullYear().toString() : null;
             if (itemYear !== selectedYear) return;
             
-            const key = `${item.producto}||${item.super}||${item.marca}`;
+            // AÑADIR CANTIDAD A LA CLAVE - CONSISTENCIA
+            const cantidad = item.cantidad || 0;
+            const unidad = item.unidad || 'g';
+            const key = `${item.producto}||${item.super}||${item.marca}||${cantidad}${unidad}`;
+            
             if (!validCombinations.has(key)) return;
             if (item[yearField] === null || item[yearField] === undefined) return;
             
             const currentDate = parsearFecha(item.fecha);
             
             if (!latestVariations.has(key) || currentDate > parsearFecha(latestVariations.get(key).fecha)) {
-                latestVariations.set(key, { fecha: currentDate, variacion: item[yearField] });
+                latestVariations.set(key, { 
+                    fecha: currentDate, 
+                    variacion: item[yearField],
+                    cantidad: cantidad,
+                    unidad: unidad
+                });
             }
         });
         
         const validVariations = Array.from(latestVariations.values()).map(v => v.variacion);
         const validProductsCount = latestVariations.size;
+        
+        // Calcular promedio de cantidad para mostrar en resultados
+        const promedioCantidad = Array.from(latestVariations.values()).reduce((sum, v) => sum + v.cantidad, 0) / validProductsCount;
+        const unidadMasComun = Array.from(latestVariations.values()).length > 0 
+            ? Array.from(latestVariations.values())[0].unidad 
+            : 'g';
         
         result = {
             title: `Inflación ${selectedYear}`,
@@ -1570,7 +1619,9 @@ function updateInflationStats() {
             recordCount: validVariations.length,
             excludedCount: excludedProducts,
             totalCombinations: totalCombinations,
-            year: selectedYear
+            year: selectedYear,
+            promedioCantidad: promedioCantidad.toFixed(0),
+            unidad: unidadMasComun
         };
     }
     
@@ -1585,7 +1636,7 @@ function updateInflationStats() {
                     ${result.inflation >= 0 ? '+' : ''}${result.inflation.toFixed(1)}%
                 </p>
                 <small>${result.description}</small>
-                ${result.excludedCount > 0 ? `<br><small class="excluded-info"><i class="fas fa-filter"></i> ${result.excludedCount} productos excluidos (menos de 3 registros)</small>` : ''}
+                ${result.excludedCount > 0 ? `<br><small class="excluded-info"><i class="fas fa-filter"></i> ${result.excludedCount} combinaciones excluidas (menos de 3 registros)</small>` : ''}
             </div>
         </div>
         
@@ -1594,9 +1645,10 @@ function updateInflationStats() {
                 <i class="fas fa-box"></i>
             </div>
             <div class="inflation-stat-content">
-                <h4>Productos Analizados</h4>
+                <h4>Combinaciones Analizadas</h4>
                 <p class="inflation-stat-number">${result.productCount}</p>
-                <small>Combinaciones con suficientes datos (≥3 registros)</small>
+                <small>Producto + Marca + Supermercado + Cantidad</small>
+                <small>Cantidad promedio: ${result.promedioCantidad}${result.unidad}</small>
                 ${result.totalCombinations > 0 ? `<br><small>De ${result.totalCombinations} combinaciones totales</small>` : ''}
             </div>
         </div>
@@ -1609,6 +1661,7 @@ function updateInflationStats() {
                 <h4>Variaciones Válidas</h4>
                 <p class="inflation-stat-number">${result.recordCount}</p>
                 <small>Variaciones después de aplicar filtros</small>
+                <small>Considerando cantidad específica</small>
             </div>
         </div>
         
@@ -1630,8 +1683,8 @@ function updateInflationStats() {
             </div>
             <div class="inflation-stat-content">
                 <h4>Nota Metodológica</h4>
-                <p>Se excluyeron ${result.excludedCount} productos por tener menos de 3 registros.</p>
-                <small>Esto asegura que la inflación se calcule solo con datos confiables.</small>
+                <p>Se excluyeron ${result.excludedCount} combinaciones por tener menos de 3 registros.</p>
+                <small>Ahora se considera producto, marca, supermercado Y cantidad específica.</small>
             </div>
         </div>
         ` : ''}
@@ -1864,6 +1917,7 @@ window.searchProduct = searchProduct;
 window.hideError = hideError;
 window.addProductToComparison = addProductToComparison;
 window.removeProductFromComparison = removeProductFromComparison;
+
 
 
 
