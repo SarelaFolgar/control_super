@@ -175,22 +175,22 @@ def columna_por_diccionario(df, col_original, col_nueva, diccionario):
 
 def calcular_ultimos_primeros_precios_netos(df):
     """
-    Calcula varios tipos de precios netos:
-    1. ultimo_precio_neto: Último precio para cada producto/marca/super (todos los años)
-    2. ultimo_precio_neto_YYYY: Último precio por año para cada producto/marca/super
-    3. primer_precio_neto: Primer precio para cada producto/marca/super (todos los años)
-    4. primer_precio_neto_YYYY: Primer precio por año para cada producto/marca/super
+    Calcula varios tipos de precios netos INCLUYENDO CANTIDAD:
+    1. ultimo_precio_neto: Último precio para cada producto/marca/super/CANTIDAD (todos los años)
+    2. ultimo_precio_neto_YYYY: Último precio por año para cada producto/marca/super/CANTIDAD
+    3. primer_precio_neto: Primer precio para cada producto/marca/super/CANTIDAD (todos los años)
+    4. primer_precio_neto_YYYY: Primer precio por año para cada producto/marca/super/CANTIDAD
     
     Args:
-        df: DataFrame con columnas 'fecha_dt', 'producto', 'marca', 'super', 'precio_neto'
+        df: DataFrame con columnas 'fecha_dt', 'producto', 'marca', 'super', 'cantidad', 'unidad', 'precio_neto'
     
     Returns:
         DataFrame con nuevas columnas de precios
     """    
-    print("📊 Calculando precios netos históricos...")
+    print("📊 Calculando precios netos históricos (INCLUYENDO CANTIDAD)...")
     
-    # Verificar columnas necesarias - usar 'fecha_dt' en lugar de 'fecha'
-    columnas_necesarias = ['fecha_dt', 'producto', 'marca', 'super', 'precio_neto']
+    # Verificar columnas necesarias - AHORA INCLUYENDO CANTIDAD Y UNIDAD
+    columnas_necesarias = ['fecha_dt', 'producto', 'marca', 'super', 'cantidad', 'unidad', 'precio_neto']
     for col in columnas_necesarias:
         if col not in df.columns:
             print(f"❌ Error: Falta columna '{col}'")
@@ -203,33 +203,37 @@ def calcular_ultimos_primeros_precios_netos(df):
     if 'ano' not in df_calc.columns:
         df_calc['ano'] = df_calc['fecha_dt'].dt.year
     
-    # 1. ÚLTIMO PRECIO GENERAL (todos los años)
-    print("1. Último precio general (todos los años)...")
+    # Crear clave única que INCLUYE CANTIDAD
+    # Usamos 'cantidad_unidad' para diferenciar 100g vs 50g vs 200g
+    df_calc['cantidad_unidad'] = df_calc['cantidad'].astype(str) + df_calc['unidad']
+    
+    # 1. ÚLTIMO PRECIO GENERAL (todos los años) - CON CANTIDAD
+    print("1. Último precio general (todos los años, con cantidad)...")
     df_sorted_desc = df_calc.sort_values('fecha_dt', ascending=False)
     ultimos_generales = df_sorted_desc.drop_duplicates(
-        subset=['producto', 'marca', 'super']
-    )[['producto', 'marca', 'super', 'precio_neto']]
+        subset=['producto', 'marca', 'super', 'cantidad_unidad']
+    )[['producto', 'marca', 'super', 'cantidad_unidad', 'precio_neto']]
     ultimos_generales = ultimos_generales.rename(
         columns={'precio_neto': 'ultimo_precio_neto'}
     )
     
-    # 2. PRIMER PRECIO GENERAL
-    print("2. Primer precio general (todos los años)...")
+    # 2. PRIMER PRECIO GENERAL - CON CANTIDAD
+    print("2. Primer precio general (todos los años, con cantidad)...")
     df_sorted_asc = df_calc.sort_values('fecha_dt', ascending=True)
     primeros_generales = df_sorted_asc.drop_duplicates(
-        subset=['producto', 'marca', 'super']
-    )[['producto', 'marca', 'super', 'precio_neto']]
+        subset=['producto', 'marca', 'super', 'cantidad_unidad']
+    )[['producto', 'marca', 'super', 'cantidad_unidad', 'precio_neto']]
     primeros_generales = primeros_generales.rename(
         columns={'precio_neto': 'primer_precio_neto'}
     )
     
     # Combinar precios generales
-    df_calc = df_calc.merge(ultimos_generales, on=['producto', 'marca', 'super'], how='left')
-    df_calc = df_calc.merge(primeros_generales, on=['producto', 'marca', 'super'], how='left')
+    df_calc = df_calc.merge(ultimos_generales, on=['producto', 'marca', 'super', 'cantidad_unidad'], how='left')
+    df_calc = df_calc.merge(primeros_generales, on=['producto', 'marca', 'super', 'cantidad_unidad'], how='left')
     
-    # 3. PRECIOS POR AÑO (por producto/marca/super dentro de cada año)
+    # 3. PRECIOS POR AÑO (por producto/marca/super/cantidad dentro de cada año)
     años_unicos = sorted(df_calc['ano'].dropna().unique())
-    print(f"3. Procesando precios por año ({len(años_unicos)} años encontrados)...")
+    print(f"3. Procesando precios por año ({len(años_unicos)} años encontrados, CON CANTIDAD)...")
     
     for año in años_unicos:
         print(f"   Año {año}...")
@@ -238,32 +242,35 @@ def calcular_ultimos_primeros_precios_netos(df):
         if len(df_año) == 0:
             continue
         
-        # Último precio del año (por producto/marca/super)
+        # Último precio del año (por producto/marca/super/cantidad)
         df_año_desc = df_año.sort_values('fecha_dt', ascending=False)
         ultimos_año = df_año_desc.drop_duplicates(
-            subset=['producto', 'marca', 'super']
-        )[['producto', 'marca', 'super', 'precio_neto']]
+            subset=['producto', 'marca', 'super', 'cantidad_unidad']
+        )[['producto', 'marca', 'super', 'cantidad_unidad', 'precio_neto']]
         ultimos_año = ultimos_año.rename(
             columns={'precio_neto': f'ultimo_precio_neto_{int(año)}'}
         )
         
-        # Primer precio del año (por producto/marca/super)
+        # Primer precio del año (por producto/marca/super/cantidad)
         df_año_asc = df_año.sort_values('fecha_dt', ascending=True)
         primeros_año = df_año_asc.drop_duplicates(
-            subset=['producto', 'marca', 'super']
-        )[['producto', 'marca', 'super', 'precio_neto']]
+            subset=['producto', 'marca', 'super', 'cantidad_unidad']
+        )[['producto', 'marca', 'super', 'cantidad_unidad', 'precio_neto']]
         primeros_año = primeros_año.rename(
             columns={'precio_neto': f'primer_precio_neto_{int(año)}'}
         )
         
         # Combinar
-        df_calc = df_calc.merge(ultimos_año, on=['producto', 'marca', 'super'], how='left')
-        df_calc = df_calc.merge(primeros_año, on=['producto', 'marca', 'super'], how='left')
+        df_calc = df_calc.merge(ultimos_año, on=['producto', 'marca', 'super', 'cantidad_unidad'], how='left')
+        df_calc = df_calc.merge(primeros_año, on=['producto', 'marca', 'super', 'cantidad_unidad'], how='left')
     
-    print("\n✅ Precios calculados:")
-    print(f"   - Último precio general: para {len(ultimos_generales)} combinaciones producto/marca/super")
-    print(f"   - Primer precio general: para {len(primeros_generales)} combinaciones producto/marca/super")
+    print("\n✅ Precios calculados (INCLUYENDO CANTIDAD):")
+    print(f"   - Último precio general: para {len(ultimos_generales)} combinaciones producto/marca/super/cantidad")
+    print(f"   - Primer precio general: para {len(primeros_generales)} combinaciones producto/marca/super/cantidad")
     print(f"   - Precios por año: para {len(años_unicos)} años diferentes")
+    
+    # Eliminar columna temporal 'cantidad_unidad'
+    df_calc = df_calc.drop('cantidad_unidad', axis=1)
     
     # Mostrar columnas añadidas
     nuevas_columnas = [col for col in df_calc.columns if 'precio_neto_' in col or col in ['ultimo_precio_neto', 'primer_precio_neto']]
@@ -273,12 +280,12 @@ def calcular_ultimos_primeros_precios_netos(df):
 
 def calcular_variaciones(df):
     """
-    Calcula múltiples variaciones de precio:
-    1. variacion_actual: entre precio_neto y ultimo_precio_neto
-    2. variacion_total: entre primer_precio_neto y ultimo_precio_neto  
-    3. variacion_YYYY: para cada año entre primer_precio_neto_YYYY y ultimo_precio_neto_YYYY
+    Calcula múltiples variaciones de precio INCLUYENDO CANTIDAD:
+    1. variacion_actual: entre precio_neto y ultimo_precio_neto (para misma cantidad)
+    2. variacion_total: entre primer_precio_neto y ultimo_precio_neto (para misma cantidad)
+    3. variacion_YYYY: para cada año entre primer_precio_neto_YYYY y ultimo_precio_neto_YYYY (para misma cantidad)
     """    
-    print("📊 Calculando variaciones de precio...")
+    print("📊 Calculando variaciones de precio (INCLUYENDO CANTIDAD)...")
     
     # Verificar columnas básicas
     if 'precio_neto' not in df.columns:
@@ -288,32 +295,32 @@ def calcular_variaciones(df):
     # Crear copia
     df_calc = df.copy()
     
-    # 1. VARIACIÓN ACTUAL (precio actual vs último precio)
+    # 1. VARIACIÓN ACTUAL (precio actual vs último precio para MISMA CANTIDAD)
     if 'ultimo_precio_neto' in df_calc.columns:
-        print("1. Calculando variación actual...")
+        print("1. Calculando variación actual (con cantidad)...")
         # Calcular variación porcentual: ((último - actual) / actual) * 100
         df_calc['variacion_actual'] = ((df_calc['ultimo_precio_neto'] - df_calc['precio_neto']) / df_calc['precio_neto']) * 100
         df_calc['variacion_actual'] = df_calc['variacion_actual'].round(2)
         
         variaciones_actuales = df_calc['variacion_actual'].notna().sum()
-        print(f"   ✅ Calculada para {variaciones_actuales}/{len(df_calc)} registros")
+        print(f"   ✅ Calculada para {variaciones_actuales}/{len(df_calc)} registros (misma cantidad)")
     else:
         print("⚠️  Advertencia: No se calculó variación actual (falta 'ultimo_precio_neto')")
     
-    # 2. VARIACIÓN TOTAL (primero vs último)
+    # 2. VARIACIÓN TOTAL (primero vs último para MISMA CANTIDAD)
     if 'primer_precio_neto' in df_calc.columns and 'ultimo_precio_neto' in df_calc.columns:
-        print("2. Calculando variación total...")
+        print("2. Calculando variación total (con cantidad)...")
         # Calcular variación porcentual: ((último - primero) / primero) * 100
         df_calc['variacion_total'] = ((df_calc['ultimo_precio_neto'] - df_calc['primer_precio_neto']) / df_calc['primer_precio_neto']) * 100
         df_calc['variacion_total'] = df_calc['variacion_total'].round(2)
         
         variaciones_totales = df_calc['variacion_total'].notna().sum()
-        print(f"   ✅ Calculada para {variaciones_totales}/{len(df_calc)} registros")
+        print(f"   ✅ Calculada para {variaciones_totales}/{len(df_calc)} registros (misma cantidad)")
     else:
         print("⚠️  Advertencia: No se calculó variación total (faltan columnas)")
     
-    # 3. VARIACIONES POR AÑO
-    print("3. Calculando variaciones por año...")
+    # 3. VARIACIONES POR AÑO (para MISMA CANTIDAD)
+    print("3. Calculando variaciones por año (con cantidad)...")
     
     # Buscar todas las columnas de primer y último precio por año
     columnas_primer = [col for col in df_calc.columns if col.startswith('primer_precio_neto_')]
@@ -326,26 +333,36 @@ def calcular_variaciones(df):
     # Años comunes (que tienen ambas columnas)
     años_comunes = sorted(set(años_primer) & set(años_ultimo))
     
-    print(f"   Años con datos completos: {len(años_comunes)}")
+    print(f"   Años con datos completos: {len(años_comunes)} (considerando cantidad)")
     
     for año in años_comunes:
         col_primer = f'primer_precio_neto_{año}'
         col_ultimo = f'ultimo_precio_neto_{año}'
         
-        # Calcular variación para este año
+        # Calcular variación para este año (para MISMA CANTIDAD)
         df_calc[f'variacion_{año}'] = ((df_calc[col_ultimo] - df_calc[col_primer]) / df_calc[col_primer]) * 100
         df_calc[f'variacion_{año}'] = df_calc[f'variacion_{año}'].round(2)
         
         # Contar cuántos registros tienen esta variación calculada
         variaciones_año = df_calc[f'variacion_{año}'].notna().sum()
-        print(f"   Año {año}: {variaciones_año} registros")
+        print(f"   Año {año}: {variaciones_año} registros (con cantidad específica)")
     
     # Estadísticas finales
-    print(f"\n✅ Todas las variaciones calculadas")
+    print(f"\n✅ Todas las variaciones calculadas (INCLUYENDO CANTIDAD)")
+    print(f"   ¡Ahora 'patatillas 100g' y 'patatillas 200g' tendrán variaciones diferentes!")
     
     # Contar columnas de variación añadidas
     columnas_variacion = [col for col in df_calc.columns if col.startswith('variacion')]
     print(f"📊 Columnas de variación añadidas: {len(columnas_variacion)}")
+    
+    # Ejemplo de confirmación
+    if 'patatillas' in df_calc['producto'].values:
+        ejemplo = df_calc[df_calc['producto'] == 'patatillas']
+        if len(ejemplo) > 0:
+            cantidades_unicas = ejemplo[['cantidad', 'unidad']].drop_duplicates()
+            print(f"📌 Ejemplo 'patatillas' tiene {len(cantidades_unicas)} cantidades diferentes:")
+            for idx, row in cantidades_unicas.iterrows():
+                print(f"   - {row['cantidad']}{row['unidad']}")
     
     return df_calc
 
