@@ -18,7 +18,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 13/05/2025,spar borbalan,cebolla dulce,1000.0,g,no aplica,2.5
 12/05/2025,spar borbalan,pan,125.0,g,no aplica,0.59
 12/05/2025,spar borbalan,fuet,170.0,g,el pozo,4.95
-12/05/2025,spar borbalan,chocolate,210.0,g,kinder maxi,3.98
+12/05/2025,spar borbalan,chocolatinas,10.0,ud,kinder maxi,3.98
 12/05/2025,spar borbalan,leche sin lactosa,1000.0,g,asturiana,1.45
 26/04/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
 26/04/2025,spar borbalan,chorizo,80.0,g,revilla,1.0
@@ -234,7 +234,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 02/01/2025,spar borbalan,bistec de res,1000.0,g,no aplica,12.69
 02/01/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.19
 02/01/2025,spar borbalan,hamburguesa de res,1000.0,g,no aplica,12.09
-02/01/2025,spar borbalan,chocolate,210.0,g,kinder maxi,3.98
+02/01/2025,spar borbalan,chocolatinas,10.0,ud,kinder maxi,3.98
 02/01/2025,spar borbalan,bacon,200.0,g,el pozo,2.59
 02/01/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
 02/01/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
@@ -537,10 +537,10 @@ fecha,super,producto,cantidad,unidad,marca,precio
 27/12/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.15
 27/12/2025,alcampo,aceite de oliva virgen extra,1000.0,g,ybarra,5.62
 30/12/2025,spar borbalan,platanos,1000.0,g,canarias,1.69
-30/12/2025,spar borbalan,chocolate,210.0,g,kinder maxi,4.29
+30/12/2025,spar borbalan,chocolatinas,10.0,ud,kinder maxi,4.29
 02/01/2026,spar borbalan,aceitunas,180.0,g,jolca,0.89
 02/01/2026,spar borbalan,patatas,1000.0,g,no aplica,1.4
-04/01/2026,spar borbalan,chocolate,210.0,g,kinder maxi,4.29
+04/01/2026,spar borbalan,chocolatinas,10.0,ud,kinder maxi,4.29
 04/01/2026,spar borbalan,filipinos,128.0,g,artiach,1.55
 05/01/2026,spar borbalan,cafe,250.0,g,carioca,3.99
 05/01/2026,spar borbalan,queso gouda,1000.0,g,castillo,10.7
@@ -553,7 +553,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 10/01/2026,spar borbalan,platanos,1000.0,g,canarias,1.75
 10/01/2026,spar borbalan,gusanitos,85.0,g,risi,1.45
 10/01/2026,spar borbalan,pajitas,100.0,g,risi,1.45
-10/01/2026,spar borbalan,chocolate,210.0,g,kinder maxi,4.29
+10/01/2026,spar borbalan,chocolatinas,10.0,ud,kinder maxi,4.29
 10/01/2026,spar borbalan,chocolate,43.0,g,kinder bueno,1.29
 10/01/2026,spar borbalan,chocolate,39.0,g,white bueno,1.15
 11/01/2026,spar borbalan,pajitas,100.0,g,risi,1.45
@@ -626,7 +626,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 25/11/2025,spar borbalan,platanos,1000.0,g,canarias,1.79
 25/11/2025,spar borbalan,pajitas,100.0,g,risi,1.45
 25/11/2025,spar borbalan,pipas,165.0,g,grefusa,2.18
-25/11/2025,spar borbalan,chocolate,210.0,g,kinder maxi,4.29
+25/11/2025,spar borbalan,chocolatinas,10.0,ud,kinder maxi,4.29
 25/11/2025,spar borbalan,chocolate,125.0,g,nestle,2.18
 18/01/2026,heladeria,bola de helado,1.0,ud,no aplica,1.8
 20/01/2026,spar borbalan,queso gouda,1000.0,g,castillo,10.7
@@ -659,7 +659,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 24/01/2026,spar borbalan,platanos,1000.0,g,canarias,1.65
 24/01/2026,spar borbalan,salvaslips,60.0,ud,spar,1.96
 24/01/2026,spar borbalan,patatas,1000.0,g,no aplica,1.35
-24/01/2026,spar borbalan,chocolate,210.0,g,kinder maxi,4.29
+24/01/2026,spar borbalan,chocolatinas,10.0,ud,kinder maxi,4.29
 24/01/2026,spar borbalan,pan de molde,550.0,g,la concepcion,1.79
 26/01/2026,spar borbalan,cebolla dulce,1000.0,g,no aplica,2.5
 26/01/2026,spar borbalan,tampones,16.0,ud,tampax compak pearl,4.29
