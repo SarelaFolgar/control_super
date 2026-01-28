@@ -763,9 +763,20 @@ function updateComparisonChart() {
             const producto = item.producto;
             const marca = item.marca || 'Sin marca';
             const supermercado = item.super || 'Sin supermercado';
-            const key = `${producto} | ${marca} | ${supermercado}`;
+            const cantidad = item.cantidad || 0;
+            const unidad = item.unidad || 'g';
             
-            if (!groups[key]) groups[key] = { producto: producto, marca: marca, super: supermercado, datos: [] };
+            // AÑADIR CANTIDAD A LA CLAVE - CAMBIO PRINCIPAL
+            const key = `${producto} | ${marca} | ${supermercado} | ${cantidad}${unidad}`;
+            
+            if (!groups[key]) groups[key] = { 
+                producto: producto, 
+                marca: marca, 
+                super: supermercado, 
+                cantidad: cantidad,
+                unidad: unidad,
+                datos: [] 
+            };
             
             const fecha = parsearFecha(item.fecha);
             if (isNaN(fecha.getTime())) {
@@ -836,10 +847,10 @@ function updateComparisonChart() {
         const colors = ['#4a6fa5', '#6b8e23', '#8b4513', '#2c3e50', '#7d3c98', '#16a085', '#e67e22', '#3498db', '#1abc9c', '#9b59b6', '#34495e', '#27ae60', '#8e44ad', '#2c3e50', '#f39c12'];
         
         Object.entries(validGroups).forEach(([combinacion, group], index) => {
-            const { producto, marca, super: supermercado, datos } = group;
+            const { producto, marca, super: supermercado, cantidad, unidad, datos } = group;
             
-            // BASE DE LA ETIQUETA: siempre incluir supermercado y marca
-            let label = `${producto} (${supermercado}, ${marca})`;
+            // BASE DE LA ETIQUETA: incluir cantidad y unidad
+            let label = `${producto} (${supermercado}, ${marca}, ${cantidad}${unidad})`;
             
             // Si hay suficientes datos para calcular variación, añadirla
             if (datos.length >= 2) {
@@ -1063,9 +1074,20 @@ function updateBrandDetails(filteredData) {
         const producto = item.producto;
         const marca = item.marca || 'Sin marca';
         const supermercado = item.super || 'Sin supermercado';
-        const key = `${producto} | ${marca} | ${supermercado}`;
+        const cantidad = item.cantidad || 0;
+        const unidad = item.unidad || 'g';
         
-        if (!groups[key]) groups[key] = { producto: producto, marca: marca, super: supermercado, datos: [] };
+        // AÑADIR CANTIDAD A LA CLAVE - CONSISTENCIA CON EL GRÁFICO
+        const key = `${producto} | ${marca} | ${supermercado} | ${cantidad}${unidad}`;
+        
+        if (!groups[key]) groups[key] = { 
+            producto: producto, 
+            marca: marca, 
+            super: supermercado, 
+            cantidad: cantidad,
+            unidad: unidad,
+            datos: [] 
+        };
         groups[key].datos.push(item);
     });
     
@@ -1099,7 +1121,10 @@ function updateBrandDetails(filteredData) {
         card.innerHTML = `
             <div class="brand-header">
                 <h4>${group.producto}</h4>
-                <span class="super-badge">${group.super}</span>
+                <div class="brand-header-details">
+                    <span class="super-badge">${group.super}</span>
+                    <span class="cantidad-badge">${group.cantidad}${group.unidad}</span>
+                </div>
             </div>
             <div class="brand-info">
                 <div>
@@ -1124,10 +1149,10 @@ function updateBrandDetails(filteredData) {
                     <small>Promedio</small>
                     <p>${precioPromedio.toFixed(2)}€</p>
                 </div>
-                <!-- CAMBIO AQUÍ: Se ha ELIMINADO el div duplicado de "Registros" -->
             </div>
             <div class="brand-meta">
                 <span><i class="fas fa-database"></i> ${group.datos.length} registros</span>
+                <span><i class="fas fa-weight-hanging"></i> ${group.cantidad}${group.unidad}</span>
                 <span><i class="fas fa-money-bill-wave"></i> ${currentFilters.priceType === 'precio_neto' ? 'Precio neto' : 'Precio real'}</span>
             </div>
         `;
@@ -1839,5 +1864,6 @@ window.searchProduct = searchProduct;
 window.hideError = hideError;
 window.addProductToComparison = addProductToComparison;
 window.removeProductFromComparison = removeProductFromComparison;
+
 
 
