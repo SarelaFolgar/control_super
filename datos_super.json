@@ -19222,5 +19222,32 @@
     "variacion_2024":null,
     "variacion_2025":29.41,
     "variacion_2026":0.0
+  },
+  {
+    "fecha":"01-02-2026",
+    "super":"heladeria",
+    "producto":"bola de helado",
+    "cantidad":1.0,
+    "unidad":"ud",
+    "marca":"no aplica",
+    "precio":1.8,
+    "precio_neto":1.8,
+    "ano":2026,
+    "mes":"febrero",
+    "ciudad":"valle gran rey",
+    "categoria":null,
+    "ultimo_precio_neto":1.8,
+    "primer_precio_neto":1.8,
+    "ultimo_precio_neto_2024":null,
+    "primer_precio_neto_2024":null,
+    "ultimo_precio_neto_2025":null,
+    "primer_precio_neto_2025":null,
+    "ultimo_precio_neto_2026":1.8,
+    "primer_precio_neto_2026":1.8,
+    "variacion_actual":0.0,
+    "variacion_total":0.0,
+    "variacion_2024":null,
+    "variacion_2025":null,
+    "variacion_2026":0.0
   }
 ]
