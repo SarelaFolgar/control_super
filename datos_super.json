@@ -19600,5 +19600,32 @@
     "variacion_2024":null,
     "variacion_2025":null,
     "variacion_2026":0.15
+  },
+  {
+    "fecha":"05-02-2026",
+    "super":"spar borbalan",
+    "producto":"patatillas",
+    "cantidad":150.0,
+    "unidad":"g",
+    "marca":"ruffles",
+    "precio":2.08,
+    "precio_neto":13.87,
+    "ano":2026,
+    "mes":"febrero",
+    "ciudad":"valle gran rey",
+    "categoria":"patatillas",
+    "ultimo_precio_neto":13.87,
+    "primer_precio_neto":13.87,
+    "ultimo_precio_neto_2024":null,
+    "primer_precio_neto_2024":null,
+    "ultimo_precio_neto_2025":null,
+    "primer_precio_neto_2025":null,
+    "ultimo_precio_neto_2026":13.87,
+    "primer_precio_neto_2026":13.87,
+    "variacion_actual":0.0,
+    "variacion_total":0.0,
+    "variacion_2024":null,
+    "variacion_2025":null,
+    "variacion_2026":0.0
   }
 ]
