@@ -19735,5 +19735,32 @@
     "variacion_2024":null,
     "variacion_2025":null,
     "variacion_2026":0.0
+  },
+  {
+    "fecha":"09-02-2026",
+    "super":"spar borbalan",
+    "producto":"yogur griego",
+    "cantidad":900.0,
+    "unidad":"g",
+    "marca":"oikos",
+    "precio":5.19,
+    "precio_neto":5.77,
+    "ano":2026,
+    "mes":"febrero",
+    "ciudad":"valle gran rey",
+    "categoria":"yogur",
+    "ultimo_precio_neto":5.77,
+    "primer_precio_neto":5.77,
+    "ultimo_precio_neto_2024":null,
+    "primer_precio_neto_2024":null,
+    "ultimo_precio_neto_2025":5.77,
+    "primer_precio_neto_2025":5.77,
+    "ultimo_precio_neto_2026":5.77,
+    "primer_precio_neto_2026":5.77,
+    "variacion_actual":0.0,
+    "variacion_total":0.0,
+    "variacion_2024":null,
+    "variacion_2025":0.0,
+    "variacion_2026":0.0
   }
 ]
