@@ -19762,5 +19762,32 @@
     "variacion_2024":null,
     "variacion_2025":0.0,
     "variacion_2026":0.0
+  },
+  {
+    "fecha":"09-02-2026",
+    "super":"spar borbalan",
+    "producto":"chocolate avellanas",
+    "cantidad":125.0,
+    "unidad":"g",
+    "marca":"nestle",
+    "precio":2.58,
+    "precio_neto":20.64,
+    "ano":2026,
+    "mes":"febrero",
+    "ciudad":"valle gran rey",
+    "categoria":null,
+    "ultimo_precio_neto":20.64,
+    "primer_precio_neto":20.64,
+    "ultimo_precio_neto_2024":null,
+    "primer_precio_neto_2024":null,
+    "ultimo_precio_neto_2025":null,
+    "primer_precio_neto_2025":null,
+    "ultimo_precio_neto_2026":20.64,
+    "primer_precio_neto_2026":20.64,
+    "variacion_actual":0.0,
+    "variacion_total":0.0,
+    "variacion_2024":null,
+    "variacion_2025":null,
+    "variacion_2026":0.0
   }
 ]
