@@ -756,7 +756,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 16/02/2026,mercadona av ppe,bizcocho,1.0,ud,hacendado,1.85
 16/02/2026,mercadona av ppe,tomate frito receta artesana,300.0,g,hacendado,1.45
 16/02/2026,mercadona av ppe,queso ahumado,200.0,g,hacendado,2.35
-16/02/2026,mercadona av ppe,ensaladilla rusa,250.0,g,hacendado,2.8
+16/02/2026,mercadona av ppe,ensaladilla rusa,500.0,g,hacendado,2.8
 16/02/2026,mercadona av ppe,tortilla con cebolla,1.0,ud,hacendado,2.8
 16/02/2026,mercadona av ppe,mac cheese,190.0,g,hacendado,1.3
 16/02/2026,mercadona av ppe,linguine,500.0,g,hacendado,0.8
@@ -810,5 +810,5 @@ fecha,super,producto,cantidad,unidad,marca,precio
 14/12/2023,mercadona av ppe,galletas choco blanco,236.0,g,hacendado,1.2
 14/12/2023,mercadona av ppe,licor crema caramelo,700.0,g,royal swan,7.0
 14/12/2023,mercadona av ppe,capuccino con pepitas,300.0,g,hacendado,2.65
-14/12/2023,mercadona av ppe,ensaladilla rusa,250.0,g,hacendado,3.0
+14/12/2023,mercadona av ppe,ensaladilla rusa,500.0,g,hacendado,3.0
 14/12/2023,mercadona av ppe,tomate salsa,1000.0,g,hacendado,2.09
