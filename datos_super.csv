@@ -65,7 +65,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 08/03/2025,spar borbalan,potitos,400.0,g,spar,2.39
 08/03/2025,spar borbalan,pan,260.0,g,no aplica,1.25
 08/03/2025,spar borbalan,cereales,375.0,g,chocapic,3.16
-08/03/2025,spar borbalan,atun,6.0,ud,eureka,6.36
+08/03/2025,spar borbalan,atun girasol,6.0,ud,eureka,6.36
 08/03/2025,spar borbalan,huevos,10.0,ud,el taro,3.49
 08/03/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
 08/03/2025,spar borbalan,patatillas,150.0,g,spar,1.29
@@ -109,7 +109,6 @@ fecha,super,producto,cantidad,unidad,marca,precio
 11/02/2025,spar borbalan,pechuga de pollo,1000.0,g,no aplica,10.49
 11/02/2025,heladeria,aguacates,1000.0,g,no aplica,4.5
 09/02/2025,olivier,pan de molde sin gluten,300.0,g,bimbo,3.95
-09/02/2025,olivier,tarro atun,220.0,g,pescamar,2.85
 07/02/2025,spar borbalan,patatillas,150.0,g,lays mediterraneas,2.85
 07/02/2025,olivier,patatas congeladas,1000.0,g,eurofrits,2.95
 05/02/2025,spar borbalan,platanos,1000.0,g,canarias,1.6
@@ -133,7 +132,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 30/01/2025,spar playa,harina,1000.0,g,pan,2.52
 30/01/2025,spar playa,yogur proteinas,400.0,g,asturiana,3.19
 30/01/2025,spar playa,pan,550.0,g,no aplica,0.85
-28/01/2025,spar borbalan,atun,6.0,ud,eureka,6.36
+28/01/2025,spar borbalan,atun girasol,6.0,ud,eureka,6.36
 28/01/2025,spar borbalan,limpiador multiusos,750.0,g,sanytol,2.78
 28/01/2025,spar borbalan,garbanzos,540.0,g,spar,1.14
 28/01/2025,spar borbalan,quitagrasa,780.0,g,kh-7,4.79
@@ -173,7 +172,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 16/01/2025,spar borbalan,carne picada de res,1000.0,g,no aplica,12.09
 16/01/2025,spar borbalan,nata,500.0,g,asturiana,2.79
 16/01/2025,spar borbalan,bacon,200.0,g,el pozo,2.59
-16/01/2025,spar borbalan,atun,6.0,ud,eureka,6.36
+16/01/2025,spar borbalan,atun girasol,6.0,ud,eureka,6.36
 16/01/2025,spar borbalan,maiz,420.0,g,spar,3.95
 16/01/2025,spar borbalan,bolsas zip,15.0,ud,spar,1.29
 16/01/2025,spar borbalan,aceitunas,540.0,g,jolca,2.67
@@ -343,7 +342,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 04/02/2025,alcampo,chocolate,100.0,g,nestle dolca,0.83
 04/02/2025,alcampo,champu,300.0,g,garnier,3.56
 04/02/2025,alcampo,harina,1000.0,g,pan,2.02
-04/02/2025,alcampo,atun,6.0,ud,alcampo,4.19
+04/02/2025,alcampo,atun claro oliva,6.0,ud,alcampo,4.19
 04/02/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
 04/02/2025,alcampo,crema de cacahuete,500.0,g,alcampo,2.78
 04/02/2025,alcampo,papel higienico,12.0,ud,alcampo,2.38
@@ -446,7 +445,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 19/08/2025,alcampo,gel de ducha,1250.0,g,instituto espanol,2.8
 19/08/2025,alcampo,cafe,500.0,g,lavazza,16.1
 19/08/2025,alcampo,harina,1000.0,g,pan,1.99
-19/08/2025,alcampo,atun,6.0,ud,alcampo,4.11
+19/08/2025,alcampo,atun claro oliva,6.0,ud,alcampo,4.11
 19/08/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.18
 19/08/2025,alcampo,papel de cocina,4.0,ud,renova,1.78
 19/08/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.16
@@ -750,7 +749,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 16/02/2026,mercadona av ppe,zumo naranja pulpa,1000.0,g,hacendado,1.8
 16/02/2026,mercadona av ppe,toallitas,240.0,ud,deliplus,2.85
 16/02/2026,mercadona av ppe,cafe con leche capuccino,250.0,g,hacendado,0.85
-16/02/2026,mercadona av ppe,café molido natural,250.0,g,hacendad,7.15
+16/02/2026,mercadona av ppe,cafe,500.0,g,carioca,7.15
 16/02/2026,mercadona av ppe,caja pañuelos,1.0,ud,hacendado,1.2
 16/02/2026,mercadona av ppe,ensalada cesar,210.0,g,hacendado,2.95
 16/02/2026,mercadona av ppe,agua,8000.0,g,fonteide,1.76
@@ -761,14 +760,14 @@ fecha,super,producto,cantidad,unidad,marca,precio
 16/02/2026,mercadona av ppe,tortilla con cebolla,1.0,ud,hacendado,2.8
 16/02/2026,mercadona av ppe,mac cheese,190.0,g,hacendado,1.3
 16/02/2026,mercadona av ppe,linguine,500.0,g,hacendado,0.8
-16/02/2026,mercadona av ppe,jamón cocido extrafino,150.0,g,hacendado,2.5
+16/02/2026,mercadona av ppe,jamon cocido extrafino,150.0,g,hacendado,2.5
 16/02/2026,mercadona av ppe,girasoles cabra cebolla,250.0,g,hacendado,2.1
-16/02/2026,mercadona av ppe,fuet espetec,1.0,ud,hacendado,2.57
+16/02/2026,mercadona av ppe,fuet,1.0,ud,hacendado,2.57
 16/02/2026,mercadona av ppe,sopa pollo fideos,71.0,g,hacendado,0.7
 16/02/2026,mercadona av ppe,platanos,1000.0,g,canarias,2.0
 16/02/2026,mercadona av ppe,aceitunas,810.0,g,hacendado,2.6
 16/02/2026,mercadona av ppe,pan de molde integral sin corteza,450.0,g,hacendado,1.15
-16/02/2026,mercadona av ppe,atun claro oliva,480.0,g,hacendado,1.3
-16/02/2026,mercadona av ppe,albondigas en salsa,210.0,g,hacendad,1.8
+16/02/2026,mercadona av ppe,atun claro oliva,6.0,ud,hacendado,1.3
+16/02/2026,mercadona av ppe,albondigas en salsa,210.0,g,hacendado,1.8
 16/02/2026,mercadona av ppe,salchichas con queso,400.0,g,hacendado,1.6
 16/02/2026,mercadona av ppe,leche condensada entera,1000.0,g,dulzan,2.15
