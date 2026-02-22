@@ -91,7 +91,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 21/02/2025,fruteria,tomate cherry,1000.0,g,pera,5.35
 21/02/2025,fruteria,queso fresco,1000.0,g,flor valsequillo,16.85
 21/02/2025,fruteria,lechuga,1.0,ud,batavia,1.59
-20/02/2025,spar borbalan,pimientos,1000.0,g,no aplica,3.6
+20/02/2025,spar borbalan,pimientos tricolor,1000.0,g,no aplica,3.6
 17/02/2025,spar borbalan,munchitos,160.0,g,matutano,2.55
 17/02/2025,spar borbalan,fuet,170.0,g,el pozo,2.99
 17/02/2025,spar borbalan,pan,125.0,g,no aplica,0.59
@@ -427,7 +427,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 23/07/2025,alcampo,cereales rellenos de leche sin gluten,400.0,g,alcampo,2.24
 23/07/2025,alcampo,papel higienico,12.0,ud,alcampo,2.25
 23/07/2025,alcampo,tomate natural,800.0,g,alcampo,0.86
-23/07/2025,alcampo,pimientos,500.0,g,no aplica,2.49
+23/07/2025,alcampo,pimientos tricolor,500.0,g,no aplica,2.49
 23/07/2025,alcampo,pasta sin gluten,500.0,g,pasta d'oro,1.89
 23/07/2025,alcampo,pan de molde sin gluten,350.0,g,sinblat,2.17
 23/07/2025,alcampo,aceite de oliva virgen extra,1000.0,g,ybarra,7.93
@@ -642,7 +642,7 @@ fecha,super,producto,cantidad,unidad,marca,precio
 23/01/2026,alcampo,pizza sin gluten,420.0,g,casa tarradellas,3.22
 23/01/2026,alcampo,yogur fresa,480.0,g,danone,1.64
 23/01/2026,alcampo,galletas flor sin gluten,400.0,g,gullon,2.98
-23/01/2026,alcampo,corn flakes sin gluten,375.0,g,nacional,2.81
+23/01/2026,alcampo,corn flakes sin gluten,375.0,g,nestle,2.81
 23/01/2026,alcampo,harina,1000.0,g,pan,2.01
 23/01/2026,alcampo,leche entera,6000.0,g,pascual,7.26
 23/01/2026,alcampo,potitos,400.0,g,alcampo,2.11
