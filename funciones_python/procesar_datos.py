@@ -388,6 +388,10 @@ def main():
       "olivier":"valle gran rey",
       "spar borbalan":"valle gran rey",
       "spar playa":"valle gran rey",
+        "mercadona":"vigo",
+        "alcampo vialia":"vigo",
+        "eroski":"vigo",
+        "gadis":"vigo",
   }
     
     dic_categoria_producto = {
