@@ -10,7 +10,8 @@ let currentSearchTerm = '';
 let selectedProducts = []; // Array para almacenar productos seleccionados
 let currentFilters = {
     city: 'global',
-    priceType: 'precio_neto'
+    priceType: 'precio_neto',
+    brand: 'todas'
 };
 
 // Elementos DOM
@@ -650,7 +651,8 @@ function searchProduct(productName) {
         
         currentFilters = { 
             city: 'global',
-            priceType: 'precio_neto'
+            priceType: 'precio_neto',
+            brand: 'todas'
         };
         
         updateSelectedProductsList();
@@ -713,6 +715,11 @@ function updateComparisonChart() {
         if (currentFilters.city !== 'global') {
             filteredData = filteredData.filter(item => item.ciudad === currentFilters.city);
         }
+
+        // Aplicar filtro de marca
+        if (currentFilters.brand && currentFilters.brand !== 'todas') {
+            filteredData = filteredData.filter(item => item.marca === currentFilters.brand);
+        }
         
         console.log(`🌍 Datos después de filtros:`, filteredData.length, 'registros');
         
@@ -766,7 +773,6 @@ function updateComparisonChart() {
             const cantidad = item.cantidad || 0;
             const unidad = item.unidad || 'g';
             
-            // AÑADIR CANTIDAD A LA CLAVE - CAMBIO PRINCIPAL
             const key = `${producto} | ${marca} | ${supermercado} | ${cantidad}${unidad}`;
             
             if (!groups[key]) groups[key] = { 
@@ -849,16 +855,13 @@ function updateComparisonChart() {
         Object.entries(validGroups).forEach(([combinacion, group], index) => {
             const { producto, marca, super: supermercado, cantidad, unidad, datos } = group;
             
-            // BASE DE LA ETIQUETA: incluir cantidad y unidad
             let label = `${producto} (${supermercado}, ${marca}, ${cantidad}${unidad})`;
             
-            // Si hay suficientes datos para calcular variación, añadirla
             if (datos.length >= 2) {
                 const firstPrice = datos[0].precio;
                 const lastPrice = datos[datos.length - 1].precio;
                 if (firstPrice > 0) {
                     const variacion = ((lastPrice - firstPrice) / firstPrice) * 100;
-                    // Añadir la variación al final de la etiqueta
                     label += ` ${variacion >= 0 ? '+' : ''}${variacion.toFixed(1)}%`;
                 }
             }
@@ -990,10 +993,11 @@ function updateComparisonChart() {
     }
 }
 
-// Configurar filtros simplificados (solo ciudad y tipo de precio)
+// Configurar filtros simplificados (ciudad, marca y tipo de precio)
 function setupFiltersSimplified() {
     const citySelect = document.getElementById('city-filter');
     const priceTypeSelect = document.getElementById('price-type-filter');
+    const brandSelect = document.getElementById('brand-filter');
     
     if (!citySelect || !priceTypeSelect) return;
     
@@ -1007,6 +1011,7 @@ function setupFiltersSimplified() {
             if (item.ciudad) ciudadesDisponibles.add(item.ciudad);
         });
     });
+
     // Poner vigo por defecto si existe para este producto
     const ciudadesArray = Array.from(ciudadesDisponibles).sort();
     if (ciudadesArray.includes('vigo') && currentFilters.city === 'global') {
@@ -1014,18 +1019,35 @@ function setupFiltersSimplified() {
     }
     updateFilterSelector(citySelect, ciudadesArray, currentFilters.city);
     priceTypeSelect.value = currentFilters.priceType;
+
+    // Obtener marcas disponibles de los productos seleccionados
+    let marcasDisponibles = new Set();
+    selectedProducts.forEach(productName => {
+        const productData = productosData.filter(p => 
+            p.producto && p.producto.toLowerCase() === productName.toLowerCase()
+        );
+        productData.forEach(item => {
+            if (item.marca) marcasDisponibles.add(item.marca);
+        });
+    });
+    if (brandSelect) {
+        updateFilterSelector(brandSelect, Array.from(marcasDisponibles).sort(), 'todas');
+        brandSelect.value = currentFilters.brand || 'todas';
+    }
     
     // Configurar evento de cambio para cada filtro
     const applyFilter = () => {
         const selectedCity = citySelect.value;
         const selectedPriceType = priceTypeSelect.value;
+        const selectedBrand = brandSelect ? brandSelect.value : 'todas';
         
         currentFilters = { 
             city: selectedCity,
-            priceType: selectedPriceType
+            priceType: selectedPriceType,
+            brand: selectedBrand
         };
         
-        console.log(`🌍 Aplicando filtros automáticamente: Ciudad=${selectedCity}, TipoPrecio=${selectedPriceType}`);
+        console.log(`🌍 Aplicando filtros: Ciudad=${selectedCity}, Marca=${selectedBrand}, TipoPrecio=${selectedPriceType}`);
         
         showLoading('Actualizando gráfico...');
         setTimeout(() => {
@@ -1037,6 +1059,9 @@ function setupFiltersSimplified() {
     // Aplicar automáticamente al cambiar cualquier filtro
     citySelect.addEventListener('change', applyFilter);
     priceTypeSelect.addEventListener('change', applyFilter);
+    if (brandSelect) {
+        brandSelect.addEventListener('change', applyFilter);
+    }
 }
 
 function updateFilterSelector(selectElement, options, selectedValue) {
@@ -1081,7 +1106,6 @@ function updateBrandDetails(filteredData) {
         const cantidad = item.cantidad || 0;
         const unidad = item.unidad || 'g';
         
-        // AÑADIR CANTIDAD A LA CLAVE - CONSISTENCIA CON EL GRÁFICO
         const key = `${producto} | ${marca} | ${supermercado} | ${cantidad}${unidad}`;
         
         if (!groups[key]) groups[key] = { 
@@ -1343,7 +1367,6 @@ function showTopVariations(type) {
     productosData.forEach(item => {
         if (!item.producto || !item.super) return;
         
-        // AÑADIR CANTIDAD A LA CLAVE - CAMBIO PRINCIPAL
         const cantidad = item.cantidad || 0;
         const unidad = item.unidad || 'g';
         const key = `${item.producto}||${item.marca || 'Sin marca'}||${item.super}||${cantidad}${unidad}`;
@@ -1487,7 +1510,6 @@ function updateInflationStats() {
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
             
-            // AÑADIR CANTIDAD A LA CLAVE - CAMBIO PRINCIPAL
             const cantidad = item.cantidad || 0;
             const unidad = item.unidad || 'g';
             const key = `${item.producto}||${item.super}||${item.marca}||${cantidad}${unidad}`;
@@ -1507,7 +1529,6 @@ function updateInflationStats() {
         filteredData.forEach(item => {
             if (!item.producto || !item.super || !item.marca) return;
             
-            // AÑADIR CANTIDAD A LA CLAVE - CONSISTENCIA
             const cantidad = item.cantidad || 0;
             const unidad = item.unidad || 'g';
             const key = `${item.producto}||${item.super}||${item.marca}||${cantidad}${unidad}`;
@@ -1530,7 +1551,6 @@ function updateInflationStats() {
         const validVariations = Array.from(latestVariations.values()).map(v => v.variacion);
         const validProductsCount = latestVariations.size;
         
-        // Calcular promedio de cantidad para mostrar en resultados
         const promedioCantidad = Array.from(latestVariations.values()).reduce((sum, v) => sum + v.cantidad, 0) / validProductsCount;
         const unidadMasComun = Array.from(latestVariations.values()).length > 0 
             ? Array.from(latestVariations.values())[0].unidad 
@@ -1562,7 +1582,6 @@ function updateInflationStats() {
             
             if (item[yearField] === null || item[yearField] === undefined) return;
             
-            // AÑADIR CANTIDAD A LA CLAVE - CAMBIO PRINCIPAL
             const cantidad = item.cantidad || 0;
             const unidad = item.unidad || 'g';
             const key = `${item.producto}||${item.super}||${item.marca}||${cantidad}${unidad}`;
@@ -1586,7 +1605,6 @@ function updateInflationStats() {
             const itemYear = fechaParsed ? fechaParsed.getFullYear().toString() : null;
             if (itemYear !== selectedYear) return;
             
-            // AÑADIR CANTIDAD A LA CLAVE - CONSISTENCIA
             const cantidad = item.cantidad || 0;
             const unidad = item.unidad || 'g';
             const key = `${item.producto}||${item.super}||${item.marca}||${cantidad}${unidad}`;
@@ -1609,7 +1627,6 @@ function updateInflationStats() {
         const validVariations = Array.from(latestVariations.values()).map(v => v.variacion);
         const validProductsCount = latestVariations.size;
         
-        // Calcular promedio de cantidad para mostrar en resultados
         const promedioCantidad = Array.from(latestVariations.values()).reduce((sum, v) => sum + v.cantidad, 0) / validProductsCount;
         const unidadMasComun = Array.from(latestVariations.values()).length > 0 
             ? Array.from(latestVariations.values())[0].unidad 
@@ -1918,8 +1935,3 @@ window.searchProduct = searchProduct;
 window.hideError = hideError;
 window.addProductToComparison = addProductToComparison;
 window.removeProductFromComparison = removeProductFromComparison;
-
-
-
-
-
