@@ -1007,8 +1007,12 @@ function setupFiltersSimplified() {
             if (item.ciudad) ciudadesDisponibles.add(item.ciudad);
         });
     });
-    
-    updateFilterSelector(citySelect, Array.from(ciudadesDisponibles).sort(), currentFilters.city);
+    // Poner vigo por defecto si existe para este producto
+    const ciudadesArray = Array.from(ciudadesDisponibles).sort();
+    if (ciudadesArray.includes('vigo') && currentFilters.city === 'global') {
+        currentFilters.city = 'vigo';
+    }
+    updateFilterSelector(citySelect, ciudadesArray, currentFilters.city);
     priceTypeSelect.value = currentFilters.priceType;
     
     // Configurar evento de cambio para cada filtro
